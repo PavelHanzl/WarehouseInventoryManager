@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1095510311359",
+    "project_id": "warehouseinventorymanager",
+    "storage_bucket": "warehouseinventorymanager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1095510311359:android:bdff2d736a2b90aabf610a",
+        "android_client_info": {
+          "package_name": "cz.pavelhanzl.warehouseinventorymanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1095510311359-6099869ojfrmcmmj5vgeetlbouhfs5mf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cz.pavelhanzl.warehouseinventorymanager",
+            "certificate_hash": "a9ba0feffa0a14a40e4525d477bc2bde5d2f92df"
+          }
+        },
+        {
+          "client_id": "1095510311359-jerbpknlldv8rn96v0h5t40fi2s1elfi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPvPSehgi3q_6jN64nFUjJqSfPyXcsuCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1095510311359-jerbpknlldv8rn96v0h5t40fi2s1elfi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
