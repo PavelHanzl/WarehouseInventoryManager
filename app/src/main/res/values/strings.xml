@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WarehouseInventoryManager</string>
+    <string name="app_name">Warehouse + Inventory Manager</string>
     <string name="loginLable">Přihlášení</string>
     <string name="emailLable">E-mail</string>
     <string name="emailHint">jan.novak@domena.cz</string>
