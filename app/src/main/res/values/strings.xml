@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">WarehouseInventoryManager</string>
+    <string name="loginLable">Přihlášení</string>
+    <string name="emailLable">E-mail</string>
+    <string name="emailHint">jan.novak@domena.cz</string>
+    <string name="passwordLable">Heslo</string>
+    <string name="passwordHint">123456</string>
+    <string name="loginButtonText">Přihlásit</string>
+    <string name="loginDontHaveAccount">Nemáte účet?</string>
+    <string name="loginRegisterText">Registrovat.</string>
 </resources>
