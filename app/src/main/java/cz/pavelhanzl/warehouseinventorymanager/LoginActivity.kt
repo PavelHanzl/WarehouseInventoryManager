@@ -1,9 +1,11 @@
 package cz.pavelhanzl.warehouseinventorymanager
 
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
+import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -11,15 +13,12 @@ class LoginActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //Vypne defaultně tmavý režim při spuštění
         supportActionBar?.hide() //Skryje action bar pro tuto aktivitu
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.decorView.windowInsetsController!!.hide(
-                android.view.WindowInsets.Type.statusBars()
-            )
-        }
-
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
+
+        ActivityLogin_register.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
 
     }
 

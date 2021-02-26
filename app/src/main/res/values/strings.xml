@@ -13,4 +13,10 @@
     <string name="RegisterButtonText">Registrovat</string>
     <string name="AlreadyHaveAnAccount">Už máte účet?</string>
     <string name="ActivityRegister_LoginText">Přihlašte se.</string>
+    <string name="RegistrationSuccessful">Registrace byla úspěšná</string>
+    <string name="emptyPassword">Heslo nemůže být prázdné!</string>
+    <string name="emptyEmail">E-mail nemůže být prázdný!</string>
+    <string name="emptyEmailCheck">Potvrzení hesla nemůže být prázdné!</string>
+    <string name="invalidEmailFormat">Zadaný e-mail je ve špatném formátu!</string>
+    <string name="invalidPassword">Hesla se neshodují nebo není splněna podmínka na minimální délku hesla 6 znaků!</string>
 </resources>
