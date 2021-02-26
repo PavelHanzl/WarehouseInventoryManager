@@ -4,8 +4,13 @@
     <string name="emailLable">E-mail</string>
     <string name="emailHint">jan.novak@domena.cz</string>
     <string name="passwordLable">Heslo</string>
+    <string name="passwordLableCheck">Heslo znovu</string>
     <string name="passwordHint">123456</string>
     <string name="loginButtonText">Přihlásit</string>
     <string name="loginDontHaveAccount">Nemáte účet?</string>
     <string name="loginRegisterText">Registrovat.</string>
+    <string name="RegisterLable">Vytvořit účet</string>
+    <string name="RegisterButtonText">Registrovat</string>
+    <string name="AlreadyHaveAnAccount">Už máte účet?</string>
+    <string name="ActivityRegister_LoginText">Přihlašte se.</string>
 </resources>

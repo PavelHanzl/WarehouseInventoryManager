@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkGrayColor"
-    tools:context=".LoginActivity">
+    tools:context=".RegisterActivity">
     <FrameLayout
-        android:id="@+id/ActivityLogin_header_image"
+        android:id="@+id/ActivityRegister_header_image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,22 +27,22 @@
 
 
     <TextView
-        android:id="@+id/ActivityLogin_loginLable"
+        android:id="@+id/ActivityRegister_RegisterLable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="35dp"
-        android:text="@string/loginLable"
+        android:text="@string/RegisterLable"
         android:textColor="@color/whiteColor"
         android:textAllCaps="true"
         android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ActivityLogin_header_image" />
+        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_header_image" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ActivityLogin_email"
+        android:id="@+id/ActivityRegister_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -50,10 +50,10 @@
         android:layout_marginEnd="16dp"
         android:textColorHint="@color/whiteColor"
         android:hint="@string/emailLable"
-        app:layout_constraintTop_toBottomOf="@id/ActivityLogin_loginLable"
+        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_RegisterLable"
         >
         <EditText
-            android:id="@+id/ActivityLogin_emailInput"
+            android:id="@+id/ActivityRegister_emailInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
@@ -64,7 +64,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ActivityLogin_password"
+        android:id="@+id/ActivityRegister_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -72,24 +72,47 @@
         android:layout_marginEnd="16dp"
         android:textColorHint="@color/whiteColor"
         android:hint="@string/passwordLable"
-        app:layout_constraintTop_toBottomOf="@id/ActivityLogin_email"
+        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_email"
         >
         <EditText
-            android:id="@+id/ActivityLogin_passwordInput"
+            android:id="@+id/ActivityRegister_passwordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:background="@color/transparentColor"
             android:textColor="@color/whiteColor"
             tools:text="@string/passwordHint"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ActivityRegister_passwordCheck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="16dp"
+        android:textColorHint="@color/whiteColor"
+        android:hint="@string/passwordLableCheck"
+        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_password"
+        >
+        <EditText
+            android:id="@+id/ActivityRegister_passwordInputCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:background="@color/transparentColor"
+            android:textColor="@color/whiteColor"
+            tools:text="@string/passwordHint"/>
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/ActivityLogin_loginButton"
+        android:id="@+id/ActivityRegister_RegisterButton"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:gravity="center"
-        android:text="@string/loginButtonText"
+        android:text="@string/RegisterButtonText"
         android:textColor="@color/darkGrayColor"
         android:textSize="17sp"
         android:textStyle="bold"
@@ -99,38 +122,38 @@
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ActivityLogin_password" />
+        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_passwordCheck" />
 
- <LinearLayout
-     android:layout_width="wrap_content"
-     android:layout_height="wrap_content"
-     android:gravity="center_vertical"
-     android:orientation="horizontal"
-     app:layout_constraintTop_toBottomOf="@id/ActivityLogin_loginButton"
-     app:layout_constraintEnd_toEndOf="parent"
-     app:layout_constraintStart_toStartOf="parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_RegisterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_marginTop="16dp"
-         android:padding="8dp"
-         android:text="@string/loginDontHaveAccount"
-         android:textColor="@color/whiteColor"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="@string/AlreadyHaveAnAccount"
+            android:textColor="@color/whiteColor"/>
 
-     <TextView
-         android:id="@+id/ActivityLogin_register"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_marginTop="16dp"
-         android:padding="8dp"
-         android:text="@string/loginRegisterText"
-         android:textColor="@color/whiteColor"
-         android:textStyle="bold"
+        <TextView
+            android:id="@+id/ActivityRegister_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
+            android:text="@string/ActivityRegister_LoginText"
+            android:textColor="@color/whiteColor"
+            android:textStyle="bold"
 
-         />
+            />
 
 
- </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
