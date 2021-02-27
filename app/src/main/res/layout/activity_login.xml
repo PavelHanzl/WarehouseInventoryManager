@@ -16,7 +16,7 @@
         android:background="@color/whiteColor">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/animation_view"
+            android:id="@+id/ActivityLogin_animatedLogo"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
