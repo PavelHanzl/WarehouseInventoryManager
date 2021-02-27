@@ -19,4 +19,5 @@
     <string name="emptyEmailCheck">Potvrzení hesla nemůže být prázdné!</string>
     <string name="invalidEmailFormat">Zadaný e-mail je ve špatném formátu!</string>
     <string name="invalidPassword">Hesla se neshodují nebo není splněna podmínka na minimální délku hesla 6 znaků!</string>
+    <string name="LoginSuccessful">Přihlášení proběhlo úspěšně!</string>
 </resources>

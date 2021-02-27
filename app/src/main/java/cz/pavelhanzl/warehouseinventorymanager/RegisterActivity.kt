@@ -26,7 +26,7 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         ActivityRegister_login.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
+            onBackPressed()
         }
 
     }
@@ -93,6 +93,15 @@ class RegisterActivity : AppCompatActivity() {
                 if(task.isSuccessful){ // Registrace proběhla úspěšně
                     val firebaseUser = task.result!!.user!!
                     Toast.makeText(this, getString(R.string.RegistrationSuccessful), Toast.LENGTH_SHORT).show()
+
+                    // Odstraní activity běžící na pozadí ve stacku, pomocí extra předá user_id a email, přejde na hlavní aktivitu a ukončí tuto aktivitu
+                    val intent = Intent(this@RegisterActivity,MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    intent.putExtra("user_id", firebaseUser.uid)
+                    intent.putExtra("email_id", email)
+                    startActivity(intent)
+                    finish()
+
                 } else { // Registrace neproběhla úspěšně
                     Toast.makeText(this, task.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
                 }
