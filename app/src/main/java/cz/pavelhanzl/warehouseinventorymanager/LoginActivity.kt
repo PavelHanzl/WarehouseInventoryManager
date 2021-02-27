@@ -28,26 +28,21 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mAuth = FirebaseAuth.getInstance()
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //Vypne defaultně tmavý režim při spuštění
         supportActionBar?.hide() //Skryje action bar pro tuto aktivitu
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        checkIfAlreadyLoggedIn()
 
         // Configure Google Sign In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+        setGoogleSignIn()
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
-
+        //Pokusí se přihlásit pomcí googlu
         google_sign_in_button.setOnClickListener{
             signIn()
         }
 
+        //Pokusí se přihlásit emailem a heslem
         ActivityLogin_loginButton.setOnClickListener() {
             attempLoginWithEmailAndPassword()
         }
@@ -59,16 +54,13 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    /**
-     * Kontroluje jestli je uživatel již přihlášen, pokud ano, tak přesměrovává na hlavní aktivitu.
-     */
-    private fun checkIfAlreadyLoggedIn() {
-        val user = mAuth.currentUser
+    private fun setGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
 
-        if (user != null) {
-            val mainActivityIntent = Intent(this, MainActivity::class.java)
-            startActivity(mainActivityIntent)
-        }
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
     private fun attempLoginWithEmailAndPassword() {
@@ -113,7 +105,7 @@ class LoginActivity : AppCompatActivity() {
     private fun login(email: String, password: String) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(
                 OnCompleteListener<AuthResult> { task ->
-                    if (task.isSuccessful) { // Přihlášení proběhlo úspěšně
+                    if (task.isSuccessful) { // Přihlášení pomocí emailu a hesla proběhlo úspěšně
                         val firebaseUser = task.result!!.user!!
                         Toast.makeText(this, getString(R.string.LoginSuccessful), Toast.LENGTH_SHORT).show()
 
@@ -125,7 +117,7 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
 
-                    } else { // Přihlášení neproběhlo úspěšně
+                    } else { // Přihlášení pomocí emailu a hesla neproběhlo úspěšně
                         Toast.makeText(this, task.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -167,19 +159,16 @@ class LoginActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
+                if (task.isSuccessful) { // Přihlášení pomocí googlu proběhlo úspěšně
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d("SignInWithGoogle", "signInWithCredential:success")
+                    Toast.makeText(this, getString(R.string.LoginSuccessful), Toast.LENGTH_SHORT).show()
                     val intentMainActivity = Intent(this, MainActivity::class.java)
                     startActivity(intentMainActivity)
                     finish()
-
-                } else {
+                } else { // Přihlášení pomocí googlu neproběhlo úspěšně
                     // If sign in fails, display a message to the user.
-                    Log.w("SignInWithGoogle", "signInWithCredential:failure", task.exception)
+                    Toast.makeText(this, task.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
                 }
-
-                // ...
             }
     }
 
