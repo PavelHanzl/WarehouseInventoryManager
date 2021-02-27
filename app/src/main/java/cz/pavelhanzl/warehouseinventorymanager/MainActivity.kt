@@ -10,8 +10,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val userId = intent.getStringExtra("user_id")
-        val emailId = intent.getStringExtra("email_id")
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val emailId = FirebaseAuth.getInstance().currentUser?.email
 
         ActivityMain_userID.text="User ID: $userId"
         ActivityMain_emailID.text="Emai ID $emailId"
