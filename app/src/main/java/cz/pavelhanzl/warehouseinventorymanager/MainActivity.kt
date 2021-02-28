@@ -10,6 +10,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
         val userId = FirebaseAuth.getInstance().currentUser?.uid
         val emailId = FirebaseAuth.getInstance().currentUser?.email
 
@@ -23,6 +39,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             finish()
         }
-
+        */
     }
 }
