@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.Dashboard"
-        android:label="fragment_dashboard"
+        android:label="@string/Dashboard"
         tools:layout="@layout/fragment_dashboard" >
         <action
             android:id="@+id/navigate_dashboard_to_settings"
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.Settings"
-        android:label="fragment_settings"
+        android:label="@string/Settings"
         tools:layout="@layout/fragment_settings" >
         <action
             android:id="@+id/navigate_settings_to_dashboard"

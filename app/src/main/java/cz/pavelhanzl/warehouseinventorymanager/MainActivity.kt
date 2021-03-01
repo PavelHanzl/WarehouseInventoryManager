@@ -3,6 +3,7 @@ package cz.pavelhanzl.warehouseinventorymanager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -28,22 +29,14 @@ class MainActivity : AppCompatActivity() {
         setUpDrawerMenu()
         setUpActionBarBasedOnNavigation()
 
+    }
 
-        /*
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        val emailId = FirebaseAuth.getInstance().currentUser?.email
+    private fun setUpDrawerMenu() {
+        navController = findNavController(R.id.fragment)
+        drawerLayout = findViewById(R.id.drawer_layout)
+        drawerNavigationView.setupWithNavController(navController)
 
-        ActivityMain_userID.text="User ID: $userId"
-        ActivityMain_emailID.text="Emai ID $emailId"
-
-
-        //Odhlášení
-        ActivityMain_LogoutBtn.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-            finish()
-        }
-        */
+        setIndividualMenuItems()
     }
 
     private fun setUpActionBarBasedOnNavigation() {
@@ -51,10 +44,20 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
-    private fun setUpDrawerMenu() {
-        navController = findNavController(R.id.fragment)
-        drawerLayout = findViewById(R.id.drawer_layout)
-        drawerNavigationView.setupWithNavController(navController)
+    //Nastaví jednotlivé tlačítka v Drawer Menu, která nejsou součástí navigation component např. logout button
+    private fun setIndividualMenuItems() {
+
+        //Logout menu item
+        val menuItemLogout = drawerNavigationView.menu.findItem(R.id.menuItem_logout)
+        menuItemLogout.setOnMenuItemClickListener {
+            Toast.makeText(applicationContext, getString(R.string.LoggingOut), Toast.LENGTH_SHORT).show()
+            FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+            finish()
+            true
+        }
+
+        //sem přijdou další tlačítka
     }
 
     override fun onSupportNavigateUp(): Boolean {

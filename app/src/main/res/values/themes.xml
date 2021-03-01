@@ -14,5 +14,7 @@
         <!-- Customize your theme here. -->
         <item name="android:textColorHint">@color/whiteColor</item>
         <item name="colorOnSurface">@color/yellowPrimaryColor</item>
+        <item name="android:textColorPrimary">@color/blackColor</item>
+
     </style>
 </resources>
