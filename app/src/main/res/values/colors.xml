@@ -10,4 +10,23 @@
     <color name="midGrayColor">#FFD6D6D6</color>
     <color name="whiteColor">#FFFFFFFF</color>
     <color name="transparentColor">#00000000</color>
+
+
+
+
+    <color name="primaryColor">#feeb15</color>
+
+    <color name="primaryLightColor">#ffff5c</color>
+
+    <color name="primaryDarkColor">#c7b900</color>
+
+    <color name="secondaryColor">#ff1744</color>
+
+    <color name="secondaryLightColor">#ff616f</color>
+
+    <color name="secondaryDarkColor">#c4001d</color>
+
+    <color name="primaryTextColor">#000000</color>
+
+    <color name="secondaryTextColor">#000000</color>
 </resources>

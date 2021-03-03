@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.WarehouseInventoryManager" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/yellowPrimaryColor</item>
-        <item name="colorPrimaryVariant">@color/yellowSecondaryColor</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColor</item>
         <item name="colorOnPrimary">@color/blackColor</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/accentColor</item>
-        <item name="colorSecondaryVariant">@color/whiteColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
         <item name="colorOnSecondary">@color/blackColor</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/blackColor</item>
@@ -20,3 +20,4 @@
         <!-- https://developer.android.com/codelabs/basic-android-kotlin-training-change-app-theme#2  -->
     </style>
 </resources>
+

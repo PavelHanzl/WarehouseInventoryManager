@@ -26,7 +26,10 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         ActivityRegister_login.setOnClickListener {
-            onBackPressed()
+            val loginActivityIntent = Intent(this@RegisterActivity, LoginActivity::class.java)
+            startActivity(loginActivityIntent)
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
         }
 
     }

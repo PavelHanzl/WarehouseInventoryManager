@@ -74,6 +74,7 @@
         android:layout_marginEnd="16dp"
         android:textColorHint="@color/whiteColor"
         android:hint="@string/passwordLable"
+        app:endIconMode="password_toggle"
         app:layout_constraintTop_toBottomOf="@id/ActivityLogin_email"
         >
         <EditText

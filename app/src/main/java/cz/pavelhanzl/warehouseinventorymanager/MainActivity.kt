@@ -14,17 +14,17 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.menu_header.*
+import kotlinx.android.synthetic.main.menu_header.view.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
-
-//    lateinit var toggle: ActionBarDrawerToggle
 
     private lateinit var listener: NavController.OnDestinationChangedListener
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawer_layout)
         drawerNavigationView.setupWithNavController(navController)
 
-        //drawerHeaderEmail.text="ee"
+        setUpEmailInHeaderOfDrawer()
         setIndividualMenuItems()
 
 
@@ -51,6 +51,12 @@ class MainActivity : AppCompatActivity() {
 //        drawerLayout.addDrawerListener(toggle)
 //        toggle.syncState()
 
+    }
+
+    private fun setUpEmailInHeaderOfDrawer() {
+        val navigationView = drawerNavigationView as NavigationView
+        val headerView = navigationView.getHeaderView(0)
+        headerView.drawerHeaderEmail.text = FirebaseAuth.getInstance().currentUser?.email.toString()
     }
 
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {

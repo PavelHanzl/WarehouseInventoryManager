@@ -50,6 +50,8 @@ class LoginActivity : AppCompatActivity() {
         //Přechází na aktivitu s registrací
         ActivityLogin_register.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
         }
 
     }

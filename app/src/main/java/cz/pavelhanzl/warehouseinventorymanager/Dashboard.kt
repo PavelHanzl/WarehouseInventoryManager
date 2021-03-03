@@ -18,7 +18,7 @@ class Dashboard : Fragment() {
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
         view.textviewdashboard.setOnClickListener{
-            val action = DashboardDirections.navigateDashboardToSettings(245)
+            val action = DashboardDirections.navigateDashboardToSettings(2459)
             Navigation.findNavController(view).navigate(action)
         }
 
