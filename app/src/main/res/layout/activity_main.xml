@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:id="@+id/drawer_layout">
+    android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
 
     <fragment
@@ -20,10 +22,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/main_navigation" />
 
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/drawerNavigationView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        app:headerLayout="@layout/menu_header"
         app:menu="@menu/drawer_menu"/>
+
+
+
 </androidx.drawerlayout.widget.DrawerLayout>

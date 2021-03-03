@@ -22,7 +22,7 @@ class Settings : Fragment() {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         val myNumber = args.number
 
-        view.textviewsettings.setOnClickListener(){Navigation.findNavController(view).navigate(R.id.navigate_settings_to_dashboard)}
+        view.textviewsettings.setOnClickListener(){Navigation.findNavController(view).navigate(R.id.action_settingsFragment_to_aboutFragment)}
         view.textviewsettings.setText("${view.textviewsettings.text} ${myNumber.toString()}")
         return view
     }

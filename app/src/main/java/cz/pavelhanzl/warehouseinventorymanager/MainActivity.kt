@@ -3,7 +3,10 @@ package cz.pavelhanzl.warehouseinventorymanager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -20,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+//    lateinit var toggle: ActionBarDrawerToggle
+
     private lateinit var listener: NavController.OnDestinationChangedListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         setUpDrawerMenu()
         setUpActionBarBasedOnNavigation()
 
+
     }
 
     private fun setUpDrawerMenu() {
@@ -37,10 +43,36 @@ class MainActivity : AppCompatActivity() {
         drawerNavigationView.setupWithNavController(navController)
 
         setIndividualMenuItems()
+
+
+//        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
+//        drawerLayout.addDrawerListener(toggle)
+//        toggle.syncState()
+
     }
 
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (toggle.onOptionsItemSelected(item)) {
+//            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+//                Toast.makeText(applicationContext, "Otevreno", Toast.LENGTH_SHORT).show()
+//                toggle.syncState()
+//                return true
+//            } else {
+//                Toast.makeText(applicationContext, "Zavreno", Toast.LENGTH_SHORT).show()
+//                toggle.syncState()
+//                return super.onOptionsItemSelected(item)
+//            }
+//
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
+
     private fun setUpActionBarBasedOnNavigation() {
-        appBarConfiguration = AppBarConfiguration(navController.graph, drawerLayout)
+
+        appBarConfiguration = AppBarConfiguration(setOf(//nastaví u kterých destinací (fragmentů a aktivit) se má u drawer menu zobrazovat hamburger ikona
+            R.id.dashboardFragment,
+            R.id.settingsFragment
+        ), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 

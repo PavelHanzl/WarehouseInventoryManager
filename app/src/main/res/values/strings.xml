@@ -27,4 +27,6 @@
     <string name="Dashboard">Nástěnka</string>
     <string name="Settings">Nastavení</string>
     <string name="logout">Odhlásit</string>
+    <string name="open">Open</string>
+    <string name="close">Zavřít</string>
 </resources>

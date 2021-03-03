@@ -30,5 +30,13 @@
             android:name="number"
             app:argType="integer"
             android:defaultValue="2" />
+        <action
+            android:id="@+id/action_settingsFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.About"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
 </navigation>

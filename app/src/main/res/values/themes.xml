@@ -1,20 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.WarehouseInventoryManager" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="Theme.WarehouseInventoryManager" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/yellowPrimaryColor</item>
         <item name="colorPrimaryVariant">@color/yellowSecondaryColor</item>
         <item name="colorOnPrimary">@color/blackColor</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/accentColor</item>
-        <item name="colorSecondaryVariant">@color/darkGrayColor</item>
+        <item name="colorSecondaryVariant">@color/whiteColor</item>
         <item name="colorOnSecondary">@color/blackColor</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSecondaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/blackColor</item>
         <!-- Customize your theme here. -->
         <item name="android:textColorHint">@color/whiteColor</item>
-        <item name="colorOnSurface">@color/yellowPrimaryColor</item>
+        <item name="colorOnSurface">@color/darkGrayColor</item>
+
         <item name="android:textColorPrimary">@color/blackColor</item>
 
+        <!-- https://developer.android.com/codelabs/basic-android-kotlin-training-change-app-theme#2  -->
     </style>
 </resources>
