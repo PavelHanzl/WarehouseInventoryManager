@@ -3,8 +3,11 @@
     <color name="accentColor">#FFBB86FC</color>
     <color name="yellowSecondaryColor">#FFf9ef84</color>
     <color name="yellowPrimaryColor">#FFfeeb15</color>
+    <color name="yellowDarkColor">#696969</color>
     <color name="blackColor">#FF000000</color>
     <color name="darkGrayColor">#FF141414</color>
+    <color name="lightGrayColor">#FFF3F3F3</color>
+    <color name="midGrayColor">#FFD6D6D6</color>
     <color name="whiteColor">#FFFFFFFF</color>
     <color name="transparentColor">#00000000</color>
 </resources>

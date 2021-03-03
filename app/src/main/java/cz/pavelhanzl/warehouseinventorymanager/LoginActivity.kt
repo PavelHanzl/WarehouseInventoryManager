@@ -115,6 +115,7 @@ class LoginActivity : AppCompatActivity() {
                         intent.putExtra("user_id", FirebaseAuth.getInstance().currentUser!!.uid)
                         intent.putExtra("email_id", email)
                         startActivity(intent)
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                         finish()
 
                     } else { // Přihlášení pomocí emailu a hesla neproběhlo úspěšně
@@ -164,6 +165,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, getString(R.string.LoginSuccessful), Toast.LENGTH_SHORT).show()
                     val intentMainActivity = Intent(this, MainActivity::class.java)
                     startActivity(intentMainActivity)
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     finish()
                 } else { // Přihlášení pomocí googlu neproběhlo úspěšně
                     // If sign in fails, display a message to the user.

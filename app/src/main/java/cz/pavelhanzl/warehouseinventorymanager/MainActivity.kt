@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.menu_header.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawer_layout)
         drawerNavigationView.setupWithNavController(navController)
 
+        //drawerHeaderEmail.text="ee"
         setIndividualMenuItems()
 
 
@@ -68,7 +70,7 @@ class MainActivity : AppCompatActivity() {
 //    }
 
     private fun setUpActionBarBasedOnNavigation() {
-
+        setSupportActionBar(toolbar)
         appBarConfiguration = AppBarConfiguration(setOf(//nastaví u kterých destinací (fragmentů a aktivit) se má u drawer menu zobrazovat hamburger ikona
             R.id.dashboardFragment,
             R.id.settingsFragment
@@ -85,6 +87,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(applicationContext, getString(R.string.LoggingOut), Toast.LENGTH_SHORT).show()
             FirebaseAuth.getInstance().signOut()
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
             true
         }

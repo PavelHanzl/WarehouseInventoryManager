@@ -13,7 +13,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/whiteColor">
+        android:background="@drawable/warehouse"
+        android:backgroundTintMode="screen"
+        android:backgroundTint="@color/midGrayColor">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/ActivityLogin_animatedLogo"
