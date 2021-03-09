@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
+import cz.pavelhanzl.warehouseinventorymanager.repository.MainRepository
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
 class Dashboard : Fragment() {
@@ -21,6 +22,7 @@ class Dashboard : Fragment() {
             val action = DashboardDirections.navigateDashboardToSettings(2459)
             Navigation.findNavController(view).navigate(action)
         }
+
 
 
         return view
