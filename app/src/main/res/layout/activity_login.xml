@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkGrayColor"
-    tools:context=".LoginActivity">
+    tools:context=".signInUser.LoginActivity">
     <FrameLayout
         android:id="@+id/ActivityLogin_header_image"
         android:layout_width="match_parent"

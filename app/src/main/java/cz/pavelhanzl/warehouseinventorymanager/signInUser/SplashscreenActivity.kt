@@ -1,14 +1,14 @@
-package cz.pavelhanzl.warehouseinventorymanager
+package cz.pavelhanzl.warehouseinventorymanager.signInUser
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.auth.FirebaseAuth
+import cz.pavelhanzl.warehouseinventorymanager.MainActivity
+import cz.pavelhanzl.warehouseinventorymanager.R
 
 class SplashscreenActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth

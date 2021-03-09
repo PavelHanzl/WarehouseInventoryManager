@@ -30,4 +30,10 @@
     <string name="open">Open</string>
     <string name="close">Zavřít</string>
     <string name="edit_profile">Upravit Profil</string>
+    <string name="type_in_name">Jméno nemůže být prázdné!</string>
+    <string name="mail_is_not_in_form">E-mail je ve špatém tvaru!</string>
+    <string name="passwor_must_have">"Heslo musí být alspoň "</string>
+    <string name="number_of_characters">" znaků dlouhé!"</string>
+    <string name="password_not_same">Hesla musí být stejná!</string>
+    <string name="nameLable">Celé jméno</string>
 </resources>

@@ -1,19 +1,20 @@
-package cz.pavelhanzl.warehouseinventorymanager
+package cz.pavelhanzl.warehouseinventorymanager.signInUser
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import android.content.Intent
-import android.provider.ContactsContract
-import android.text.TextUtils
-import android.util.Log
-import android.view.View
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import cz.pavelhanzl.warehouseinventorymanager.MainActivity
+import cz.pavelhanzl.warehouseinventorymanager.R
+import cz.pavelhanzl.warehouseinventorymanager.databinding.ActivityRegisterBinding
+import cz.pavelhanzl.warehouseinventorymanager.databinding.ActivityRegisterBindingImpl
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
-import org.w3c.dom.Text
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +22,10 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        ActivityRegister_RegisterButton.setOnClickListener{
-            AtempRegistration()
+        //Registruje viewmodel k danému view
+        val registerViewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
+        DataBindingUtil.setContentView<ActivityRegisterBinding>(this, R.layout.activity_register).apply { this.setLifecycleOwner(this@RegisterActivity)
+        this.viewmodel=registerViewModel
         }
 
         ActivityRegister_login.setOnClickListener {
@@ -33,15 +36,15 @@ class RegisterActivity : AppCompatActivity() {
         }
 
     }
-
+/*
     /**
      * Pokusí se registrovat uživatele se zadanými hodnotami, získanými z edittextviews. Před registrací
      * probíhá krátká kontrola zadaných údajů na validitu.
      */
     private fun AtempRegistration() {
-        val email = ActivityRegister_emailInput.text.trim().toString()
-        val password = ActivityRegister_passwordInput.text.trim().toString()
-        val passwordCheck = ActivityRegister_passwordInputCheck.text.trim().toString()
+        val email = ActivityRegister_emailInput.text!!.trim().toString()
+        val password = ActivityRegister_passwordInput.text!!.trim().toString()
+        val passwordCheck = ActivityRegister_passwordInputCheck.text!!.trim().toString()
 
         var cancelRegistration = false
         var focusView = ActivityRegister_emailInput
@@ -98,7 +101,7 @@ class RegisterActivity : AppCompatActivity() {
                     Toast.makeText(this, getString(R.string.RegistrationSuccessful), Toast.LENGTH_SHORT).show()
 
                     // Odstraní activity běžící na pozadí ve stacku, pomocí extra předá user_id a email, přejde na hlavní aktivitu a ukončí tuto aktivitu
-                    val intent = Intent(this@RegisterActivity,MainActivity::class.java)
+                    val intent = Intent(this@RegisterActivity, MainActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     intent.putExtra("user_id", firebaseUser.uid)
                     intent.putExtra("email_id", email)
@@ -112,4 +115,7 @@ class RegisterActivity : AppCompatActivity() {
             }
         )
     }
+
+    */
+
 }

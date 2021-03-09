@@ -1,163 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/darkGrayColor"
-    tools:context=".RegisterActivity">
-    <FrameLayout
-        android:id="@+id/ActivityRegister_header_image"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="cz.pavelhanzl.warehouseinventorymanager.signInUser.RegisterViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/warehouse"
-        android:backgroundTintMode="screen"
-        android:backgroundTint="@color/midGrayColor">
+        android:layout_height="match_parent"
+        android:background="@color/darkGrayColor"
+        tools:context=".signInUser.RegisterActivity">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/ActivityRegister_animatedLogo"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            app:lottie_fileName="logoAnimation.json"
-            app:lottie_autoPlay="true" />
-    </FrameLayout>
-
-
-    <TextView
-        android:id="@+id/ActivityRegister_RegisterLable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="35dp"
-        android:text="@string/RegisterLable"
-        android:textColor="@color/whiteColor"
-        android:textAllCaps="true"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_header_image" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ActivityRegister_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="16dp"
-        android:textColorHint="@color/whiteColor"
-        android:hint="@string/emailLable"
-        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_RegisterLable"
-        >
-        <EditText
-            android:id="@+id/ActivityRegister_emailInput"
+        <FrameLayout
+            android:id="@+id/ActivityRegister_header_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:background="@color/transparentColor"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:textColor="@color/whiteColor"
-            tools:text="@string/emailHint"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="150dp"
+            android:backgroundTintMode="screen"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/warehouse"
+                android:scaleType="centerCrop"
+                android:tint="@color/midGrayColor"
+                android:tintMode="screen"/>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/ActivityRegister_animatedLogo"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="logoAnimation.json" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ActivityRegister_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="16dp"
-        android:textColorHint="@color/whiteColor"
-        android:hint="@string/passwordLable"
-        app:endIconMode="password_toggle"
-        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_email"
-        >
-        <EditText
-            android:id="@+id/ActivityRegister_passwordInput"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:background="@color/transparentColor"
-            android:textColor="@color/whiteColor"
-            tools:text="@string/passwordHint"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
+        </FrameLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ActivityRegister_passwordCheck"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="16dp"
-        android:textColorHint="@color/whiteColor"
-        android:hint="@string/passwordLableCheck"
-        app:endIconMode="password_toggle"
-        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_password"
-        >
-        <EditText
-            android:id="@+id/ActivityRegister_passwordInputCheck"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:background="@color/transparentColor"
-            android:textColor="@color/whiteColor"
-            tools:text="@string/passwordHint"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/ActivityRegister_RegisterButton"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:gravity="center"
-        android:text="@string/RegisterButtonText"
-        android:textColor="@color/darkGrayColor"
-        android:textSize="17sp"
-        android:textStyle="bold"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="16dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_passwordCheck" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/ActivityRegister_RegisterButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
+            android:id="@+id/ActivityRegister_RegisterLable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:padding="8dp"
-            android:text="@string/AlreadyHaveAnAccount"
-            android:textColor="@color/whiteColor"/>
-
-        <TextView
-            android:id="@+id/ActivityRegister_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:padding="8dp"
-            android:text="@string/ActivityRegister_LoginText"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="35dp"
+            android:text="@string/RegisterLable"
+            android:textAllCaps="true"
             android:textColor="@color/whiteColor"
+            android:textSize="17sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ActivityRegister_header_image" />
 
-            />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ActivityRegister_name"
+            app:errorEnabled="true"
+            app:errorText="@{viewmodel.nameError}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/nameLable"
+            android:textColorHint="@color/whiteColor"
+            app:layout_constraintTop_toBottomOf="@id/ActivityRegister_RegisterLable">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ActivityRegister_nameInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparentColor"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/whiteColor"
+                android:text="@={viewmodel.nameContent}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ActivityRegister_email"
+            app:errorEnabled="true"
+            app:errorText="@{viewmodel.emailError}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/emailLable"
+            android:textColorHint="@color/whiteColor"
+            app:layout_constraintTop_toBottomOf="@id/ActivityRegister_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ActivityRegister_emailInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparentColor"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/whiteColor"
+                android:text="@={viewmodel.emailContent}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ActivityRegister_password"
+            app:errorEnabled="true"
+            app:errorText="@{viewmodel.passwordErrorLength}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/passwordLable"
+            android:textColorHint="@color/whiteColor"
+            app:endIconMode="password_toggle"
+            app:layout_constraintTop_toBottomOf="@id/ActivityRegister_email">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ActivityRegister_passwordInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparentColor"
+                android:inputType="textPassword"
+                android:textColor="@color/whiteColor"
+                android:text="@={viewmodel.password1Content}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ActivityRegister_passwordCheck"
+            app:errorEnabled="true"
+            app:errorText="@{viewmodel.passwordErrorSimilarity}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/passwordLableCheck"
+            android:textColorHint="@color/whiteColor"
+            app:endIconMode="password_toggle"
+            app:layout_constraintTop_toBottomOf="@id/ActivityRegister_password">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ActivityRegister_passwordInputCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparentColor"
+                android:inputType="textPassword"
+                android:textColor="@color/whiteColor"
+                android:text="@={viewmodel.password2Content}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/ActivityRegister_RegisterButton"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="@string/RegisterButtonText"
+            android:textColor="@color/darkGrayColor"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:onClick="@{() -> viewmodel.onRegisterClick()}"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ActivityRegister_passwordCheck" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ActivityRegister_RegisterButton">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+                android:text="@string/AlreadyHaveAnAccount"
+                android:textColor="@color/whiteColor" />
+
+            <TextView
+                android:id="@+id/ActivityRegister_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:padding="8dp"
+                android:text="@string/ActivityRegister_LoginText"
+                android:textColor="@color/whiteColor"
+                android:textStyle="bold"
+
+                />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

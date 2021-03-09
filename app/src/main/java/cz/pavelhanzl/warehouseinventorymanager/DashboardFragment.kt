@@ -1,15 +1,18 @@
 package cz.pavelhanzl.warehouseinventorymanager
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.google.firebase.firestore.FirebaseFirestore
 import cz.pavelhanzl.warehouseinventorymanager.repository.MainRepository
 import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
-class Dashboard : Fragment() {
+
+class DashboardFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -18,13 +21,9 @@ class Dashboard : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
-        view.llButtonSettings.setOnClickListener{
-            val action = DashboardDirections.navigateDashboardToSettings(2459)
-            Navigation.findNavController(view).navigate(action)
-        }
 
 
-
+MainRepository.writeUser()
         return view
     }
 
