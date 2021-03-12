@@ -36,4 +36,5 @@
     <string name="number_of_characters">" znaků dlouhé!"</string>
     <string name="password_not_same">Hesla musí být stejná!</string>
     <string name="nameLable">Celé jméno</string>
+    <string name="RegistrationSuccess">Registrace proběhla úspěšně!</string>
 </resources>

@@ -3,6 +3,7 @@ package cz.pavelhanzl.warehouseinventorymanager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -17,6 +18,7 @@ import cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.menu_header.*
 import kotlinx.android.synthetic.main.menu_header.view.*
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,11 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         setUpEmailInHeaderOfDrawer()
         setIndividualMenuItems()
-
-
-//        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
-//        drawerLayout.addDrawerListener(toggle)
-//        toggle.syncState()
+        
 
     }
 
@@ -57,21 +55,6 @@ class MainActivity : AppCompatActivity() {
         headerView.drawerHeaderEmail.text = FirebaseAuth.getInstance().currentUser?.email.toString()
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        if (toggle.onOptionsItemSelected(item)) {
-//            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-//                Toast.makeText(applicationContext, "Otevreno", Toast.LENGTH_SHORT).show()
-//                toggle.syncState()
-//                return true
-//            } else {
-//                Toast.makeText(applicationContext, "Zavreno", Toast.LENGTH_SHORT).show()
-//                toggle.syncState()
-//                return super.onOptionsItemSelected(item)
-//            }
-//
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
 
     private fun setUpActionBarBasedOnNavigation() {
         setSupportActionBar(toolbar)
