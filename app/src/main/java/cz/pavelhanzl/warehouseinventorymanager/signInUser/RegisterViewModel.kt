@@ -44,7 +44,13 @@ class RegisterViewModel : ViewModel() {
     val passwordErrorSimilarity: LiveData<String> get() = _passwordErrorSimilarity
 
 
-    var status = MutableLiveData<String>("")
+    private val _status = MutableLiveData<String>("")
+    val status: LiveData<String> get() = _status
+
+    private val _moveToDashboard = MutableLiveData<Boolean>()
+    val moveToDashboard: LiveData<Boolean> get() = _moveToDashboard
+
+
     ///
 
 
@@ -53,31 +59,24 @@ class RegisterViewModel : ViewModel() {
         if (validForRegistration()) {
 
             viewModelScope.launch(Dispatchers.IO) {
-                var coroutineStatus = ""
-                var exception: String? = null
 
                 try {
-                    val firebase = createUserInFirebaseAuth(
-                        emailContent.value!!,
-                        password1Content.value!!
-                    ).await()
-                    Log.d("Fire", firebase.toString())
+                    createUserInFirebaseAuth(emailContent.value!!, password1Content.value!!).await()
                 } catch (e: Exception) {
-                    Log.d("Fire", e.toString())
-                    exception = e.localizedMessage
+                    _status.postValue(e.message)
+                    return@launch
                 }
 
-                if (exception == null){
+                try {
                     createUserInFirestore(nameContent.value!!, emailContent.value!!).await()
-                    coroutineStatus = stringResource(R.string.RegistrationSuccess)
-                    Log.d("Fire", "Dělam usera")
-                } else{
-                    coroutineStatus=exception.toString()
+                } catch (e: Exception) {
+                    _status.postValue(e.localizedMessage)
+                    FirebaseAuth.getInstance().currentUser!!.delete()
+                    return@launch
                 }
 
-                withContext(Dispatchers.Main) {
-                    status.value = coroutineStatus
-                }
+
+                _moveToDashboard.postValue(true)
             }
 
 
@@ -138,26 +137,14 @@ class RegisterViewModel : ViewModel() {
 
 
     fun createUserInFirebaseAuth(email: String, password: String): Task<AuthResult> {
-
-        val registrationTask =
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) { // Registrace proběhla úspěch
-                        Log.d("Registrace", "Úspěch")
-                    } else { // Registrace neproběhla úspěšně
-                        Log.d("Registrace", "Neúspěch")
-                    }
-                }
-        return registrationTask
+        return FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
     }
 
-    //toFirestore
-    fun createUserInFirestore(name: String, email: String): Task<DocumentReference> {
+    fun createUserInFirestore(name: String, email: String): Task<Void> {
         val user: MutableMap<String, Any> = HashMap()
         user["name"] = name
         user["email"] = email
 
-        val createUserInDb = db.collection("users") .add(user)
-        return createUserInDb
+        return db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(user)
     }
 }
