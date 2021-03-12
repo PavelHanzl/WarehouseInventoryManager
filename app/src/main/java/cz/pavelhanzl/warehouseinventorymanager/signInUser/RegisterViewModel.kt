@@ -14,6 +14,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.WarehouseInventoryManagerApp
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
 import cz.pavelhanzl.warehouseinventorymanager.repository.MainRepository
 import kotlinx.coroutines.*
@@ -21,7 +22,7 @@ import kotlinx.coroutines.tasks.await
 
 class RegisterViewModel : ViewModel() {
 
-    private val passwordLength = 6
+    private val passwordLength = Constants.MIN_PASSWORD_LENGTH
     private val db = FirebaseFirestore.getInstance()
 
     // proměné, které může měnit View a jsou nabindované přes XML

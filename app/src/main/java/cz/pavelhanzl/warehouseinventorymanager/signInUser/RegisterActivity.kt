@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity() {
-    lateinit var registerViewModel : RegisterViewModel
+    lateinit var registerViewModel: RegisterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportActionBar?.hide() //Skryje action bar pro tuto aktivitu
@@ -27,11 +27,10 @@ class RegisterActivity : AppCompatActivity() {
         //Registruje viewmodel k danému view
         registerViewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
 
+        //nastaví Databinding a propojí viewmodel s xml
         DataBindingUtil.setContentView<ActivityRegisterBinding>(this, R.layout.activity_register)
             .apply {
-                this.setLifecycleOwner(
-                    this@RegisterActivity
-                )
+                this.setLifecycleOwner(this@RegisterActivity)
                 this.viewmodel = registerViewModel
             }
 

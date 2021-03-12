@@ -61,7 +61,8 @@ class MainActivity : AppCompatActivity() {
         val headerView = navigationView.getHeaderView(0)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val userDocument = db.collection("users").document(mAuth.currentUser!!.uid).get().await()
+            val userDocument =
+                db.collection("users").document(mAuth.currentUser!!.uid).get().await()
             val currentlyLoggedInUser = userDocument.toObject<User>()
             withContext(Dispatchers.Main) {
                 headerView.drawerHeaderEmail.text = currentlyLoggedInUser!!.name

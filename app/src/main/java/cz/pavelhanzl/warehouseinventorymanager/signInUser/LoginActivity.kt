@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
+import cz.pavelhanzl.warehouseinventorymanager.databinding.ActivityLoginBinding
 import cz.pavelhanzl.warehouseinventorymanager.databinding.ActivityRegisterBinding
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
@@ -24,9 +26,10 @@ import kotlinx.android.synthetic.main.activity_register.*
 
 class LoginActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         private const val RC_SIGN_IN = 120
     }
+
     private lateinit var mAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -40,21 +43,44 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         //Registruje viewmodel k danému view
-         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
+        //nastaví Databinding a propojí viewmodel s xml
+        DataBindingUtil.setContentView<ActivityLoginBinding>(this, R.layout.activity_login)
+            .apply {
+                this.setLifecycleOwner(this@LoginActivity)
+                this.viewmodel = loginViewModel
+            }
 
 
         // Configure Google Sign In
         setGoogleSignIn()
 
         //Pokusí se přihlásit pomcí googlu
-        google_sign_in_button.setOnClickListener{
+        google_sign_in_button.setOnClickListener {
             signIn()
         }
 
+
+        loginViewModel.status.observe(this, Observer { status ->
+            if (status != "") {
+                Toast.makeText(this, status.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        loginViewModel.moveToDashboard.observe(this, Observer {
+            if (it) {
+                Toast.makeText(this, R.string.LoginSuccessful, Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                finish()
+            }
+        })
+
         //Pokusí se přihlásit emailem a heslem
         ActivityLogin_loginButton.setOnClickListener() {
-            attempLoginWithEmailAndPassword()
+            //attempLoginWithEmailAndPassword()
         }
 
         //Přechází na aktivitu s registrací
@@ -75,67 +101,6 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
-    private fun attempLoginWithEmailAndPassword() {
-        val email = ActivityLogin_emailInput.text.trim().toString()
-        val password = ActivityLogin_passwordInput.text.trim().toString()
-
-        var cancelLogin = false
-        var focusView = ActivityLogin_emailInput
-
-        //Validace zadaných polí
-        if (isEmpty(email)) {
-            Toast.makeText(this, getString(R.string.emptyEmail), Toast.LENGTH_SHORT).show()
-            focusView = ActivityLogin_emailInput
-            cancelLogin = true
-        } else if (isEmpty(password)) {
-            Toast.makeText(this, getString(R.string.emptyPassword), Toast.LENGTH_SHORT).show()
-            focusView = ActivityLogin_passwordInput
-            cancelLogin = true
-        } else if (!isEmailValid(email)) {
-            Toast.makeText(this, getString(R.string.invalidEmailFormat), Toast.LENGTH_SHORT).show()
-            focusView = ActivityLogin_emailInput
-            cancelLogin = true
-        }
-
-        if (cancelLogin) {
-            focusView.requestFocus() //pokud nastala chyba, tak focusne na první špatně vyplněné pole
-        } else {
-            login(email, password) //pokud vše bez chyby, tak přejde na registraci
-        }
-    }
-
-
-    //Ověřuje, zdali je parametr prázdný
-    private fun isEmpty(input: String) = input.isEmpty()
-
-    //Ověřuje, zdali parametr obsahuje zavináč a tečku
-    private fun isEmailValid(email: String): Boolean {
-        return email.contains("@") && email.contains(".")
-    }
-
-    //provede login na základě emailu a hesla
-    private fun login(email: String, password: String) {
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(
-                OnCompleteListener<AuthResult> { task ->
-                    if (task.isSuccessful) { // Přihlášení pomocí emailu a hesla proběhlo úspěšně
-                        val firebaseUser = task.result!!.user!!
-                        Toast.makeText(this, getString(R.string.LoginSuccessful), Toast.LENGTH_SHORT).show()
-
-                        // Odstraní activity běžící na pozadí ve stacku, pomocí extra předá user_id a email, přejde na hlavní aktivitu a ukončí tuto aktivitu
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        intent.putExtra("user_id", FirebaseAuth.getInstance().currentUser!!.uid)
-                        intent.putExtra("email_id", email)
-                        startActivity(intent)
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                        finish()
-
-                    } else { // Přihlášení pomocí emailu a hesla neproběhlo úspěšně
-                        Toast.makeText(this, task.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
-                    }
-                }
-        )
-    }
 
     //google sign in method
     private fun signIn() {
@@ -150,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             val exception = task.exception
-            if (task.isSuccessful){
+            if (task.isSuccessful) {
                 try {
                     // Google Sign In was successful, authenticate with Firebase
                     val account = task.getResult(ApiException::class.java)!!
@@ -161,7 +126,7 @@ class LoginActivity : AppCompatActivity() {
                     Log.w("SignInWithGoogle", "Google sign in failed", e)
                     // ...
                 }
-            } else{
+            } else {
                 Log.w("SignInWithGoogle", exception.toString())
             }
 
@@ -174,14 +139,16 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) { // Přihlášení pomocí googlu proběhlo úspěšně
                     // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(this, getString(R.string.LoginSuccessful), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.LoginSuccessful), Toast.LENGTH_SHORT)
+                        .show()
                     val intentMainActivity = Intent(this, MainActivity::class.java)
                     startActivity(intentMainActivity)
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     finish()
                 } else { // Přihlášení pomocí googlu neproběhlo úspěšně
                     // If sign in fails, display a message to the user.
-                    Toast.makeText(this, task.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, task.exception!!.message.toString(), Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
     }
