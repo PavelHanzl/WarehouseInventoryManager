@@ -1,9 +1,11 @@
 package cz.pavelhanzl.warehouseinventorymanager.signInUser
 
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -46,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         mAuth = FirebaseAuth.getInstance()
-        supportActionBar?.hide() //Skryje action bar pro tuto aktivitu
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN) //Skryje status bar pro tuto aktivitu
 
         super.onCreate(savedInstanceState)
 

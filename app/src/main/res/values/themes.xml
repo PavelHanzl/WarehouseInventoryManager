@@ -4,17 +4,15 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">@color/primaryLightColor</item>
-        <item name="colorOnPrimary">@color/blackColor</item>
+        <item name="colorOnPrimary">@color/whiteColor</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondaryColor</item>
         <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
-        <item name="colorOnSecondary">@color/blackColor</item>
+        <item name="colorOnSecondary">@color/whiteColor</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/blackColor</item>
+        <item name="android:statusBarColor">@color/primaryColor</item>
         <!-- Customize your theme here. -->
-        <item name="android:textColorHint">@color/whiteColor</item>
-        <item name="colorOnSurface">@color/whiteColor</item>
-        <item name="android:textColorPrimary">@color/blackColor</item>
+
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item> <!--Zakazuje defaultně dark mode-->
 
         <!-- https://developer.android.com/codelabs/basic-android-kotlin-training-change-app-theme#2  -->

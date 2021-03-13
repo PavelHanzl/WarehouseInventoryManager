@@ -37,4 +37,11 @@
     <string name="password_not_same">Hesla musí být stejná!</string>
     <string name="nameLable">Celé jméno</string>
     <string name="RegistrationSuccess">Registrace proběhla úspěšně!</string>
+    <string name="drawerMenu_other">Ostatní</string>
+    <string name="drawerMenu_warehouses">Sklady</string>
+    <string name="drawerMenu_sharedWarehouses">Ostatní sklady</string>
+    <string name="drawerMenu_ownWarehouses">Mé sklady</string>
+    <string name="drawerMenu_warehouseInvitations">Pozvánky do skladů</string>
+    <string name="drawerMenu_notification">Notifikace</string>
+    <string name="drawerMenu_help">Nápověda</string>
 </resources>

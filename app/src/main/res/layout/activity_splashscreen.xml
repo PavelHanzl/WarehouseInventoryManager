@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".signInUser.SplashscreenActivity"
-    android:background="@color/yellowPrimaryColor">
+    android:background="@color/blue1">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/ActivitySplashscreen_animatedZnak"

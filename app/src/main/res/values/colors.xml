@@ -1,34 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="accentColor">#FFBB86FC</color>
-    <color name="yellowSecondaryColor">#FFf9ef84</color>
-    <color name="yellowPrimaryColor">#FFfeeb15</color>
-    <color name="yellowDarkColor">#696969</color>
-    <color name="blackColor">#FF000000</color>
-    <color name="darkGrayColor">#FF141414</color>
-    <color name="lightGrayColor">#FFF3F3F3</color>
-    <color name="midGrayColor">#FFD6D6D6</color>
+
     <color name="whiteColor">#FFFFFFFF</color>
-    <color name="transparentColor">#00000000</color>
+    <color name="lightGrayColor">#FFD6D6D6</color>
+    <color name="midGrayColor">#696969</color>
+    <color name="darkGrayColor">#FF141414</color>
+    <color name="blackColor">#FF000000</color>
+
+    <color name="blue1">#F1F9FF</color>
+    <color name="blue2">#BCE0FD</color>
+    <color name="blue3">#7FC4FD</color>
 
 
-
-
-    <color name="primaryColor">#feeb15</color>
-
-    <color name="primaryLightColor">#ffff5c</color>
-
-    <color name="primaryDarkColor">#c7b900</color>
-
-    <color name="secondaryColor">#ff1744</color>
-
-    <color name="secondaryLightColor">#ff616f</color>
-
-    <color name="secondaryDarkColor">#c4001d</color>
-
+    <color name="primaryColor">#2699fb</color>
+    <color name="primaryLightColor">#72c9ff</color>
+    <color name="primaryDarkColor">#006cc7</color>
+    <color name="secondaryColor">#f50057</color>
+    <color name="secondaryLightColor">#ff5983</color>
+    <color name="secondaryDarkColor">#bb002f</color>
     <color name="primaryTextColor">#000000</color>
-
     <color name="secondaryTextColor">#000000</color>
-    <color name="wireframeBlue">#2699FB</color>
+    <color name="transparentColor">#00000000</color>
 
 </resources>

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@drawable/warehouse"
     android:backgroundTintMode="screen"
-    android:backgroundTint="@color/midGrayColor">
+    android:backgroundTint="@color/lightGrayColor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,19 +34,12 @@
                 android:layout_marginTop="10dp"
                 android:text="mail@domain.com"
                 android:textStyle="bold"
-                android:textColor="@color/blackColor"
+
                 android:layout_gravity="end" />
 
         </LinearLayout>
 
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/yellowPrimaryColor"
-        android:gravity="end"
-        android:orientation="horizontal" />
 
 </LinearLayout>

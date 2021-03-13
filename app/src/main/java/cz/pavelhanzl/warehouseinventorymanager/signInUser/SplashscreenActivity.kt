@@ -1,10 +1,13 @@
 package cz.pavelhanzl.warehouseinventorymanager.signInUser
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import com.google.firebase.auth.FirebaseAuth
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
@@ -15,7 +18,8 @@ class SplashscreenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //Vypne defaultně tmavý režim při spuštění pro celou apku
-        supportActionBar?.hide() //Skryje action bar pro tuto aktivitu
+
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN) //Skryje status bar pro tuto aktivitu
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splashscreen)

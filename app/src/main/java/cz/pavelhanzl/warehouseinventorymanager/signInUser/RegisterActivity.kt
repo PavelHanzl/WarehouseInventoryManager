@@ -3,6 +3,7 @@ package cz.pavelhanzl.warehouseinventorymanager.signInUser
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -20,7 +21,8 @@ class RegisterActivity : AppCompatActivity() {
     lateinit var registerViewModel: RegisterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        supportActionBar?.hide() //Skryje action bar pro tuto aktivitu
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN) //Skryje status bar pro tuto aktivitu
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 

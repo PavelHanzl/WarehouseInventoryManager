@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteColor"
     tools:context=".DashboardFragment">
 
 
@@ -22,7 +21,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:background="@color/lightGrayColor"
+            android:background="@color/blue1"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
@@ -36,7 +35,7 @@
                 android:layout_marginTop="-10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_ownwarehouse"
-                android:tint="@color/wireframeBlue" />
+                android:tint="@color/primaryColor" />
 
 
             <com.google.android.material.textview.MaterialTextView
@@ -58,7 +57,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
-            android:background="@color/lightGrayColor"
+            android:background="@color/blue1"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
@@ -72,7 +71,7 @@
                 android:layout_marginTop="-10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_sharedwarehouse"
-                android:tint="@color/wireframeBlue" />
+                android:tint="@color/primaryColor" />
 
 
             <com.google.android.material.textview.MaterialTextView
@@ -102,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.5"
-                android:background="@color/lightGrayColor"
+                android:background="@color/blue1"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
@@ -115,7 +114,7 @@
                     android:layout_marginTop="-10dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_warehousenotification"
-                    android:tint="@color/wireframeBlue" />
+                    android:tint="@color/primaryColor" />
 
 
                 <com.google.android.material.textview.MaterialTextView
@@ -146,7 +145,7 @@
                         android:layout_height="fill_parent"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="0.33"
-                        android:background="@color/lightGrayColor"
+                        android:background="@color/blue1"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
@@ -160,7 +159,7 @@
                             android:layout_marginStart="25dp"
                             android:scaleType="fitCenter"
                             android:src="@drawable/ic_notification"
-                            android:tint="@color/wireframeBlue" />
+                            android:tint="@color/primaryColor" />
 
 
                         <com.google.android.material.textview.MaterialTextView
@@ -181,7 +180,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:layout_weight="0.33"
-                        android:background="@color/lightGrayColor"
+                        android:background="@color/blue1"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
@@ -195,7 +194,7 @@
                             android:layout_marginStart="25dp"
                             android:scaleType="fitCenter"
                             android:src="@drawable/ic_help"
-                            android:tint="@color/wireframeBlue" />
+                            android:tint="@color/primaryColor" />
 
 
                         <com.google.android.material.textview.MaterialTextView
@@ -216,7 +215,7 @@
                         android:layout_height="fill_parent"
                         android:layout_marginTop="10dp"
                         android:layout_weight="0.33"
-                        android:background="@color/lightGrayColor"
+                        android:background="@color/blue1"
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
@@ -230,7 +229,7 @@
                             android:layout_marginStart="25dp"
                             android:scaleType="fitCenter"
                             android:src="@drawable/ic_settings"
-                            android:tint="@color/wireframeBlue" />
+                            android:tint="@color/primaryColor" />
 
 
                         <com.google.android.material.textview.MaterialTextView

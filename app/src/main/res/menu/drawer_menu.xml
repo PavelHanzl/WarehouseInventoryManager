@@ -1,17 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/group_dashboard"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/dashboardFragment"
-            android:title="@string/Dashboard"/>
-        <item
-            android:id="@+id/settingsFragment"
-            android:title="@string/Settings" />
+            android:icon="@drawable/ic_dashboard"
+            android:title="@string/Dashboard" />
+
     </group>
-    <group >
-        <item
-            android:id="@+id/menuItem_logout"
-            android:title="@string/logout" />
-    </group>
+
+    <item android:title="@string/drawerMenu_warehouses">
+        <menu>
+            <item
+                android:id="@+id/ownWarehouseFragment"
+                android:icon="@drawable/ic_ownwarehouse"
+                android:title="@string/drawerMenu_ownWarehouses" />
+            <item
+                android:id="@+id/sharedWarehouseFragment"
+                android:icon="@drawable/ic_sharedwarehouse"
+                android:title="@string/drawerMenu_sharedWarehouses" />
+            <item
+                android:id="@+id/warehouseInvitationFragment"
+                android:icon="@drawable/ic_warehousenotification"
+                android:title="@string/drawerMenu_warehouseInvitations" />
+            <item
+                android:id="@+id/notificationFragment"
+                android:icon="@drawable/ic_notification"
+                android:title="@string/drawerMenu_notification" />
+        </menu>
+    </item>
+
+    <item android:title="@string/drawerMenu_other">
+        <menu>
+            <group
+                android:id="@+id/group_other"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/settingsFragment"
+                    android:icon="@drawable/ic_settings"
+                    android:title="@string/Settings" />
+                <item
+                    android:id="@+id/helpFragment"
+                    android:icon="@drawable/ic_help"
+                    android:title="@string/drawerMenu_help" />
+                <item
+                    android:id="@+id/menuItem_logout"
+                    android:icon="@drawable/ic_logout"
+                    android:title="@string/logout" />
+            </group>
+        </menu>
+    </item>
+
 </menu>
