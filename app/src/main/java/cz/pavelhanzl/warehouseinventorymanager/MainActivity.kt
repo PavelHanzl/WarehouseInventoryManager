@@ -4,12 +4,15 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -23,6 +26,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import cz.pavelhanzl.warehouseinventorymanager.repository.User
 import cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginActivity
+import cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.menu_header.*
 import kotlinx.android.synthetic.main.menu_header.view.*
@@ -38,7 +42,12 @@ class MainActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val mAuth = FirebaseAuth.getInstance()
 
+    lateinit var mainActivityViewModel: MainActivityViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        //Registruje viewmodel k danému view
+        mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -55,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpDrawerMenu() {
         navController = findNavController(R.id.fragment)
-        drawerLayout = findViewById(R.id.drawer_layout)
+        drawerLayout = drawer_layout
         drawerNavigationView.setupWithNavController(navController)
 
         setUpNameInHeaderOfDrawer()
@@ -68,28 +77,13 @@ class MainActivity : AppCompatActivity() {
         val navigationView = drawerNavigationView as NavigationView
         val headerView = navigationView.getHeaderView(0)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val userDocument = db.collection("users").document(mAuth.currentUser!!.uid)
-            userDocument.addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    Log.w("Header", "Listen failed.", error)
-                    return@addSnapshotListener
-                }
+        mainActivityViewModel.name.observe(this, Observer { name ->
+            headerView.drawerHeaderEmail.text = name
+        })
 
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d("Header", "Current data: ${snapshot.data}")
-                    headerView.drawerHeaderEmail.text = snapshot.toObject<User>()!!.name
-                } else {
-                    Log.d("Header", "Current data: null")
-                }
-            }
-            /*
-            val currentlyLoggedInUser = userDocument.toObject<User>()
-            withContext(Dispatchers.Main) {
-                headerView.drawerHeaderEmail.text = currentlyLoggedInUser!!.name
-            }*/
-        }
-
+        mainActivityViewModel.profilePhoto.observe(this, Observer { profilePhoto ->
+            profileImage.setImageBitmap(profilePhoto)
+        })
 
     }
 
@@ -110,16 +104,20 @@ class MainActivity : AppCompatActivity() {
         //Logout menu item
         val menuItemLogout = drawerNavigationView.menu.findItem(R.id.menuItem_logout)
         menuItemLogout.setOnMenuItemClickListener {
-            Toast.makeText(applicationContext, getString(R.string.LoggingOut), Toast.LENGTH_SHORT)
-                .show()
-            FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            finish()
+            logOut()
             true
         }
 
         //sem přijdou další tlačítka
+    }
+
+    private fun logOut() {
+        Toast.makeText(applicationContext, getString(R.string.LoggingOut), Toast.LENGTH_SHORT)
+            .show()
+        FirebaseAuth.getInstance().signOut()
+        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
