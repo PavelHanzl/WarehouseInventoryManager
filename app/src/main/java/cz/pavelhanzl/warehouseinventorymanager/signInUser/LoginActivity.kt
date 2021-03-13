@@ -1,6 +1,5 @@
 package cz.pavelhanzl.warehouseinventorymanager.signInUser
 
-import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

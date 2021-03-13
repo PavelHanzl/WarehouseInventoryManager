@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -37,9 +38,11 @@ class MainActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val mAuth = FirebaseAuth.getInstance()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN) //Skryje status bar pro tuto aktivitu
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        ) //Skryje status bar pro tuto aktivitu
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -55,28 +58,40 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawer_layout)
         drawerNavigationView.setupWithNavController(navController)
 
-        setUpEmailInHeaderOfDrawer()
+        setUpNameInHeaderOfDrawer()
         setIndividualMenuItems()
 
 
     }
 
-    private fun setUpEmailInHeaderOfDrawer() {
+    private fun setUpNameInHeaderOfDrawer() {
         val navigationView = drawerNavigationView as NavigationView
         val headerView = navigationView.getHeaderView(0)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val userDocument =
-                db.collection("users").document(mAuth.currentUser!!.uid).get().await()
+            val userDocument = db.collection("users").document(mAuth.currentUser!!.uid)
+            userDocument.addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.w("Header", "Listen failed.", error)
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d("Header", "Current data: ${snapshot.data}")
+                    headerView.drawerHeaderEmail.text = snapshot.toObject<User>()!!.name
+                } else {
+                    Log.d("Header", "Current data: null")
+                }
+            }
+            /*
             val currentlyLoggedInUser = userDocument.toObject<User>()
             withContext(Dispatchers.Main) {
                 headerView.drawerHeaderEmail.text = currentlyLoggedInUser!!.name
-            }
+            }*/
         }
 
 
     }
-
 
     private fun setUpActionBarBasedOnNavigation() {
         setSupportActionBar(toolbar)

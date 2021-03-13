@@ -54,6 +54,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.0'
+    implementation 'com.google.firebase:firebase-storage-ktx:19.2.1'
 
 
     testImplementation 'junit:junit:4.+'

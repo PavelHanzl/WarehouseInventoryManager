@@ -76,7 +76,6 @@ class LoginViewModel : ViewModel() {
   FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(
    OnCompleteListener<AuthResult> { task ->
     if (task.isSuccessful) { // Přihlášení pomocí emailu a hesla proběhlo úspěšně
-     _status.value= "Super"
      _moveToDashboard.value = true
     } else { // Přihlášení pomocí emailu a hesla neproběhlo úspěšně
      _status.value = task.exception!!.message.toString()
