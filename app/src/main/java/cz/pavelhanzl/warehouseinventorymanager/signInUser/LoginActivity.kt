@@ -13,16 +13,24 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.ActivityLoginBinding
 import cz.pavelhanzl.warehouseinventorymanager.databinding.ActivityRegisterBinding
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
-
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
 
@@ -30,6 +38,7 @@ class LoginActivity : AppCompatActivity() {
         private const val RC_SIGN_IN = 120
     }
 
+    private val db = FirebaseFirestore.getInstance()
     private lateinit var mAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
 
@@ -40,7 +49,6 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide() //Skryje action bar pro tuto aktivitu
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
         //Registruje viewmodel k danému view
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
@@ -53,15 +61,6 @@ class LoginActivity : AppCompatActivity() {
             }
 
 
-        // Configure Google Sign In
-        setGoogleSignIn()
-
-        //Pokusí se přihlásit pomcí googlu
-        google_sign_in_button.setOnClickListener {
-            signIn()
-        }
-
-
         loginViewModel.status.observe(this, Observer { status ->
             if (status != "") {
                 Toast.makeText(this, status.toString(), Toast.LENGTH_SHORT).show()
@@ -70,18 +69,9 @@ class LoginActivity : AppCompatActivity() {
 
         loginViewModel.moveToDashboard.observe(this, Observer {
             if (it) {
-                Toast.makeText(this, R.string.LoginSuccessful, Toast.LENGTH_SHORT).show()
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                startActivity(intent)
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                finish()
+                moveToDashboard()
             }
         })
-
-        //Pokusí se přihlásit emailem a heslem
-        ActivityLogin_loginButton.setOnClickListener() {
-            //attempLoginWithEmailAndPassword()
-        }
 
         //Přechází na aktivitu s registrací
         ActivityLogin_register.setOnClickListener {
@@ -90,6 +80,22 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
+        // Configure Google Sign In
+        setGoogleSignIn()
+
+        //Pokusí se přihlásit pomcí googlu
+        google_sign_in_button.setOnClickListener {
+            signIn()
+        }
+
+    }
+
+    private fun moveToDashboard() {
+        Toast.makeText(this, R.string.LoginSuccessful, Toast.LENGTH_SHORT).show()
+        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        finish()
     }
 
     private fun setGoogleSignIn() {
@@ -100,7 +106,6 @@ class LoginActivity : AppCompatActivity() {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
-
 
     //google sign in method
     private fun signIn() {
@@ -135,22 +140,58 @@ class LoginActivity : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) { // Přihlášení pomocí googlu proběhlo úspěšně
-                    // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(this, getString(R.string.LoginSuccessful), Toast.LENGTH_SHORT)
-                        .show()
-                    val intentMainActivity = Intent(this, MainActivity::class.java)
-                    startActivity(intentMainActivity)
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                    finish()
-                } else { // Přihlášení pomocí googlu neproběhlo úspěšně
-                    // If sign in fails, display a message to the user.
-                    Toast.makeText(this, task.exception!!.message.toString(), Toast.LENGTH_SHORT)
-                        .show()
-                }
+
+
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                mAuth.signInWithCredential(credential).await()
+                Log.d("Firestore", "Login with google")
+            } catch (e: FirebaseAuthException) {
+                Log.d("Firestore", "Google down: " + "${e.message}")
+                return@launch
             }
+
+            try {
+                val userDocumentRef =
+                    db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                        .get().await()
+                if (userDocumentRef.exists()) {
+                    withContext(Dispatchers.Main){
+                        moveToDashboard()
+                    }
+                    return@launch
+                }
+            } catch (e: Exception) {
+                Log.d("Firestore", "Reference dokumentu usera nenalezena!" + "${e.message}")
+            }
+
+            try {
+                createUserInFirestore(
+                    mAuth.currentUser!!.displayName.toString(),
+                    mAuth.currentUser!!.email.toString()
+                ).await()
+            } catch (e: Exception) {
+                mAuth.currentUser!!.delete()
+                return@launch
+            }
+
+            withContext(Dispatchers.Main){
+                moveToDashboard()
+            }
+
+        }
+
+    }
+
+    fun createUserInFirestore(name: String, email: String): Task<Void> {
+
+        val user: MutableMap<String, Any> = HashMap()
+        user["name"] = name
+        user["email"] = email
+
+        return db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .set(user)
+
     }
 
 }
