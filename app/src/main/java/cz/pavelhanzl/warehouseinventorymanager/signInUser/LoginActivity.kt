@@ -78,7 +78,6 @@ class LoginActivity : AppCompatActivity() {
         ActivityLogin_register.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            finish()
         }
 
         // Configure Google Sign In
@@ -174,6 +173,12 @@ class LoginActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 mAuth.currentUser!!.delete()
                 return@launch
+            }
+
+            try {
+                loginViewModel.saveUserProfilePhotoFromGoogleAuth()
+            } catch (e: Exception){
+                Log.d("Storage", "Nahrávání obrázku neprošlo!" + "${e.message}")
             }
 
             withContext(Dispatchers.Main){

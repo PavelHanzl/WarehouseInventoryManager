@@ -1,6 +1,7 @@
 package cz.pavelhanzl.warehouseinventorymanager.signInUser
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -9,12 +10,16 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
+import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
+import java.io.ByteArrayOutputStream
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel : BaseViewModel() {
  private val passwordLength = Constants.MIN_PASSWORD_LENGTH
 
  var emailContent = MutableLiveData<String>("")
@@ -84,6 +89,15 @@ class LoginViewModel : ViewModel() {
   )
  }
 
+fun saveUserProfilePhotoFromGoogleAuth(): UploadTask {
+  var userImageURL = auth.currentUser!!.photoUrl.toString()
+  var photoRef = storage.child("images/" + auth.currentUser!!.uid + "/profile.jpg")
+  val picture = Picasso.get().load(userImageURL).get()
+  val baos = ByteArrayOutputStream()
+  picture.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+  val data = baos.toByteArray()
+  return photoRef.putBytes(data)
+ }
 
 }
 

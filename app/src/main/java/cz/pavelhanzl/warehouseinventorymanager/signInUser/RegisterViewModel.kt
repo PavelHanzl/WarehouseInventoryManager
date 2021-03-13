@@ -17,13 +17,13 @@ import cz.pavelhanzl.warehouseinventorymanager.WarehouseInventoryManagerApp
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
 import cz.pavelhanzl.warehouseinventorymanager.repository.MainRepository
+import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel : BaseViewModel() {
 
     private val passwordLength = Constants.MIN_PASSWORD_LENGTH
-    private val db = FirebaseFirestore.getInstance()
 
     // proměné, které může měnit View a jsou nabindované přes XML
     val nameContent = MutableLiveData<String>("")

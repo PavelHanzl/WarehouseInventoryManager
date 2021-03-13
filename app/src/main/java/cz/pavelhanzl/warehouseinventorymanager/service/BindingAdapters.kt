@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager
+package cz.pavelhanzl.warehouseinventorymanager.service
 
 import androidx.databinding.BindingAdapter
 import com.google.android.material.textfield.TextInputLayout
