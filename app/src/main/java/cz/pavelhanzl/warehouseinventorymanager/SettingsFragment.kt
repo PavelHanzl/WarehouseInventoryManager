@@ -10,9 +10,9 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
-class Settings : Fragment() {
+class SettingsFragment : Fragment() {
 
-    val args: SettingsArgs by navArgs()
+    val args: SettingsFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

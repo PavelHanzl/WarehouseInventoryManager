@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.Settings"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.SettingsFragment"
         android:label="@string/Settings"
         tools:layout="@layout/fragment_settings" >
         <action

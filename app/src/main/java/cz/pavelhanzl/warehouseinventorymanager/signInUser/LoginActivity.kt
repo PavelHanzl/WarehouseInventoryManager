@@ -140,64 +140,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-
-
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                mAuth.signInWithCredential(credential).await()
-                Log.d("Firestore", "Login with google")
-            } catch (e: FirebaseAuthException) {
-                Log.d("Firestore", "Google down: " + "${e.message}")
-                return@launch
-            }
-
-            try {
-                val userDocumentRef =
-                    db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
-                        .get().await()
-                if (userDocumentRef.exists()) {
-                    withContext(Dispatchers.Main){
-                        moveToDashboard()
-                    }
-                    return@launch
-                }
-            } catch (e: Exception) {
-                Log.d("Firestore", "Reference dokumentu usera nenalezena!" + "${e.message}")
-            }
-
-            try {
-                createUserInFirestore(
-                    mAuth.currentUser!!.displayName.toString(),
-                    mAuth.currentUser!!.email.toString()
-                ).await()
-            } catch (e: Exception) {
-                mAuth.currentUser!!.delete()
-                return@launch
-            }
-
-            try {
-                loginViewModel.saveUserProfilePhotoFromGoogleAuth()
-            } catch (e: Exception){
-                Log.d("Storage", "Nahrávání obrázku neprošlo!" + "${e.message}")
-            }
-
-            withContext(Dispatchers.Main){
-                moveToDashboard()
-            }
-
-        }
-
+        loginViewModel.firebaseAuthWithGoogleLogic(credential)
     }
 
-    fun createUserInFirestore(name: String, email: String): Task<Void> {
 
-        val user: MutableMap<String, Any> = HashMap()
-        user["name"] = name
-        user["email"] = email
-
-        return db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
-            .set(user)
-
-    }
 
 }

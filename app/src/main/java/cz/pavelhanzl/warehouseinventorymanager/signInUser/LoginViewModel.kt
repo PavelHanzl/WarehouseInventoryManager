@@ -8,8 +8,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
@@ -17,7 +20,13 @@ import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
 
 class LoginViewModel : BaseViewModel() {
  private val passwordLength = Constants.MIN_PASSWORD_LENGTH
@@ -97,6 +106,60 @@ fun saveUserProfilePhotoFromGoogleAuth(): UploadTask {
   picture.compress(Bitmap.CompressFormat.JPEG, 100, baos)
   val data = baos.toByteArray()
   return photoRef.putBytes(data)
+ }
+
+ fun createUserInFirestore(name: String, email: String): Task<Void> {
+
+  val user: MutableMap<String, Any> = HashMap()
+  user["name"] = name
+  user["email"] = email
+
+  return db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+   .set(user)
+
+ }
+
+ fun firebaseAuthWithGoogleLogic(credential: AuthCredential){
+  GlobalScope.launch(Dispatchers.IO) {
+   try {
+    auth.signInWithCredential(credential).await()
+    Log.d("Firestore", "Login with google")
+   } catch (e: FirebaseAuthException) {
+    Log.d("Firestore", "Google down: " + "${e.message}")
+    return@launch
+   }
+
+   try {
+    val userDocumentRef =
+     db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+      .get().await()
+    if (userDocumentRef.exists()) {
+     _moveToDashboard.postValue(true)
+     return@launch
+    }
+   } catch (e: Exception) {
+    Log.d("Firestore", "Reference dokumentu usera nenalezena!" + "${e.message}")
+   }
+
+   try {
+    createUserInFirestore(
+     auth.currentUser!!.displayName.toString(),
+     auth.currentUser!!.email.toString()
+    ).await()
+   } catch (e: Exception) {
+     auth.currentUser!!.delete()
+     return@launch
+   }
+
+   try {
+     saveUserProfilePhotoFromGoogleAuth()
+   } catch (e: Exception){
+    Log.d("Storage", "Nahrávání obrázku neprošlo!" + "${e.message}")
+   }
+
+   _moveToDashboard.postValue(true)
+
+  }
  }
 
 }
