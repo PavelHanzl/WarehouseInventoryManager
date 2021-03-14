@@ -56,8 +56,14 @@ class MainActivityViewModel: BaseViewModel() {
     fun getUserImage() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                var imageRef = storage.child("images/" + auth.currentUser!!.uid + "/profile.jpg").getBytes(5L*1024*1024).await()
-                var bmp = BitmapFactory.decodeByteArray(imageRef, 0, imageRef.size)
+                var imageRef = storage.child("images/users/" + auth.currentUser!!.uid + "/profile.jpg")
+                var byteArray =imageRef.getBytes(5L*1024*1024).await()
+                var bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+
+                imageRef.downloadUrl.addOnSuccessListener {
+                    Log.d("ImageRef Download URL", "URL: $it" )
+                }
+
                 _profilePhoto.postValue(bmp)
             }catch (e: StorageException){
                 Log.d("Header", "Obrázek nejde načíst! Udělej s tim něco! + ${e.message}")

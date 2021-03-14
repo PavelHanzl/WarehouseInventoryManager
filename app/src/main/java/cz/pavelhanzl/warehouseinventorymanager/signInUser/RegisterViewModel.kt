@@ -142,9 +142,12 @@ class RegisterViewModel : BaseViewModel() {
     }
 
     fun createUserInFirestore(name: String, email: String): Task<Void> {
+
         val user: MutableMap<String, Any> = HashMap()
+        user["userID"] = auth.currentUser!!.uid
         user["name"] = name
         user["email"] = email
+        user["photoURL"] = ""
 
         return db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(user)
     }

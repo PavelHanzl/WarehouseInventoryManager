@@ -100,7 +100,7 @@ class LoginViewModel : BaseViewModel() {
 
 fun saveUserProfilePhotoFromGoogleAuth(): UploadTask {
   var userImageURL = auth.currentUser!!.photoUrl.toString()
-  var photoRef = storage.child("images/" + auth.currentUser!!.uid + "/profile.jpg")
+  var photoRef = storage.child("images/users/" + auth.currentUser!!.uid + "/profile.jpg")
   val picture = Picasso.get().load(userImageURL).get()
   val baos = ByteArrayOutputStream()
   picture.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -108,11 +108,13 @@ fun saveUserProfilePhotoFromGoogleAuth(): UploadTask {
   return photoRef.putBytes(data)
  }
 
- fun createUserInFirestore(name: String, email: String): Task<Void> {
+  fun createUserInFirestore(name: String, email: String): Task<Void> {
 
   val user: MutableMap<String, Any> = HashMap()
+  user["userID"] = auth.currentUser!!.uid
   user["name"] = name
   user["email"] = email
+  user["photoURL"] = ""
 
   return db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
    .set(user)
@@ -152,7 +154,7 @@ fun saveUserProfilePhotoFromGoogleAuth(): UploadTask {
    }
 
    try {
-     saveUserProfilePhotoFromGoogleAuth()
+     saveUserProfilePhotoFromGoogleAuth().await()
    } catch (e: Exception){
     Log.d("Storage", "Nahrávání obrázku neprošlo!" + "${e.message}")
    }
