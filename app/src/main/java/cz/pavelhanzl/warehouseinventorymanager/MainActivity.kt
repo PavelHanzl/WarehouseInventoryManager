@@ -1,16 +1,11 @@
 package cz.pavelhanzl.warehouseinventorymanager
 
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.util.Log
-import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -22,16 +17,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
-import cz.pavelhanzl.warehouseinventorymanager.repository.User
 import cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginActivity
-import cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.menu_header.*
 import kotlinx.android.synthetic.main.menu_header.view.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.tasks.await
 
 class MainActivity : AppCompatActivity() {
 
@@ -67,13 +57,13 @@ class MainActivity : AppCompatActivity() {
         drawerLayout = drawer_layout
         drawerNavigationView.setupWithNavController(navController)
 
-        setUpNameInHeaderOfDrawer()
+        setUpProfileInfoInHeaderOfDrawer()
         setIndividualMenuItems()
 
 
     }
 
-    private fun setUpNameInHeaderOfDrawer() {
+    private fun setUpProfileInfoInHeaderOfDrawer() {
         val navigationView = drawerNavigationView as NavigationView
         val headerView = navigationView.getHeaderView(0)
 
@@ -92,7 +82,8 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(//nastaví u kterých destinací (fragmentů a aktivit) se má u drawer menu zobrazovat hamburger ikona
                 R.id.dashboardFragment,
-                R.id.settingsFragment
+                R.id.settingsFragment,
+                R.id.ownWarehouseFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

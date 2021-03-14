@@ -5,6 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import kotlinx.android.synthetic.main.fragment_dashboard.*
+import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
 class DashboardFragment : Fragment() {
 
@@ -13,9 +17,25 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        return inflater.inflate(R.layout.fragment_dashboard, container, false)
 
-        return view
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        llButtonOwnWarehouse.setOnClickListener {
+            val action = DashboardFragmentDirections.actionDashboardFragmentToOwnWarehouseFragment()
+            Navigation.findNavController(view).navigate(action)
+        }
+
+        llButtonSettings.setOnClickListener {
+            val action = DashboardFragmentDirections.navigateDashboardToSettings(5)
+            Navigation.findNavController(view).navigate(action)
+
+        }
+
     }
 
 }

@@ -11,8 +11,11 @@
 
     </group>
 
-    <item android:title="@string/drawerMenu_warehouses">
-        <menu>
+    <!--<item android:title="@string/drawerMenu_warehouses">
+        <menu>-->
+            <group
+                android:id="@+id/group_warehouses"
+                android:checkableBehavior="single">
             <item
                 android:id="@+id/ownWarehouseFragment"
                 android:icon="@drawable/ic_ownwarehouse"
@@ -29,11 +32,12 @@
                 android:id="@+id/notificationFragment"
                 android:icon="@drawable/ic_notification"
                 android:title="@string/drawerMenu_notification" />
-        </menu>
-    </item>
+            </group>
+            <!--</menu>
+        </item>-->
 
-    <item android:title="@string/drawerMenu_other">
-        <menu>
+        <!--<item android:title="@string/drawerMenu_other">
+            <menu>-->
             <group
                 android:id="@+id/group_other"
                 android:checkableBehavior="single">
@@ -50,7 +54,7 @@
                     android:icon="@drawable/ic_logout"
                     android:title="@string/logout" />
             </group>
-        </menu>
-    </item>
+        <!--</menu>
+    </item>-->
 
 </menu>
