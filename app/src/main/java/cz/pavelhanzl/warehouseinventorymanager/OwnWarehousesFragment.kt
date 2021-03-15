@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import cz.pavelhanzl.warehouseinventorymanager.repository.MainRepository
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import kotlinx.android.synthetic.main.fragment_own_warehouses.*
@@ -18,7 +20,7 @@ class OwnWarehousesFragment : Fragment() {
     private val MainRepository = MainRepository()
     private var ownWarehousesList: List<Warehouse> = ArrayList()
     private  val ownWarehousesAdapter: OwnWarehousesAdapter = OwnWarehousesAdapter(ownWarehousesList)
-
+    val db = Firebase.firestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +36,7 @@ class OwnWarehousesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fab_ownWarehouses_addNewOwnWarehouse.setOnClickListener {
-            val action = OwnWarehousesFragmentDirections.actionOwnWarehouseFragmentToDashboardFragment()
+            val action = OwnWarehousesFragmentDirections.actionOwnWarehouseFragmentToCreateWarehouseFragment()
             Navigation.findNavController(view).navigate(action)
         }
 
@@ -46,14 +48,19 @@ class OwnWarehousesFragment : Fragment() {
     }
 
     private fun getOwnWarehousesData() {
-        MainRepository.getOwnWarehouses().addOnCompleteListener {
-            if (it.isSuccessful) {
-                ownWarehousesList = it.result!!.toObjects(Warehouse::class.java)
+        db.collection("warehouses").addSnapshotListener { snapshot, error ->
+            if(error != null){
+                Log.d("OwnWarehousesRecycle", "Error: ${error!!.message}")
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+                ownWarehousesList = snapshot.toObjects(Warehouse::class.java)
                 ownWarehousesAdapter.ownWarehousesItems = ownWarehousesList
                 ownWarehousesAdapter.notifyDataSetChanged()
 
             } else {
-                Log.d("OwnWarehousesRecycle", "Error: ${it.exception!!.message}")
+                Log.d("OwnWarehousesRecycle", "Error: ${error!!.message}")
             }
         }
     }

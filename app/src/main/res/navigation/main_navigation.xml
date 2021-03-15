@@ -50,5 +50,17 @@
         <action
             android:id="@+id/action_ownWarehouseFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
+        <action
+            android:id="@+id/action_ownWarehouseFragment_to_createWarehouseFragment"
+            app:destination="@id/createWarehouseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createWarehouseFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.CreateWarehouseFragment"
+        android:label="@string/CreateNewWarehouse"
+        tools:layout="@layout/fragment_create_warehouse">
+        <action
+            android:id="@+id/action_createWarehouseFragment_to_ownWarehouseFragment"
+            app:destination="@id/ownWarehouseFragment" />
     </fragment>
 </navigation>

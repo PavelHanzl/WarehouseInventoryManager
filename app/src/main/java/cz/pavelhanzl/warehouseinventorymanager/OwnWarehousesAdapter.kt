@@ -18,13 +18,15 @@ class OwnWarehousesAdapter (var ownWarehousesItems: List<Warehouse>): RecyclerVi
     }
 
     class WarehouseViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun binduj(warehouse: Warehouse) {
+        fun bind(warehouse: Warehouse) {
             itemView.rv_ownWarehousesListWarehouseName.text = warehouse.name
         }
     }
 
+
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as WarehouseViewHolder).binduj(ownWarehousesItems[position])
+        (holder as WarehouseViewHolder).bind(ownWarehousesItems[position])
     }
 
     override fun getItemCount(): Int {
