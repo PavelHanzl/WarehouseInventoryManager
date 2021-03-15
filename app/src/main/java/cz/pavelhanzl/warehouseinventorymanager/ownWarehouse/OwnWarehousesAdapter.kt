@@ -4,16 +4,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestoreException
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import kotlinx.android.synthetic.main.rv_own_warehouses_list_item.view.*
 
-class OwnWarehousesAdapter (var ownWarehousesItems: List<Warehouse>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class OwnWarehousesAdapter(var ownWarehousesItems: List<Warehouse>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.rv_own_warehouses_list_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(
+            R.layout.rv_own_warehouses_list_item,
+            parent,
+            false
+        )
         return WarehouseViewHolder(view)
     }
 
@@ -32,5 +37,7 @@ class OwnWarehousesAdapter (var ownWarehousesItems: List<Warehouse>): RecyclerVi
     override fun getItemCount(): Int {
        return ownWarehousesItems.size
     }
+
+
 
 }
