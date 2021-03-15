@@ -45,4 +45,5 @@
     <string name="drawerMenu_notification">Notifikace</string>
     <string name="drawerMenu_help">Nápověda</string>
     <string name="ownWarehouses">Mé sklady</string>
+    <string name="warehouse_name">Jméno skladu</string>
 </resources>

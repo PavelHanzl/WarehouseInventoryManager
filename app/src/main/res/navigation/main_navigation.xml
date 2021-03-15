@@ -44,7 +44,7 @@
         tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/ownWarehouseFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehousesFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.OwnWarehousesFragment"
         android:label="@string/ownWarehouses"
         tools:layout="@layout/fragment_own_warehouses">
         <action
