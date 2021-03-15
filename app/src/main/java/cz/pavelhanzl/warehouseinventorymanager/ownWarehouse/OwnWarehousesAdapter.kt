@@ -1,11 +1,11 @@
-package cz.pavelhanzl.warehouseinventorymanager
+package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
-import kotlinx.android.synthetic.main.fragment_own_warehouses.view.*
 import kotlinx.android.synthetic.main.rv_own_warehouses_list_item.view.*
 
 class OwnWarehousesAdapter (var ownWarehousesItems: List<Warehouse>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {

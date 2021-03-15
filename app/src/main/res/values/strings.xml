@@ -49,4 +49,6 @@
     <string name="CreateNewWarehouse">Založit nový sklad</string>
     <string name="back">Zpět</string>
     <string name="makeNewWarehouse">Založit sklad</string>
+    <string name="Note">Poznámka</string>
+    <string name="warehouseName">Název skladu</string>
 </resources>

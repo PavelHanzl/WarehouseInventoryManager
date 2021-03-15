@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager
+package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse
 
 import android.os.Bundle
 import android.util.Log
@@ -10,14 +10,13 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import cz.pavelhanzl.warehouseinventorymanager.repository.MainRepository
+import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import kotlinx.android.synthetic.main.fragment_own_warehouses.*
 import kotlinx.android.synthetic.main.fragment_own_warehouses.view.*
 
 class OwnWarehousesFragment : Fragment() {
 
-    private val MainRepository = MainRepository()
     private var ownWarehousesList: List<Warehouse> = ArrayList()
     private  val ownWarehousesAdapter: OwnWarehousesAdapter = OwnWarehousesAdapter(ownWarehousesList)
     val db = Firebase.firestore
@@ -36,7 +35,8 @@ class OwnWarehousesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         fab_ownWarehouses_addNewOwnWarehouse.setOnClickListener {
-            val action = OwnWarehousesFragmentDirections.actionOwnWarehouseFragmentToCreateWarehouseFragment()
+            val action =
+                OwnWarehousesFragmentDirections.actionOwnWarehouseFragmentToCreateWarehouseFragment()
             Navigation.findNavController(view).navigate(action)
         }
 

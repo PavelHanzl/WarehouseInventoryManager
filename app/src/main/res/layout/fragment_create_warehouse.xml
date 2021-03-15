@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.createWarehouse.CreateWarehouseFragmentViewModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CreateWarehouseFragment">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField"
+        android:id="@+id/tf_ownWarehouseName_FragmentCreateWarehouse"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:hint="Název skladu"
-        app:layout_constraintEnd_toStartOf="@+id/rv_ownWarehousesListWarehouseProfileImage"
+        android:hint="@string/warehouseName"
+        app:layout_constraintEnd_toStartOf="@+id/ci_WarehouseProfileImage_FragmentCreateWarehouse"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tf_ownWarehouseNameContent_FragmentCreateWarehouse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
@@ -28,37 +39,41 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/rv_ownWarehousesListWarehouseProfileImage"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:id="@+id/ci_WarehouseProfileImage_FragmentCreateWarehouse"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/avatar_ownwarehouseavatar"
         app:civ_border_color="@color/primaryColor"
         app:civ_border_width="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/outlinedTextField"
+        app:layout_constraintBottom_toBottomOf="@+id/tf_ownWarehouseName_FragmentCreateWarehouse"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/outlinedTextField" />
+        app:layout_constraintTop_toTopOf="@+id/tf_ownWarehouseName_FragmentCreateWarehouse"
+        app:layout_constraintVertical_bias="0.65" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/outlinedTextField2"
+        android:id="@+id/tf_ownWarehouseNote_FragmentCreateWarehouse"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:hint="Poznámka"
+        android:hint="@string/Note"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outlinedTextField">
+        app:layout_constraintTop_toBottomOf="@+id/tf_ownWarehouseName_FragmentCreateWarehouse"
+        app:counterEnabled="true"
+        app:counterMaxLength="250">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/tf_ownWarehouseNoteContent_FragmentCreateWarehouse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/textButton"
+        android:id="@+id/btn_BackButton_FragmentCreateWarehouse"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -78,7 +93,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <Button
-        android:id="@+id/textButton2"
+        android:id="@+id/btn_CreateWarehouse_FragmentCreateWarehouse"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -88,6 +103,8 @@
         android:text="@string/makeNewWarehouse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline" />
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        android:onClick="@{()-> viewmodel.onCreateButtonClicked()}"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
+</layout>
