@@ -93,6 +93,9 @@ dependencies {
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //Image picker
+    implementation 'com.github.dhaval2404:imagepicker:1.8'
+
     //implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0"
     //implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha02"
 

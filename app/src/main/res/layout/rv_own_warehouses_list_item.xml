@@ -27,20 +27,25 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/rv_ownWarehousesListWarehouseName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:layout_marginEnd="16dp"
         android:text="@string/warehouse_name"
         android:textColor="@color/darkGrayColor"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintStart_toEndOf="@+id/rv_ownWarehousesListWarehouseProfileImage"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

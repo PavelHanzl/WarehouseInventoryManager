@@ -21,7 +21,32 @@
     <string name="invalidPassword">Hesla se neshodují nebo není splněna podmínka na minimální délku hesla 6 znaků!</string>
     <string name="LoginSuccessful">Přihlášení proběhlo úspěšně!</string>
     <string name="LoginWithSocials">Přihlášení pomocí sociálních sítí</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- IMAGE PICKER -->
+    <string name="title_choose_image_provider">Zvolit</string>
+    <string name="action_cancel">Zrušit</string>
+    <string name="title_gallery">Galerie</string>
+    <string name="title_camera">Kamera</string>
+
+    <string name="message_gallery_permission_denied">Read External Storage permission is needed to select Image. Please turn on the requested permission from Settings > Permissions.</string>
+    <string name="message_camera_permission_denied">Camera and External Storage permissions are needed to capture the image. Turning off any permission won\'t allow the application to run smoothly. Please turn on all requested permissions from Settings > Permissions.</string>
+    <string name="permission_gallery_denied">
+        <![CDATA[Storage permission is needed to pick gallery image. Please allow storage permission from Settings > Permissions.]]></string>
+    <string name="permission_camera_extended_denied">
+        <![CDATA[Camera and Storage permissions are needed to take a picture. Please allow both the requested permissions from Settings > Permissions.]]></string>
+    <string name="permission_camera_denied">
+        <![CDATA[Storage permission is needed to take a picture. Please allow storage permission from Settings > Permissions.]]></string>
+
+    <string name="error_failed_to_create_camera_image_file">Failed to create Camera image file</string>
+    <string name="error_failed_pick_gallery_image">Failed to pick Gallery image</string>
+    <string name="error_failed_to_crop_image">Failed to crop image</string>
+    <string name="error_failed_to_compress_image">Failed to compress image</string>
+    <string name="error_task_cancelled">Task Cancelled</string>
+    <string name="error_camera_app_not_found">Camera app not found</string>
+
+    <!-- xxx IMAGE PICKER xxx -->
+
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="LoggingOut">Odhlašovaní...</string>
     <string name="Dashboard">Nástěnka</string>
@@ -51,4 +76,5 @@
     <string name="makeNewWarehouse">Založit sklad</string>
     <string name="Note">Poznámka</string>
     <string name="warehouseName">Název skladu</string>
+    <string name="Canceled">Ukončeno</string>
 </resources>
