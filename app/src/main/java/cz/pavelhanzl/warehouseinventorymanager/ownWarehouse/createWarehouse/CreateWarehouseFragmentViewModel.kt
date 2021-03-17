@@ -1,26 +1,16 @@
 package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.createWarehouse
-
-import android.graphics.drawable.Drawable
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
-import androidx.core.graphics.drawable.toDrawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.UploadTask
-import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
+import java.util.*
 
 class CreateWarehouseFragmentViewModel : BaseViewModel() {
 
@@ -28,13 +18,7 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
     var warehouseNoteContent = MutableLiveData<String>("")
     var warehouseProfilePhoto = MutableLiveData<ByteArray>()
 
-    private val _photoURL = MutableLiveData<String>("")
-    val photoURL: LiveData<String> get() = _photoURL
 
-
-
-    private val _showCreateAnim = MutableLiveData<Boolean>(false)
-    val showCreateAnim: LiveData<Boolean> get() = _showCreateAnim
 
     private val _goBackToPreviousScreen = MutableLiveData<Boolean>(false)
     val goBackToPreviousScreen: LiveData<Boolean> get() = _goBackToPreviousScreen
@@ -43,6 +27,7 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun onCreateButtonClicked() {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d("Had", "Klikáš mi na vytvářecího hada, debile")
@@ -63,14 +48,19 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
 
                 }
 
-                val warehouse: MutableMap<String, Any> = HashMap()
-                warehouse["warehouseID"] = warehouseDocRef.id
-                warehouse["owner"] = auth.currentUser!!.uid
-                warehouse["name"] = warehouseNameContent.value!!
-                warehouse["note"] = warehouseNoteContent.value!!
-                warehouse["photoURL"] = if (profileImageURL!=null) profileImageURL.toString() else ""
+
+                val warehouse = Warehouse()
+                warehouse.warehouseID = warehouseDocRef.id
+                warehouse.owner = auth.currentUser!!.uid
+                warehouse.name = warehouseNameContent.value!!
+                warehouse.note = warehouseNoteContent.value!!
+                warehouse.photoURL = profileImageURL?.toString() ?: ""
 
                 warehouseDocRef.set(warehouse).await()
+
+                repoComunicationLayer.createWarehouseLogItem("Sklad vytvořen!",warehouseID = warehouseDocRef.id)
+
+
             } catch (e: Exception) {
                 Log.d("Had", "Něco je špatně: ${e.message}")
                 return@launch

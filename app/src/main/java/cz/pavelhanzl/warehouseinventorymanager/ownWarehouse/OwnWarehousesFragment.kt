@@ -50,7 +50,7 @@ class OwnWarehousesFragment : Fragment() {
     private fun getOwnWarehousesData() {
         db.collection("warehouses").addSnapshotListener { snapshot, error ->
             if(error != null){
-                Log.d("OwnWarehousesRecycle", "Error: ${error!!.message}")
+                Log.d("OwnWarehousesRecycle", "Error: ${error.message}")
                 return@addSnapshotListener
             }
 
@@ -60,7 +60,7 @@ class OwnWarehousesFragment : Fragment() {
                 ownWarehousesAdapter.notifyDataSetChanged()
 
             } else {
-                Log.d("OwnWarehousesRecycle", "Error: ${error!!.message}")
+                Log.d("OwnWarehousesRecycle", "Error.")
             }
         }
     }

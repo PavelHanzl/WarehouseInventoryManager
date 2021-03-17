@@ -20,16 +20,14 @@ import com.google.firebase.storage.ktx.storage
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 
-class MainRepository {
+class RepoComunicationLayer {
     val db = Firebase.firestore
     val auth = Firebase.auth
     val storage = Firebase.storage.reference
 
-    fun getUser(): FirebaseUser?{
-        return  auth.currentUser
-     }
-
-    fun getOwnWarehouses(): Task<QuerySnapshot> {
-        return db.collection("warehouses").get()
+    fun createWarehouseLogItem(logMessage: String, itemName: String = "", itemCount: String = "", warehouseID: String){
+        val warehouseLogItem = WarehouseLogItem(logMessage,itemName, itemCount)
+        db.collection("warehouses").document(warehouseID).collection("log").document().set(warehouseLogItem)
     }
+
 }

@@ -1,22 +1,14 @@
 package cz.pavelhanzl.warehouseinventorymanager.signInUser
 
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
 import cz.pavelhanzl.warehouseinventorymanager.R
-import cz.pavelhanzl.warehouseinventorymanager.WarehouseInventoryManagerApp
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
-import cz.pavelhanzl.warehouseinventorymanager.repository.MainRepository
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await

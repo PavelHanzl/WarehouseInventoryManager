@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ownWarehouse.OwnWarehousesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_ownWarehousesList"
         android:layout_width="match_parent"

@@ -28,6 +28,9 @@ android {
         }
     }
     compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -95,6 +98,9 @@ dependencies {
 
     //Image picker
     implementation 'com.github.dhaval2404:imagepicker:1.8'
+
+    //backsupport DateTimeFormatter
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     //implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0"
     //implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha02"
