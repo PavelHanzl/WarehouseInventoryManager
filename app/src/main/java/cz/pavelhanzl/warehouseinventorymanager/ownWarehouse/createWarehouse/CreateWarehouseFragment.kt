@@ -40,7 +40,7 @@ class CreateWarehouseFragment : Fragment() {
     ): View? {
 
         //binduje a přiřazuje viewmodel
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_warehouse, container, false)
+        binding = FragmentCreateWarehouseBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(CreateWarehouseFragmentViewModel::class.java)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner

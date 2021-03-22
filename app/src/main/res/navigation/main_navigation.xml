@@ -48,19 +48,24 @@
         android:label="@string/ownWarehouses"
         tools:layout="@layout/fragment_own_warehouses">
         <action
-            android:id="@+id/action_ownWarehouseFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment" />
-        <action
             android:id="@+id/action_ownWarehouseFragment_to_createWarehouseFragment"
             app:destination="@id/createWarehouseFragment" />
+        <action
+            android:id="@+id/action_ownWarehouseFragment_to_ownWarehouseDetailFragment"
+            app:destination="@id/ownWarehouseDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/createWarehouseFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.createWarehouse.CreateWarehouseFragment"
         android:label="@string/CreateNewWarehouse"
-        tools:layout="@layout/fragment_create_warehouse">
-        <action
-            android:id="@+id/action_createWarehouseFragment_to_ownWarehouseFragment"
-            app:destination="@id/ownWarehouseFragment" />
+        tools:layout="@layout/fragment_create_warehouse"/>
+    <fragment
+        android:id="@+id/ownWarehouseDetailFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehouseDetailFragment"
+        android:label="fragment_own_warehouse_detail"
+        tools:layout="@layout/fragment_own_warehouse_detail" >
+        <argument
+            android:name="warehouseID"
+            app:argType="string" />
     </fragment>
 </navigation>

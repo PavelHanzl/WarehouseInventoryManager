@@ -1,8 +1,10 @@
 package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,6 +30,17 @@ class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>) :
             }
 
         }
+
+        fun  bindID(ID: String){
+            itemView.setOnClickListener{
+                var action = OwnWarehousesFragmentDirections.actionOwnWarehouseFragmentToOwnWarehouseDetailFragment(ID)
+                itemView.findNavController().navigate(action)
+                Log.d("test", ID)
+            }
+
+        }
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WarehouseViewHolder {
@@ -45,6 +58,8 @@ class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>) :
         model: Warehouse
     ) {
         holder.bindVisible(model)
+        var id = snapshots.getSnapshot(position).id
+        holder.bindID(id)
     }
 
 
