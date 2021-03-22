@@ -24,6 +24,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateWarehouseBinding
+import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_warehouse.*
 
@@ -49,6 +50,7 @@ class CreateWarehouseFragment : Fragment() {
         viewModel.goBackToPreviousScreen.observe(viewLifecycleOwner, Observer {
             if (it) {
                 findNavController().navigateUp()
+                hideKeyboard(activity as MainActivity)
             }
         })
 
