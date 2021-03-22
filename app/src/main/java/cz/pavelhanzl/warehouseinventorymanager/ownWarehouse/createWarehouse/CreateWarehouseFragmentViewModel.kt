@@ -5,14 +5,18 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
+import cz.pavelhanzl.warehouseinventorymanager.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
 class CreateWarehouseFragmentViewModel : BaseViewModel() {
+
+    val TAG = "CreateWarehouseVM"
 
     var warehouseNameContent = MutableLiveData<String>("")
     var warehouseNoteContent = MutableLiveData<String>("")
@@ -30,25 +34,25 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
     @SuppressLint("SimpleDateFormat")
     fun onCreateButtonClicked() {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("Had", "Klikáš mi na vytvářecího hada, debile")
-
             try {
+
                 var profileImageURL : Uri? = null
                 val warehouseDocRef = db.collection("warehouses").document()
 
-
+                //pokud uživatel zvolil ve View fotku ze zařízení, tak ji nahraje na server, pokud ne, tak přeskočí
                 if(warehouseProfilePhoto.value != null) {
-                    Log.d("Had", "Snažíš se mi proběhnout, debile")
                     try {
+                        //nahrává na Storage
                         storage.child("/warehouses/${warehouseDocRef.id}/profileImage.jpg").putBytes(warehouseProfilePhoto.value!!).await()
+
+                        //získává url nahraného souboru
                         profileImageURL = storage.child("/warehouses/${warehouseDocRef.id}/profileImage.jpg").downloadUrl.await()
                     } catch (e: Exception){
-                        Log.d("Uložto", e.message.toString())
+                        Log.d(TAG, "Error: ${e.message}")
                     }
-
                 }
 
-
+                //vytvoří instanci skladu
                 val warehouse = Warehouse()
                 warehouse.warehouseID = warehouseDocRef.id
                 warehouse.owner = auth.currentUser!!.uid
@@ -56,21 +60,22 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
                 warehouse.note = warehouseNoteContent.value!!
                 warehouse.photoURL = profileImageURL?.toString() ?: ""
 
+                //zapíše do dokumentu
                 warehouseDocRef.set(warehouse).await()
 
-                repoComunicationLayer.createWarehouseLogItem("Sklad vytvořen!",warehouseID = warehouseDocRef.id)
-
+                //vytvoří log k vytvářenému skladu
+                repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.warehouseCreated),warehouseID = warehouseDocRef.id)
 
             } catch (e: Exception) {
-                Log.d("Had", "Něco je špatně: ${e.message}")
-                return@launch
+                Log.d(TAG, "Error: ${e.message}")
+                //return@launch
             }
-           _goBackToPreviousScreen.postValue(true)
+            _goBackToPreviousScreen.postValue(true)
         }
+
     }
 
     fun onBackButtonClicked() {
-        Log.d("Had", "Klikáš mi na zpětného hada, debile")
         _goBackToPreviousScreen.postValue(true)
     }
 

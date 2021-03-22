@@ -1,21 +1,36 @@
 package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toDrawable
+
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import kotlinx.android.synthetic.main.rv_own_warehouses_list_item.view.*
 
-class OwnWarehousesAdapter(var ownWarehousesItems: List<Warehouse>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>) :
+    FirestoreRecyclerAdapter<Warehouse, OwnWarehousesAdapter.WarehouseViewHolder>(options) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    class WarehouseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        fun bindVisible(warehouse: Warehouse) {
+            itemView.rv_ownWarehousesListWarehouseName.text = warehouse.name
+            if (warehouse.photoURL.isNotEmpty()) {
+                Glide.with(itemView).load(warehouse.photoURL)
+                    .into(itemView.rv_ownWarehousesListWarehouseProfileImage)
+            } else {
+                Glide.with(itemView).load(R.drawable.avatar_ownwarehouseavatar)
+                    .into(itemView.rv_ownWarehousesListWarehouseProfileImage)
+            }
+
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WarehouseViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
             R.layout.rv_own_warehouses_list_item,
             parent,
@@ -24,39 +39,12 @@ class OwnWarehousesAdapter(var ownWarehousesItems: List<Warehouse>) :
         return WarehouseViewHolder(view)
     }
 
-    class WarehouseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(warehouse: Warehouse) {
-            itemView.rv_ownWarehousesListWarehouseName.text = warehouse.name
-
-
-            if (warehouse.photoURL.isNotEmpty() && warehouse.photoURL != "null") {
-                Log.d("tisk", warehouse.photoURL)
-                try {
-                    Picasso.get().load(warehouse.photoURL)
-                        .placeholder(R.drawable.avatar_ownwarehouseavatar)// Place holder image from drawable folder
-                        .error(R.drawable.avatar_profileavatar).resize(110, 110).centerCrop()
-                        .into(itemView.rv_ownWarehousesListWarehouseProfileImage)
-                } catch (e: Exception) {
-                    Log.d("tagik", e.message.toString())
-                }
-            } else {
-                Log.d("tagi", "else" )
-
-                Picasso.get().load(R.drawable.avatar_ownwarehouseavatar)
-                    .error(R.drawable.avatar_ownwarehouseavatar)
-                    .into(itemView.rv_ownWarehousesListWarehouseProfileImage)
-            }
-
-
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as WarehouseViewHolder).bind(ownWarehousesItems[position])
-    }
-
-    override fun getItemCount(): Int {
-        return ownWarehousesItems.size
+    override fun onBindViewHolder(
+        holder: WarehouseViewHolder,
+        position: Int,
+        model: Warehouse
+    ) {
+        holder.bindVisible(model)
     }
 
 

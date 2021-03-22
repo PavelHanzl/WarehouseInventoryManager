@@ -77,4 +77,7 @@
     <string name="Note">Poznámka</string>
     <string name="warehouseName">Název skladu</string>
     <string name="Canceled">Ukončeno</string>
+
+    <string name="warehouseCreated">Sklad vytvořen.</string>
+
 </resources>
