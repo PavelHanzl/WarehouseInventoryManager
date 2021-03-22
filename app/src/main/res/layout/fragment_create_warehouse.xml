@@ -27,6 +27,8 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/warehouseName"
+        app:errorEnabled="true"
+        app:errorText="@{viewmodel.warehouseNameError}"
         app:layout_constraintEnd_toStartOf="@+id/ci_WarehouseProfileImage_FragmentCreateWarehouse"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -52,7 +54,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/tf_ownWarehouseName_FragmentCreateWarehouse"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tf_ownWarehouseName_FragmentCreateWarehouse"
-        app:layout_constraintVertical_bias="0.65" />
+        app:layout_constraintVertical_bias="0.25" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -63,11 +65,13 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        app:errorEnabled="true"
+        app:errorText="@{viewmodel.warehouseNoteError}"
         android:hint="@string/Note"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tf_ownWarehouseName_FragmentCreateWarehouse"
         app:counterEnabled="true"
-        app:counterMaxLength="250">
+        app:counterMaxLength="200">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tf_ownWarehouseNoteContent_FragmentCreateWarehouse"

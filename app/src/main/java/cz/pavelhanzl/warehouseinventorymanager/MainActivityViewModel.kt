@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class MainActivityViewModel: BaseViewModel() {
+class MainActivityViewModel : BaseViewModel() {
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> get() = _name
 
@@ -57,15 +57,15 @@ class MainActivityViewModel: BaseViewModel() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 var imageRef = storage.child("images/users/" + auth.currentUser!!.uid + "/profile.jpg")
-                var byteArray =imageRef.getBytes(5L*1024*1024).await()
+                var byteArray = imageRef.getBytes(5L * 1024 * 1024).await()
                 var bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 
                 imageRef.downloadUrl.addOnSuccessListener {
-                    Log.d("ImageRef Download URL", "URL: $it" )
+                    Log.d("ImageRef Download URL", "URL: $it")
                 }
 
                 _profilePhoto.postValue(bmp)
-            }catch (e: StorageException){
+            } catch (e: StorageException) {
                 Log.d("Header", "Obrázek nejde načíst! Udělej s tim něco! + ${e.message}")
             }
         }
