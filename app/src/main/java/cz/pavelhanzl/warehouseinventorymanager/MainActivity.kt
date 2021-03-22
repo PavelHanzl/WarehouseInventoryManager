@@ -40,10 +40,10 @@ class MainActivity : AppCompatActivity() {
         //Registruje viewmodel k danému view
         mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
-        window.setFlags(
+        /*window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
-        ) //Skryje status bar pro tuto aktivitu
+        ) //Skryje status bar pro tuto aktivitu*/
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
