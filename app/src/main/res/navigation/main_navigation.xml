@@ -66,5 +66,17 @@
         <argument
             android:name="warehouseID"
             app:argType="string" />
+        <action
+            android:id="@+id/action_ownWarehouseDetailFragment_to_itemDetailFragment"
+            app:destination="@id/itemDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemDetailFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.itemDetail.ItemDetailFragment"
+        android:label="@string/item_detail"
+        tools:layout="@layout/fragment_item_detail">
+        <argument
+            android:name="itemId"
+            app:argType="string" />
     </fragment>
 </navigation>

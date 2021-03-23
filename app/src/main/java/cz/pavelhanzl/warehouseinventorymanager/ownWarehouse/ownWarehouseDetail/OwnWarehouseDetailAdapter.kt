@@ -12,6 +12,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesAdapter
 import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesFragmentDirections
+import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.itemDetail.ItemDetailFragment
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
@@ -29,20 +30,20 @@ class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>
                 Glide.with(itemView).load(warehouseItem.photoURL)
                     .into(itemView.rv_ownWarehousesDetailListItemProfileImage)
             } else {
-                Glide.with(itemView).load(R.drawable.avatar_ownwarehouseavatar)
+                Glide.with(itemView).load(R.drawable.ic_avatar_warehouse_item)
                     .into(itemView.rv_ownWarehousesDetailListItemProfileImage)
             }
 
         }
 
-        /*fun  bindID(ID: String){
+        fun  bindID(id: String){
             itemView.setOnClickListener{
-                var action = OwnWarehousesFragmentDirections.actionOwnWarehouseFragmentToOwnWarehouseDetailFragment(ID)
+                var action = OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToItemDetailFragment(id)
                 itemView.findNavController().navigate(action)
-                Log.d("test", ID)
+                Log.d("test", id)
             }
 
-        }*/
+        }
 
 
     }
@@ -61,8 +62,8 @@ class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>
     override fun onBindViewHolder(holder: WarehouseItemViewHolder, position: Int, model: WarehouseItem) {
 
         holder.bindVisible(model)
-        //var id = snapshots.getSnapshot(position).id
-        //holder.bindID(id)
+        var id = snapshots.getSnapshot(position).id
+        holder.bindID(id)
     }
 
 

@@ -83,5 +83,6 @@
     <string name="warehouse_was_deleted">Sklad byl odstraněn!</string>
     <string name="restore">Obnovit</string>
     <string name="item_name">Jméno položky</string>
+    <string name="item_detail">Detail položky</string>
 
 </resources>
