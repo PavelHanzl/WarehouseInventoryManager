@@ -63,5 +63,41 @@
             app:layout_constraintBottom_toTopOf="@+id/fab_ownWhDetail_addItem_byHand"
             app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_addItem_byHand" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_ownWhDetail_removeItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_minus"
+            app:layout_constraintBottom_toBottomOf="@+id/fab_ownWhDetail_addItem"
+            app:layout_constraintEnd_toStartOf="@+id/fab_ownWhDetail_addItem"
+            app:layout_constraintTop_toTopOf="@+id/fab_ownWhDetail_addItem" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_ownWhDetail_removeItem_byHand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/secondaryDarkColor"
+            android:clickable="true"
+            android:src="@drawable/ic_edit"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/fab_ownWhDetail_removeItem"
+            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_removeItem" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_ownWhDetail_removeItem_byScan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/secondaryDarkColor"
+            android:clickable="true"
+            android:src="@drawable/ic_scaner"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/fab_ownWhDetail_removeItem_byHand"
+            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_removeItem_byHand" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

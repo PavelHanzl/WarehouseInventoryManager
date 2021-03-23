@@ -1,6 +1,7 @@
 package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -21,17 +22,23 @@ import kotlinx.android.synthetic.main.menu_header.*
 class OwnWarehouseDetailFragment : BaseFragment() {
     private lateinit var binding: FragmentOwnWarehouseDetailBinding
     lateinit var viewModel: OwnWarehousesDetailFragmentViewModel
-    private val fabAnimFromBottom: Animation by lazy{AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom)}
-    private val fabAnimToBottom: Animation by lazy{AnimationUtils.loadAnimation(requireContext(), R.anim.fab_to_bottom)}
+
+    private val fabAddItemAnimFromBottom: Animation by lazy{AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom)}
+    private val fabAddItemAnimToBottom: Animation by lazy{AnimationUtils.loadAnimation(requireContext(), R.anim.fab_to_bottom)}
+
+    private val fabRemoveItemAnimFromBottom: Animation by lazy{AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom)}
+    private val fabRemoveItemAnimToBottom: Animation by lazy{AnimationUtils.loadAnimation(requireContext(), R.anim.fab_to_bottom)}
+
 
     private var addItemClicked = false
+    private var removeItemClicked = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-
+        //předá argumenty do viewmodelu
         if (savedInstanceState == null) {
             viewModel =
                 ViewModelProvider(this).get(OwnWarehousesDetailFragmentViewModel::class.java)
@@ -57,8 +64,10 @@ class OwnWarehouseDetailFragment : BaseFragment() {
                 viewModel.warehouseObject.value!!.name
         })
 
+
+
         binding.fabOwnWhDetailAddItem.setOnClickListener {
-            onAddItemButtonClicked()
+            onAddOrRemoveItemButtonClicked(addItemClicked,"add")
         }
 
         binding.fabOwnWhDetailAddItemByHand.setOnClickListener {
@@ -69,34 +78,87 @@ class OwnWarehouseDetailFragment : BaseFragment() {
             Toast.makeText(requireContext(),"add by scan",Toast.LENGTH_SHORT).show()
         }
 
+        binding.fabOwnWhDetailRemoveItem.setOnClickListener {
+            onAddOrRemoveItemButtonClicked(removeItemClicked,"remove")
+        }
+
+        binding.fabOwnWhDetailRemoveItemByHand.setOnClickListener {
+            Toast.makeText(requireContext(),"remove by hand",Toast.LENGTH_SHORT).show()
+        }
+
+        binding.fabOwnWhDetailRemoveItemByScan.setOnClickListener {
+            Toast.makeText(requireContext(),"remove by scan",Toast.LENGTH_SHORT).show()
+        }
+
 
         return binding.root
     }
 
-    private fun onAddItemButtonClicked() {
-        setVisibility(addItemClicked)
-        setAnimation(addItemClicked)
-        addItemClicked = !addItemClicked
+    private fun onAddOrRemoveItemButtonClicked(clicked: Boolean, operation: String) {
+
+        when(operation){
+            "add" -> addItemClicked = !addItemClicked
+            "remove" -> removeItemClicked = !removeItemClicked
+        }
+
+        setVisibility(clicked, operation)
+        setAnimation(clicked, operation)
     }
 
-    private fun setAnimation(clicked: Boolean) {
-        if(!clicked){
-            binding.fabOwnWhDetailAddItemByScan.startAnimation(fabAnimFromBottom)
-            binding.fabOwnWhDetailAddItemByHand.startAnimation(fabAnimFromBottom)
-        } else{
-            binding.fabOwnWhDetailAddItemByScan.startAnimation(fabAnimToBottom)
-            binding.fabOwnWhDetailAddItemByHand.startAnimation(fabAnimToBottom)
+    private fun setAnimation(clicked: Boolean, operation: String) {
+        when(operation){
+            "add" -> {
+                if(!clicked){
+                    Log.d("Animace", "Add anim - not clicked")
+                    binding.fabOwnWhDetailAddItemByScan.startAnimation(fabAddItemAnimFromBottom)
+                    binding.fabOwnWhDetailAddItemByHand.startAnimation(fabAddItemAnimFromBottom)
+                } else{
+                    Log.d("Animace", "Add anim - clicked")
+                    binding.fabOwnWhDetailAddItemByScan.startAnimation(fabAddItemAnimToBottom)
+                    binding.fabOwnWhDetailAddItemByHand.startAnimation(fabAddItemAnimToBottom)
+                }
+            }
+            "remove" -> {
+                if(!clicked){
+                    Log.d("Animace", "Remove anim - not clicked")
+                    binding.fabOwnWhDetailRemoveItemByScan.startAnimation(fabRemoveItemAnimFromBottom)
+                    binding.fabOwnWhDetailRemoveItemByHand.startAnimation(fabRemoveItemAnimFromBottom)
+                } else{
+                    Log.d("Animace", "Remove anim - clicked")
+                    binding.fabOwnWhDetailRemoveItemByScan.startAnimation(fabRemoveItemAnimToBottom)
+                    binding.fabOwnWhDetailRemoveItemByHand.startAnimation(fabRemoveItemAnimToBottom)
+                }
+            }
         }
+
     }
 
-    private fun setVisibility(clicked: Boolean) {
-        if(!clicked){
-            binding.fabOwnWhDetailAddItemByScan.visibility = VISIBLE
-            binding.fabOwnWhDetailAddItemByHand.visibility = VISIBLE
-        } else{
-            binding.fabOwnWhDetailAddItemByScan.visibility = INVISIBLE
-            binding.fabOwnWhDetailAddItemByHand.visibility = INVISIBLE
+    private fun setVisibility(clicked: Boolean, operation: String) {
+        when(operation){
+            "add" -> {
+                if(!clicked){
+                    Log.d("Animace", "Add visi - not clicked")
+                    binding.fabOwnWhDetailAddItemByScan.visibility = VISIBLE
+                    binding.fabOwnWhDetailAddItemByHand.visibility = VISIBLE
+                } else{
+                    Log.d("Animace", "Add visi - clicked")
+                    binding.fabOwnWhDetailAddItemByScan.visibility = INVISIBLE
+                    binding.fabOwnWhDetailAddItemByHand.visibility = INVISIBLE
+                }
+            }
+            "remove" -> {
+                if(!clicked){
+                    Log.d("Animace", "Remove visi - not clicked")
+                    binding.fabOwnWhDetailRemoveItemByScan.visibility = VISIBLE
+                    binding.fabOwnWhDetailRemoveItemByHand.visibility = VISIBLE
+                } else{
+                    Log.d("Animace", "Remove visi - clicked")
+                    binding.fabOwnWhDetailRemoveItemByScan.visibility = INVISIBLE
+                    binding.fabOwnWhDetailRemoveItemByScan.visibility = INVISIBLE
+                }
+            }
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
