@@ -16,27 +16,33 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.snackbar.Snackbar
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentOwnWarehouseDetailBinding
+import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesAdapter
+import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
+import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
+import kotlinx.android.synthetic.main.fragment_own_warehouse_detail.*
+import kotlinx.android.synthetic.main.fragment_own_warehouses.*
 import kotlinx.android.synthetic.main.menu_header.*
 
 class OwnWarehouseDetailFragment : BaseFragment() {
+    private val args: OwnWarehouseDetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentOwnWarehouseDetailBinding
     lateinit var viewModel: OwnWarehousesDetailFragmentViewModel
 
-    private val fabAddItemAnimFromBottom: Animation by lazy{AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom)}
-    private val fabAddItemAnimToBottom: Animation by lazy{AnimationUtils.loadAnimation(requireContext(), R.anim.fab_to_bottom)}
+    private val fabAddItemAnimFromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom) }
+    private val fabAddItemAnimToBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_to_bottom) }
 
-    private val fabRemoveItemAnimFromBottom: Animation by lazy{AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom)}
-    private val fabRemoveItemAnimToBottom: Animation by lazy{AnimationUtils.loadAnimation(requireContext(), R.anim.fab_to_bottom)}
-
+    private val fabRemoveItemAnimFromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom) }
+    private val fabRemoveItemAnimToBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_to_bottom) }
 
     private var addItemClicked = false
     private var removeItemClicked = false
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +52,6 @@ class OwnWarehouseDetailFragment : BaseFragment() {
         if (savedInstanceState == null) {
             viewModel =
                 ViewModelProvider(this).get(OwnWarehousesDetailFragmentViewModel::class.java)
-            val args: OwnWarehouseDetailFragmentArgs by navArgs()
             viewModel.setData(args.warehouseID)
         }
 
@@ -74,6 +79,11 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpRecycleView()
     }
 
     private fun setOnClickListenersOnAddRemoveButtons() {
@@ -104,7 +114,7 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
     private fun onAddOrRemoveItemButtonClicked(clicked: Boolean, operation: String) {
 
-        when(operation){
+        when (operation) {
             "add" -> addItemClicked = !addItemClicked
             "remove" -> removeItemClicked = !removeItemClicked
         }
@@ -114,24 +124,24 @@ class OwnWarehouseDetailFragment : BaseFragment() {
     }
 
     private fun setAnimation(clicked: Boolean, operation: String) {
-        when(operation){
+        when (operation) {
             "add" -> {
-                if(!clicked){
+                if (!clicked) {
                     Log.d("Animace", "Add anim - not clicked")
                     binding.fabOwnWhDetailAddItemByScan.startAnimation(fabAddItemAnimFromBottom)
                     binding.fabOwnWhDetailAddItemByHand.startAnimation(fabAddItemAnimFromBottom)
-                } else{
+                } else {
                     Log.d("Animace", "Add anim - clicked")
                     binding.fabOwnWhDetailAddItemByScan.startAnimation(fabAddItemAnimToBottom)
                     binding.fabOwnWhDetailAddItemByHand.startAnimation(fabAddItemAnimToBottom)
                 }
             }
             "remove" -> {
-                if(!clicked){
+                if (!clicked) {
                     Log.d("Animace", "Remove anim - not clicked")
                     binding.fabOwnWhDetailRemoveItemByScan.startAnimation(fabRemoveItemAnimFromBottom)
                     binding.fabOwnWhDetailRemoveItemByHand.startAnimation(fabRemoveItemAnimFromBottom)
-                } else{
+                } else {
                     Log.d("Animace", "Remove anim - clicked")
                     binding.fabOwnWhDetailRemoveItemByScan.startAnimation(fabRemoveItemAnimToBottom)
                     binding.fabOwnWhDetailRemoveItemByHand.startAnimation(fabRemoveItemAnimToBottom)
@@ -142,24 +152,24 @@ class OwnWarehouseDetailFragment : BaseFragment() {
     }
 
     private fun setVisibility(clicked: Boolean, operation: String) {
-        when(operation){
+        when (operation) {
             "add" -> {
-                if(!clicked){
+                if (!clicked) {
                     Log.d("Animace", "Add visi - not clicked")
                     binding.fabOwnWhDetailAddItemByScan.visibility = VISIBLE
                     binding.fabOwnWhDetailAddItemByHand.visibility = VISIBLE
-                } else{
+                } else {
                     Log.d("Animace", "Add visi - clicked")
                     binding.fabOwnWhDetailAddItemByScan.visibility = INVISIBLE
                     binding.fabOwnWhDetailAddItemByHand.visibility = INVISIBLE
                 }
             }
             "remove" -> {
-                if(!clicked){
+                if (!clicked) {
                     Log.d("Animace", "Remove visi - not clicked")
                     binding.fabOwnWhDetailRemoveItemByScan.visibility = VISIBLE
                     binding.fabOwnWhDetailRemoveItemByHand.visibility = VISIBLE
-                } else{
+                } else {
                     Log.d("Animace", "Remove visi - clicked")
                     binding.fabOwnWhDetailRemoveItemByScan.visibility = INVISIBLE
                     binding.fabOwnWhDetailRemoveItemByScan.visibility = INVISIBLE
@@ -169,7 +179,6 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.own_warehouse_detail_menu, menu);
         super.onCreateOptionsMenu(menu, inflater)
@@ -177,9 +186,10 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        when(item!!.itemId){
+        when (item!!.itemId) {
             R.id.miOwnWarehouseEdit -> {
-                Toast.makeText(context,"Edit",Toast.LENGTH_SHORT).show()}
+                Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
+            }
 
             R.id.miOwnWarehouseDelete -> {
                 viewModel.deleteWarehouse()
@@ -192,6 +202,18 @@ class OwnWarehouseDetailFragment : BaseFragment() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setUpRecycleView() {
+        //nastaví recycleview
+        val query = db.collection("warehouses").document(args.warehouseID).collection("items")
+        val options = FirestoreRecyclerOptions.Builder<WarehouseItem>().setQuery(query, WarehouseItem::class.java).setLifecycleOwner(this).build()
+        val ownWarehouseDetailAdapter = OwnWarehouseDetailAdapter(options)
+
+        rv_ownWarehouseDetailList.apply {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = ownWarehouseDetailAdapter
+        }
     }
 
 }

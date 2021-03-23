@@ -82,5 +82,6 @@
     <string name="warehouseCreated">Sklad vytvořen.</string>
     <string name="warehouse_was_deleted">Sklad byl odstraněn!</string>
     <string name="restore">Obnovit</string>
+    <string name="item_name">Jméno položky</string>
 
 </resources>

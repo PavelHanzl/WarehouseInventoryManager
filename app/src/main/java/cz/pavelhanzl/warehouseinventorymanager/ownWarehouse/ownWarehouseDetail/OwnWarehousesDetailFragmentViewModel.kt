@@ -18,19 +18,25 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     var warehouseObject = MutableLiveData<Warehouse>()
     lateinit var warehouseSnapshot: Map<String, Any>
 
+    //odstraní sklad z databáze
     fun deleteWarehouse() {
+
+        //běží v globalscope, aby bylo možné sklad obnovit ve funkci delete WhUndo i po zničení viewmodelu
         GlobalScope.launch(Dispatchers.IO) {
             warehouseSnapshot = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).get().await().data!!
             db.collection("warehouses").document(warehouseObject.value!!.warehouseID).delete()
         }
     }
 
+    //obnoví smazaný sklad po kliku na snackbar
     fun deleteWarehouseUndo() {
         GlobalScope.launch(Dispatchers.IO) {
             db.collection("warehouses").document(warehouseObject.value!!.warehouseID).set(warehouseSnapshot)
         }
     }
 
+
+    //nastaví data při creatu view k tomuto viewmodelu přiřazenému
     fun setData(warehouseId: String) {
         warehouseID.value = warehouseId
 

@@ -36,6 +36,11 @@ class OwnWarehousesFragment : BaseFragment() {
             Navigation.findNavController(view).navigate(action)
         }
 
+        setUpRecycleView()
+
+    }
+
+    private fun setUpRecycleView() {
         //nastaví recycleview
         val query = db.collection("warehouses")
         val options = FirestoreRecyclerOptions.Builder<Warehouse>().setQuery(query, Warehouse::class.java).setLifecycleOwner(this).build()
@@ -45,7 +50,6 @@ class OwnWarehousesFragment : BaseFragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = ownWarehousesAdapter
         }
-
     }
 
 

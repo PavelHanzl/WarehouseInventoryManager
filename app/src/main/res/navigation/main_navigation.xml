@@ -62,8 +62,7 @@
     <fragment
         android:id="@+id/ownWarehouseDetailFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehouseDetailFragment"
-        android:label="fragment_own_warehouse_detail"
-        tools:layout="@layout/fragment_own_warehouse_detail" >
+        tools:layout="@layout/fragment_own_warehouse_detail">
         <argument
             android:name="warehouseID"
             app:argType="string" />

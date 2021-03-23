@@ -47,6 +47,7 @@ class CreateWarehouseFragment : Fragment() {
 
 
 
+
         viewModel.goBackToPreviousScreen.observe(viewLifecycleOwner, Observer {
             if (it) {
                 findNavController().navigateUp()
@@ -73,7 +74,6 @@ class CreateWarehouseFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         //zobrazí loading overlay
         (activity as MainActivity).showLoading()
 
@@ -100,8 +100,9 @@ class CreateWarehouseFragment : Fragment() {
             Toast.makeText(requireContext(), getString(R.string.Canceled), Toast.LENGTH_SHORT).show()
         }
 
-        //skryje loading overlay
+        //zobrazí loading overlay
         (activity as MainActivity).hideLoading()
+
     }
 
     // skryje probíhající loading overlay pokud uživatel zmáčkne zpět a nestihne se dokončit skrytí

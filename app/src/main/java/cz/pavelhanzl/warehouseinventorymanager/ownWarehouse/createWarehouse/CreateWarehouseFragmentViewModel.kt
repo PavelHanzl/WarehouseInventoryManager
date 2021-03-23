@@ -11,6 +11,7 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -42,7 +43,7 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
         //check validity dat
         if(!isValid())return
 
-        viewModelScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(Dispatchers.IO) {
 
             try {
                 var profileImageURL: Uri? = null
