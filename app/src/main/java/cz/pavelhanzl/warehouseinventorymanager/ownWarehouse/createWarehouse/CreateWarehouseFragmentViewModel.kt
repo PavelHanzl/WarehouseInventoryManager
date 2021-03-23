@@ -106,5 +106,8 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
 
         return valid
     }
-
+    override fun onCleared() {
+        Log.d("viewDes","destroyed1")
+        super.onCleared()
+    }
 }

@@ -1,5 +1,6 @@
 package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -7,12 +8,15 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentOwnWarehouseDetailBinding
@@ -66,32 +70,36 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
 
 
-        binding.fabOwnWhDetailAddItem.setOnClickListener {
-            onAddOrRemoveItemButtonClicked(addItemClicked,"add")
-        }
-
-        binding.fabOwnWhDetailAddItemByHand.setOnClickListener {
-            Toast.makeText(requireContext(),"add by hand",Toast.LENGTH_SHORT).show()
-        }
-
-        binding.fabOwnWhDetailAddItemByScan.setOnClickListener {
-            Toast.makeText(requireContext(),"add by scan",Toast.LENGTH_SHORT).show()
-        }
-
-        binding.fabOwnWhDetailRemoveItem.setOnClickListener {
-            onAddOrRemoveItemButtonClicked(removeItemClicked,"remove")
-        }
-
-        binding.fabOwnWhDetailRemoveItemByHand.setOnClickListener {
-            Toast.makeText(requireContext(),"remove by hand",Toast.LENGTH_SHORT).show()
-        }
-
-        binding.fabOwnWhDetailRemoveItemByScan.setOnClickListener {
-            Toast.makeText(requireContext(),"remove by scan",Toast.LENGTH_SHORT).show()
-        }
+        setOnClickListenersOnAddRemoveButtons()
 
 
         return binding.root
+    }
+
+    private fun setOnClickListenersOnAddRemoveButtons() {
+        binding.fabOwnWhDetailAddItem.setOnClickListener {
+            onAddOrRemoveItemButtonClicked(addItemClicked, "add")
+        }
+
+        binding.fabOwnWhDetailAddItemByHand.setOnClickListener {
+            Toast.makeText(requireContext(), "add by hand", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.fabOwnWhDetailAddItemByScan.setOnClickListener {
+            Toast.makeText(requireContext(), "add by scan", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.fabOwnWhDetailRemoveItem.setOnClickListener {
+            onAddOrRemoveItemButtonClicked(removeItemClicked, "remove")
+        }
+
+        binding.fabOwnWhDetailRemoveItemByHand.setOnClickListener {
+            Toast.makeText(requireContext(), "remove by hand", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.fabOwnWhDetailRemoveItemByScan.setOnClickListener {
+            Toast.makeText(requireContext(), "remove by scan", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun onAddOrRemoveItemButtonClicked(clicked: Boolean, operation: String) {
@@ -161,9 +169,9 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.own_warehouse_detail_menu, menu);
-
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -173,10 +181,17 @@ class OwnWarehouseDetailFragment : BaseFragment() {
             R.id.miOwnWarehouseEdit -> {
                 Toast.makeText(context,"Edit",Toast.LENGTH_SHORT).show()}
 
-            R.id.miOwnWarehouseDelete -> {Toast.makeText(context,"Delete",Toast.LENGTH_SHORT).show()}
+            R.id.miOwnWarehouseDelete -> {
+                viewModel.deleteWarehouse()
+
+                Snackbar.make(this.requireView(), getString(R.string.warehouse_was_deleted), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.restore)) {
+                        viewModel.deleteWarehouseUndo()
+                    }.show()
+                findNavController().navigateUp()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
-
 
 }

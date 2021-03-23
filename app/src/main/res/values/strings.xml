@@ -80,5 +80,7 @@
     <string name="Canceled">Ukončeno</string>
 
     <string name="warehouseCreated">Sklad vytvořen.</string>
+    <string name="warehouse_was_deleted">Sklad byl odstraněn!</string>
+    <string name="restore">Obnovit</string>
 
 </resources>
