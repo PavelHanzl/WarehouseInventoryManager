@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewmodel"
             type="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel" />
@@ -15,7 +16,7 @@
         android:layout_height="match_parent"
         tools:context=".ownWarehouse.ownWarehouseDetail.OwnWarehouseDetailFragment">
 
-        <!-- TODO: Update blank fragment layout -->
+
         <TextView
             android:id="@+id/tv_warehouseID"
             android:layout_width="wrap_content"
@@ -25,6 +26,42 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_ownWhDetail_addItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_plus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_ownWhDetail_addItem_byHand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/secondaryDarkColor"
+            android:clickable="true"
+            android:src="@drawable/ic_edit"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/fab_ownWhDetail_addItem"
+            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_addItem" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_ownWhDetail_addItem_byScan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/secondaryDarkColor"
+            android:clickable="true"
+            android:src="@drawable/ic_scaner"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/fab_ownWhDetail_addItem_byHand"
+            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_addItem_byHand" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

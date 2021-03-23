@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+
+    <item
+        android:id="@+id/miOwnWarehouseEdit"
+        android:icon="@drawable/ic_dashboard"
+        android:title="Upravit informace o skladu"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/miOwnWarehousePeople"
+        android:icon="@drawable/ic_dashboard"
+        android:title="Lidé v tomto skladu"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/miOwnWarehouseLog"
+        android:icon="@drawable/ic_dashboard"
+        android:title="Log skladu"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/miOwnWarehouseDelete"
+        android:icon="@drawable/ic_dashboard"
+        android:title="Odstranit sklad"
+        app:showAsAction="never"/>
+
+
+</menu>
