@@ -4,6 +4,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -66,5 +68,11 @@ class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>
         holder.bindID(id)
     }
 
+    override fun onViewAttachedToWindow(holder: WarehouseItemViewHolder) {
+        super.onViewAttachedToWindow(holder)
+
+        val animation: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.scale_up)
+        holder.itemView.startAnimation(animation);
+    }
 
 }

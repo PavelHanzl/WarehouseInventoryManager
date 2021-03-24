@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -42,14 +45,18 @@ class OwnWarehousesFragment : BaseFragment() {
 
     private fun setUpRecycleView() {
         //nastaví recycleview
+
         val query = db.collection("warehouses")
         val options = FirestoreRecyclerOptions.Builder<Warehouse>().setQuery(query, Warehouse::class.java).setLifecycleOwner(this).build()
         val ownWarehousesAdapter = OwnWarehousesAdapter(options)
+
 
         rv_ownWarehousesList.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = ownWarehousesAdapter
         }
+
+
     }
 
 
