@@ -86,19 +86,20 @@ class OwnWarehousesFragment : BaseFragment() {
             (activity as MainActivity).supportActionBar!!.title = getString(R.string.drawerMenu_sharedWarehouses)
         }
 
-        setUpRecycleView(ownWarehouse)
+        setUpRecycleView()
     }
 
-    private fun setUpRecycleView(ownWarehouse: Boolean) {
+    private fun setUpRecycleView() {
         val query = //nastaví recycleview query pro recycle view
             if (ownWarehouse) {// vlastní sklady
                 db.collection("warehouses").whereEqualTo("owner", auth.currentUser!!.uid)
             } else {// ostatní sklady
+                //TODO: Domyslet načítání skladů cizích
                 db.collection("warehouses").whereEqualTo("owner", "d9OQ597uv4MGjdEHuA5RAfKSaBg2")
             }
 
         val options = FirestoreRecyclerOptions.Builder<Warehouse>().setQuery(query, Warehouse::class.java).setLifecycleOwner(this).build()
-        val ownWarehousesAdapter = OwnWarehousesAdapter(options, args.ownWarehouse)
+        val ownWarehousesAdapter = OwnWarehousesAdapter(options, ownWarehouse)
 
 
         rv_ownWarehousesList.apply {

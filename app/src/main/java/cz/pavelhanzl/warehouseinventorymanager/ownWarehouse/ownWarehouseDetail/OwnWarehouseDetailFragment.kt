@@ -66,8 +66,7 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
         //observer na warehouse object, který když se změní, tak se upraví title pro tento fragment
         viewModel.warehouseObject.observe(viewLifecycleOwner, Observer { profilePhoto ->
-            (activity as MainActivity).supportActionBar!!.title =
-                viewModel.warehouseObject.value!!.name
+            (activity as MainActivity).supportActionBar!!.title = viewModel.warehouseObject.value!!.name
         })
 
 
@@ -178,21 +177,11 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
-
-        // pokud je přihlášený user zároveň majitelem skladu, tak inflatuje menu s rozšířenými možnostmi, pokud není, tak s omezenými možnostmi
-        GlobalScope.launch(Dispatchers.IO) {
-
-            //porovnává přihlášeného usera s ownerem
-            val whOwner= viewModel.getWarehouseOwner(warehouseId = args.warehouseID).await().toObject(Warehouse::class.java)!!.owner
-            if(whOwner  == auth.currentUser!!.uid){
-                withContext(Main){
-                inflater.inflate(R.menu.own_warehouse_detail_menu_admin, menu)}
-            } else{
-                withContext(Main){
-                inflater.inflate(R.menu.own_warehouse_detail_menu_user, menu)}
-            }
+        if (args.ownWarehouse) {
+            inflater.inflate(R.menu.own_warehouse_detail_menu_admin, menu)
+        } else {
+            inflater.inflate(R.menu.own_warehouse_detail_menu_user, menu)
         }
-
 
 
         super.onCreateOptionsMenu(menu, inflater)
