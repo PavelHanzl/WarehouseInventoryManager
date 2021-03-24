@@ -1,6 +1,5 @@
 package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -8,10 +7,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.VisibleForTesting
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -22,13 +18,13 @@ import com.google.android.material.snackbar.Snackbar
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentOwnWarehouseDetailBinding
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesAdapter
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.android.synthetic.main.fragment_own_warehouse_detail.*
-import kotlinx.android.synthetic.main.fragment_own_warehouses.*
-import kotlinx.android.synthetic.main.menu_header.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.tasks.await
 
 class OwnWarehouseDetailFragment : BaseFragment() {
     private val args: OwnWarehouseDetailFragmentArgs by navArgs()
@@ -55,6 +51,7 @@ class OwnWarehouseDetailFragment : BaseFragment() {
             viewModel.setData(args.warehouseID)
         }
 
+        Toast.makeText(requireContext(), "Tvůj sklad: " + args.ownWarehouse, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateView(
@@ -180,7 +177,24 @@ class OwnWarehouseDetailFragment : BaseFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.own_warehouse_detail_menu, menu);
+
+
+        // pokud je přihlášený user zároveň majitelem skladu, tak inflatuje menu s rozšířenými možnostmi, pokud není, tak s omezenými možnostmi
+        GlobalScope.launch(Dispatchers.IO) {
+
+            //porovnává přihlášeného usera s ownerem
+            val whOwner= viewModel.getWarehouseOwner(warehouseId = args.warehouseID).await().toObject(Warehouse::class.java)!!.owner
+            if(whOwner  == auth.currentUser!!.uid){
+                withContext(Main){
+                inflater.inflate(R.menu.own_warehouse_detail_menu_admin, menu)}
+            } else{
+                withContext(Main){
+                inflater.inflate(R.menu.own_warehouse_detail_menu_user, menu)}
+            }
+        }
+
+
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 

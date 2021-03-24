@@ -1,23 +1,35 @@
 package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse
 
+import android.app.DownloadManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.view.animation.LayoutAnimationController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.firestore.Query
+import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_own_warehouses.*
 
-
 class OwnWarehousesFragment : BaseFragment() {
+    val args: OwnWarehousesFragmentArgs by navArgs()
+    lateinit var navigationView: NavigationView
+    var ownWarehouse: Boolean = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        super.onCreate(savedInstanceState)
+        //získá odkaz na drawer navigation view, abychom pomocí něho mohli později checknout aktivní položku v menu, podle toho jestli se nacházíme v "Mé sklady" nebo "Ostatní sklady"
+        navigationView = requireActivity().drawerNavigationView
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,16 +51,54 @@ class OwnWarehousesFragment : BaseFragment() {
             Navigation.findNavController(view).navigate(action)
         }
 
-        setUpRecycleView()
+        if (!args.ownWarehouse) {
+            fab_ownWarehouses_addNewOwnWarehouse.visibility = INVISIBLE
+        }
+
+
+        checkWarehouseOwnership()
+
 
     }
 
-    private fun setUpRecycleView() {
-        //nastaví recycleview
+    private fun checkWarehouseOwnership() {
+        if (args.ownWarehouse) {//kliknuto na mé sklady
+            //nastaví member variable vlastnictví skladu
+            ownWarehouse = true
 
-        val query = db.collection("warehouses")
+            //nastaví aktivní ikonu v drawer menu na "mé sklady"
+            navigationView.menu.getItem(1).isChecked = true
+
+            //nastaví odpovídající title v actionbaru "Ostatní sklady"
+            (activity as MainActivity).supportActionBar!!.title = getString(R.string.drawerMenu_ownWarehouses)
+
+        } else {//kliknuto na ostatní sklady
+            //nastaví member variable vlastnictví skladu
+            ownWarehouse = false
+
+            //nastaví aktivní ikonu v drawer menu na "ostatní sklady"
+            navigationView.menu.getItem(2).isChecked = true
+
+            //skryje možnost přidání skladu
+            fab_ownWarehouses_addNewOwnWarehouse.visibility = INVISIBLE
+
+            //nastaví odpovídající title v actionbaru "Ostatní sklady"
+            (activity as MainActivity).supportActionBar!!.title = getString(R.string.drawerMenu_sharedWarehouses)
+        }
+
+        setUpRecycleView(ownWarehouse)
+    }
+
+    private fun setUpRecycleView(ownWarehouse: Boolean) {
+        val query = //nastaví recycleview query pro recycle view
+            if (ownWarehouse) {// vlastní sklady
+                db.collection("warehouses").whereEqualTo("owner", auth.currentUser!!.uid)
+            } else {// ostatní sklady
+                db.collection("warehouses").whereEqualTo("owner", "d9OQ597uv4MGjdEHuA5RAfKSaBg2")
+            }
+
         val options = FirestoreRecyclerOptions.Builder<Warehouse>().setQuery(query, Warehouse::class.java).setLifecycleOwner(this).build()
-        val ownWarehousesAdapter = OwnWarehousesAdapter(options)
+        val ownWarehousesAdapter = OwnWarehousesAdapter(options, args.ownWarehouse)
 
 
         rv_ownWarehousesList.apply {

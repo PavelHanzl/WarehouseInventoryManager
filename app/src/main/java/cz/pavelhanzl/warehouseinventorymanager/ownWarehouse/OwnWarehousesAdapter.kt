@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -15,10 +16,9 @@ import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import kotlinx.android.synthetic.main.rv_own_warehouses_list_item.view.*
 
-class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>) :
-    FirestoreRecyclerAdapter<Warehouse, OwnWarehousesAdapter.WarehouseViewHolder>(options) {
+class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var ownWarehouse: Boolean) : FirestoreRecyclerAdapter<Warehouse, OwnWarehousesAdapter.WarehouseViewHolder>(options) {
 
-    class WarehouseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class WarehouseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val holders = itemView
 
         fun bindVisible(warehouse: Warehouse) {
@@ -33,11 +33,11 @@ class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>) :
 
         }
 
-        fun  bindID(ID: String){
+        fun  bindID(warehouseID: String){
             itemView.setOnClickListener{
-                var action = OwnWarehousesFragmentDirections.actionOwnWarehouseFragmentToOwnWarehouseDetailFragment(ID)
+                var action = OwnWarehousesFragmentDirections.actionOwnWarehouseFragmentToOwnWarehouseDetailFragment(warehouseID, ownWarehouse)
                 itemView.findNavController().navigate(action)
-                Log.d("test", ID)
+                Log.d("test",warehouseID)
             }
 
         }
@@ -60,8 +60,7 @@ class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>) :
         model: Warehouse
     ) {
         holder.bindVisible(model)
-        var id = snapshots.getSnapshot(position).id
-        holder.bindID(id)
+        holder.bindID(snapshots.getSnapshot(position).id)
         holder.holders.animate()
 
     }

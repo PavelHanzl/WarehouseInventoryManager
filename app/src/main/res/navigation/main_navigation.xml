@@ -18,6 +18,7 @@
         <action
             android:id="@+id/action_dashboardFragment_to_ownWarehouseFragment"
             app:destination="@id/ownWarehouseFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
@@ -45,7 +46,6 @@
     <fragment
         android:id="@+id/ownWarehouseFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesFragment"
-        android:label="@string/ownWarehouses"
         tools:layout="@layout/fragment_own_warehouses">
         <action
             android:id="@+id/action_ownWarehouseFragment_to_createWarehouseFragment"
@@ -53,6 +53,10 @@
         <action
             android:id="@+id/action_ownWarehouseFragment_to_ownWarehouseDetailFragment"
             app:destination="@id/ownWarehouseDetailFragment" />
+        <argument
+            android:name="ownWarehouse"
+            android:defaultValue="true"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/createWarehouseFragment"
@@ -69,6 +73,12 @@
         <action
             android:id="@+id/action_ownWarehouseDetailFragment_to_itemDetailFragment"
             app:destination="@id/itemDetailFragment" />
+        <action
+            android:id="@+id/action_ownWarehouseDetailFragment_to_createWarehouseFragment"
+            app:destination="@id/createWarehouseFragment" />
+        <argument
+            android:name="ownWarehouse"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/itemDetailFragment"
@@ -79,4 +89,14 @@
             android:name="itemId"
             app:argType="string" />
     </fragment>
+    <action android:id="@+id/action_global_ownWarehouseFragment_false" app:destination="@id/ownWarehouseFragment">
+        <argument
+            android:name="ownWarehouse"
+            android:defaultValue="false" />
+    </action>
+    <action android:id="@+id/action_global_ownWarehouseFragment_true" app:destination="@id/ownWarehouseFragment" >
+        <argument
+            android:name="ownWarehouse"
+            android:defaultValue="true" />
+    </action>
 </navigation>

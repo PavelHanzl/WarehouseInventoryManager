@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
@@ -11,7 +12,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -19,6 +24,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesFragmentDirections
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -91,6 +97,13 @@ class MainActivity : AppCompatActivity() {
 
     //Nastaví jednotlivé tlačítka v Drawer Menu, která nejsou součástí navigation component např. logout button
     private fun setIndividualMenuItems() {
+
+     /*   val menuItemSharedWarehouses = drawerNavigationView.menu.findItem(R.id.menu_item_sharedWarehouseFragment)
+        menuItemSharedWarehouses.setOnMenuItemClickListener {
+            drawerLayout.close()
+            navController.navigate(R.id.action_global_ownWarehouseFragment)
+            true
+        }*/
 
         //Logout menu item
         val menuItemLogout = drawerNavigationView.menu.findItem(R.id.menuItem_logout)

@@ -17,13 +17,14 @@
                 android:id="@+id/group_warehouses"
                 android:checkableBehavior="single">
             <item
-                android:id="@+id/ownWarehouseFragment"
+                android:id="@+id/action_global_ownWarehouseFragment_true"
                 android:icon="@drawable/ic_ownwarehouse"
                 android:title="@string/drawerMenu_ownWarehouses" />
             <item
-                android:id="@+id/sharedWarehouseFragment"
+                android:id="@+id/action_global_ownWarehouseFragment_false"
                 android:icon="@drawable/ic_sharedwarehouse"
-                android:title="@string/drawerMenu_sharedWarehouses" />
+                android:title="@string/drawerMenu_sharedWarehouses"
+                />
             <item
                 android:id="@+id/warehouseInvitationFragment"
                 android:icon="@drawable/ic_warehousenotification"
