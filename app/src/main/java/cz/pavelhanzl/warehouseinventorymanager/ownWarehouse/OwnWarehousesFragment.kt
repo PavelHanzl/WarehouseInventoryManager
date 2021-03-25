@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Query
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
@@ -95,7 +96,19 @@ class OwnWarehousesFragment : BaseFragment() {
                 db.collection("warehouses").whereEqualTo("owner", auth.currentUser!!.uid)
             } else {// ostatní sklady
                 //TODO: Domyslet načítání skladů cizích
-                db.collection("warehouses").whereEqualTo("owner", "d9OQ597uv4MGjdEHuA5RAfKSaBg2")
+                db.collection("warehouses").whereArrayContains("users",auth.currentUser!!.uid)
+
+                    /* db.collection("warehouses").whereIn(FieldPath.documentId(), listOf(
+                    "C8Py9nDTVudEpfU19zCg",
+                    "F7eDAwyPZNC4MYvxe2fO",
+                    "AkQ6Bhygfbeb8JesnIIJ",
+                    "GXo3yE1voxPdvBl2Zemn",
+                    "JrEC3hx2BsaF5aecBiVZ",
+                    "Mc8aUoi9w0qEnU4bhC4k",
+                    "NbeMJV8U5hG1UFMg3nxD",
+                    "OCJsVeOPwpa6cEoz710x",
+                    "OM2KSPISM5lYHT2ob6DU"))*/
+
             }
 
         val options = FirestoreRecyclerOptions.Builder<Warehouse>().setQuery(query, Warehouse::class.java).setLifecycleOwner(this).build()

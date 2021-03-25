@@ -16,6 +16,15 @@
     android:layout_height="match_parent"
     tools:context=".CreateWarehouseFragment">
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:indeterminate="true"
+        app:showAnimationBehavior="outward"
+        app:hideAnimationBehavior="inward"
+        android:visibility="@{viewmodel.visibiliyOfProgressIndicator}"
+        />
 
 
     <com.google.android.material.textfield.TextInputLayout

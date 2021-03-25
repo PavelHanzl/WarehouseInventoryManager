@@ -3,6 +3,7 @@ package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.createWarehouse
 import android.annotation.SuppressLint
 import android.net.Uri
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -33,6 +34,11 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
     private val _goBackToPreviousScreen = MutableLiveData<Boolean>(false)
     val goBackToPreviousScreen: LiveData<Boolean> get() = _goBackToPreviousScreen
 
+
+    private val _visibiliyOfProgressIndicator = MutableLiveData<Int>(View.GONE)
+    val visibiliyOfProgressIndicator: LiveData<Int> get() = _visibiliyOfProgressIndicator
+
+
     init {
 
     }
@@ -44,7 +50,7 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
         if(!isValid())return
 
         GlobalScope.launch(Dispatchers.IO) {
-
+            _visibiliyOfProgressIndicator.postValue(View.VISIBLE)
             try {
                 var profileImageURL: Uri? = null
                 val warehouseDocRef = db.collection("warehouses").document()
