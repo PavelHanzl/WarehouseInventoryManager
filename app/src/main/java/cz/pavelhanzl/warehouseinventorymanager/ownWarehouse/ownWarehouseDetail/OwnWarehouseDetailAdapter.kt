@@ -28,18 +28,16 @@ class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>
         fun bindVisible(warehouseItem: WarehouseItem) {
             itemView.rv_ownWarehousesDetailListItemName.text = warehouseItem.name
             itemView.rv_ownWarehousesDetailListItemCount.text = warehouseItem.count
-            if (warehouseItem.photoURL.isNotEmpty()) {
-                Glide.with(itemView).load(warehouseItem.photoURL)
-                    .into(itemView.rv_ownWarehousesDetailListItemProfileImage)
-            } else {
-                Glide.with(itemView).load(R.drawable.ic_avatar_warehouse_item)
-                    .into(itemView.rv_ownWarehousesDetailListItemProfileImage)
-            }
 
+            Glide.with(itemView)
+                .load(warehouseItem.photoURL)
+                .placeholder(R.drawable.ic_avatar_warehouse_item)
+                .error(R.drawable.ic_avatar_warehouse_item)
+                .into(itemView.rv_ownWarehousesDetailListItemProfileImage)
         }
 
-        fun  bindID(id: String){
-            itemView.setOnClickListener{
+        fun bindID(id: String) {
+            itemView.setOnClickListener {
                 var action = OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToItemDetailFragment(id)
                 itemView.findNavController().navigate(action)
                 Log.d("test", id)
@@ -49,8 +47,6 @@ class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>
 
 
     }
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OwnWarehouseDetailAdapter.WarehouseItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(

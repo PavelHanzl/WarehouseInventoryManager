@@ -23,13 +23,12 @@ class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var own
 
         fun bindVisible(warehouse: Warehouse) {
             itemView.rv_ownWarehousesListWarehouseName.text = warehouse.name
-            if (warehouse.photoURL.isNotEmpty()) {
-                Glide.with(itemView).load(warehouse.photoURL)
-                    .into(itemView.rv_ownWarehousesListWarehouseProfileImage)
-            } else {
-                Glide.with(itemView).load(R.drawable.avatar_ownwarehouseavatar)
-                    .into(itemView.rv_ownWarehousesListWarehouseProfileImage)
-            }
+
+            Glide.with(itemView)
+                .load(warehouse.photoURL)
+                .placeholder(R.drawable.avatar_ownwarehouseavatar)
+                .error(R.drawable.avatar_ownwarehouseavatar)
+                .into(itemView.rv_ownWarehousesListWarehouseProfileImage)
 
         }
 

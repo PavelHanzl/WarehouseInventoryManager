@@ -120,6 +120,7 @@
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/secondaryColor"
         android:text="@string/makeNewWarehouse"
+        android:enabled="@{viewmodel.createEditButtonEnabled}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
