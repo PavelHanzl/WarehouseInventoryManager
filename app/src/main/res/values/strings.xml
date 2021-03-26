@@ -91,5 +91,6 @@
     <string name="delete_warehouse_title">Odstranit sklad?</string>
     <string name="delete_warehouse_description">Odstraněním skladu odstraníte také všechny položky v něm umístěné.\n\nOpravdu chcete sklad odstranit?</string>
     <string name="you_left_the_warehouse">Opustili jste sklad!</string>
+    <string name="edit_warehouse">Upravit sklad</string>
 
 </resources>

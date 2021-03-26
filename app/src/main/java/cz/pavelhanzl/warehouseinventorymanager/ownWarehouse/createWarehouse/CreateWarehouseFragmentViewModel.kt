@@ -20,6 +20,8 @@ import java.util.*
 class CreateWarehouseFragmentViewModel : BaseViewModel() {
 
     val TAG = "CreateWarehouseVM"
+    var editMode = false
+    var edittedWarehouse: Warehouse = Warehouse()
 
     var warehouseNameContent = MutableLiveData<String>("")
     var warehouseNoteContent = MutableLiveData<String>("")
@@ -35,8 +37,8 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
     val goBackToPreviousScreen: LiveData<Boolean> get() = _goBackToPreviousScreen
 
 
-    private val _visibiliyOfProgressIndicator = MutableLiveData<Int>(View.GONE)
-    val visibiliyOfProgressIndicator: LiveData<Int> get() = _visibiliyOfProgressIndicator
+    private val _visibilityOfProgressIndicator = MutableLiveData<Int>(View.GONE)
+    val visibiliyOfProgressIndicator: LiveData<Int> get() = _visibilityOfProgressIndicator
 
 
     init {
@@ -50,7 +52,7 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
         if(!isValid())return
 
         GlobalScope.launch(Dispatchers.IO) {
-            _visibiliyOfProgressIndicator.postValue(View.VISIBLE)
+            _visibilityOfProgressIndicator.postValue(View.VISIBLE)
             try {
                 var profileImageURL: Uri? = null
                 val warehouseDocRef = db.collection("warehouses").document()

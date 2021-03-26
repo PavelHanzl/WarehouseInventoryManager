@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.getColor
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentOwnWarehouseDetailBinding
+import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesFragmentDirections
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
@@ -194,6 +196,8 @@ class OwnWarehouseDetailFragment : BaseFragment() {
         when (item!!.itemId) {
             R.id.miOwnWarehouseEdit -> {
                 Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
+                var action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
+                findNavController().navigate(action)
             }
 
             R.id.miOwnWarehouseDelete -> deleteOfOwnWarehouse()

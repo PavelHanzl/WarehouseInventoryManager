@@ -61,8 +61,13 @@
     <fragment
         android:id="@+id/createWarehouseFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.createWarehouse.CreateWarehouseFragment"
-        android:label="@string/CreateNewWarehouse"
-        tools:layout="@layout/fragment_create_warehouse"/>
+        tools:layout="@layout/fragment_create_warehouse">
+        <argument
+            android:name="warehouseObject"
+            android:defaultValue="@null"
+            app:argType="cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/ownWarehouseDetailFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehouseDetailFragment"
