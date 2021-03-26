@@ -94,6 +94,9 @@ class CreateWarehouseFragmentViewModel : BaseViewModel() {
             } catch (e: Exception) {
                 Log.d(TAG, "Error: ${e.message}")
 
+                //skryje progressbar
+                _visibilityOfProgressIndicator.postValue(View.GONE)
+
                 //v případě chyby povolí tlačítko pro vytvoření/editaci, aby bylo možné akci opakovat
                 _createEditButtonEnabled.postValue(true)
 
