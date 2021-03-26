@@ -199,7 +199,17 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
                 Snackbar.make(this.requireView(), getString(R.string.warehouse_was_deleted), Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.restore)) {
-                        viewModel.deleteWarehouseUndo()
+                        viewModel.undoChangesOfWarehouseDocument()
+                    }.show()
+                findNavController().navigateUp()
+            }
+
+            R.id.miOwnWarehouseLeave -> {
+                viewModel.leaveWarehouse()
+
+                Snackbar.make(this.requireView(), "Opustili jste sklad!", Snackbar.LENGTH_LONG)
+                    .setAction("Zpět") {
+                        viewModel.undoChangesOfWarehouseDocument()
                     }.show()
                 findNavController().navigateUp()
             }

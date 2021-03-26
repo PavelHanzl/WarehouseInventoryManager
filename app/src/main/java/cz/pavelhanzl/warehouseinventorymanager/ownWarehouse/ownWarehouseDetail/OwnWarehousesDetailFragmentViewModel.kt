@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.toObject
 import cz.pavelhanzl.warehouseinventorymanager.repository.User
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
@@ -19,23 +20,31 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     var warehouseObject = MutableLiveData<Warehouse>()
     lateinit var warehouseSnapshot: Map<String, Any>
 
-    //odstraní sklad z databáze
-    fun deleteWarehouse() {
-
-        //běží v globalscope, aby bylo možné sklad obnovit ve funkci delete WhUndo i po zničení viewmodelu
-        GlobalScope.launch(Dispatchers.IO) {
+    suspend fun makeWarehouseSnapshot() {
             warehouseSnapshot = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).get().await().data!!
-            db.collection("warehouses").document(warehouseObject.value!!.warehouseID).delete()
-        }
     }
 
-    //obnoví smazaný sklad po kliku na snackbar
-    fun deleteWarehouseUndo() {
+    fun undoChangesOfWarehouseDocument() {
         GlobalScope.launch(Dispatchers.IO) {
             db.collection("warehouses").document(warehouseObject.value!!.warehouseID).set(warehouseSnapshot)
         }
     }
 
+    //odstraní sklad z databáze
+    fun deleteWarehouse() {
+        //běží v globalscope, aby bylo možné sklad obnovit ve funkci delete WhUndo i po zničení viewmodelu
+        GlobalScope.launch(Dispatchers.IO) {
+            makeWarehouseSnapshot()
+            db.collection("warehouses").document(warehouseObject.value!!.warehouseID).delete()
+        }
+    }
+    //odstraní přihlášeného uživatele z uživatelů skladu. Již se přihlášenmu uživateli nebude zobrazovat v sekci "ostatní sklady".
+    fun leaveWarehouse() {
+        GlobalScope.launch(Dispatchers.IO) {
+            makeWarehouseSnapshot()
+            db.collection("warehouses").document(warehouseObject.value!!.warehouseID).update("users", FieldValue.arrayRemove(auth.currentUser!!.uid))
+        }
+    }
 
     fun getWarehouseOwner(warehouseId: String): Task<DocumentSnapshot> {
         return db.collection("warehouses").document(warehouseId).get()
