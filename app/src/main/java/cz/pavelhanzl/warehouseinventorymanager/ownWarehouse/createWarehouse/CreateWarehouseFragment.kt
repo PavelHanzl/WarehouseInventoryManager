@@ -21,6 +21,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
@@ -29,46 +30,15 @@ import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.O
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_warehouse.*
+import kotlinx.android.synthetic.main.rv_own_warehouses_list_item.view.*
 
 class CreateWarehouseFragment : Fragment() {
     private lateinit var binding: FragmentCreateWarehouseBinding
     lateinit var viewModel: CreateWarehouseFragmentViewModel
     private val args: CreateWarehouseFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(CreateWarehouseFragmentViewModel::class.java)
 
 
-
-    }
-
-    private fun runFragmentInEditMode() {
-        //nastaví editmode ve viewmodelu a vytvoří objekt editovaného skladu na základě skladu předáného v safeargs
-        viewModel.editMode = true
-        viewModel.edittedWarehouse = args.warehouseObject!!
-
-        //nastaví pole "název skladu" a "poznámka"
-        viewModel.warehouseNameContent.postValue(args.warehouseObject!!.name)
-        viewModel.warehouseNoteContent.postValue(args.warehouseObject!!.note)
-
-
-        //nastaví odpovídající title v actionbaru "Ostatní sklady"
-        (activity as MainActivity).supportActionBar!!.title = "Upravit informace o skladu"
-
-        binding.btnCreateWarehouseFragmentCreateWarehouse.text = getString(R.string.edit_warehouse)
-
-
-    }
-
-    private fun runFragmentInCreateMode() {
-        //nastaví editmode ve viewmodelu na false - vytváříme nový sklad
-        viewModel.editMode = false
-
-        //nastaví odpovídající title v actionbaru "Ostatní sklady"
-        (activity as MainActivity).supportActionBar!!.title = resources.getString(R.string.CreateNewWarehouse)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,11 +46,12 @@ class CreateWarehouseFragment : Fragment() {
     ): View? {
 
         //binduje a přiřazuje viewmodel
+        viewModel = ViewModelProvider(this).get(CreateWarehouseFragmentViewModel::class.java)
         binding = FragmentCreateWarehouseBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        //pokud je předán objekt skladu v safeargs, tak jedeme v editmodu
+        //pokud je předán objekt skladu v safeargs, tak jedeme v editmodu, jinak módu vytváření
         if(args.warehouseObject != null) runFragmentInEditMode() else runFragmentInCreateMode()
 
 
@@ -106,7 +77,38 @@ class CreateWarehouseFragment : Fragment() {
         return binding.root
     }
 
+    private fun runFragmentInEditMode() {
+        //nastaví editmode ve viewmodelu a vytvoří objekt editovaného skladu na základě skladu předáného v safeargs
+        viewModel.editMode = true
+        viewModel.edittedWarehouse = args.warehouseObject!!
 
+        //nastaví pole "název skladu" a "poznámka"
+        viewModel.warehouseNameContent.postValue(args.warehouseObject!!.name)
+        viewModel.warehouseNoteContent.postValue(args.warehouseObject!!.note)
+
+
+        //nastaví odpovídající title v actionbaru "Ostatní sklady"
+        (activity as MainActivity).supportActionBar!!.title = "Upravit informace o skladu"
+
+        //změní text na vytvářejícím tllačítku na "upravit sklad"
+        binding.btnCreateWarehouseFragmentCreateWarehouse.text = getString(R.string.edit_warehouse)
+
+        Glide.with(requireContext())
+            .load(viewModel.edittedWarehouse.photoURL)
+            .placeholder(R.drawable.avatar_ownwarehouseavatar)
+            .error(R.drawable.avatar_ownwarehouseavatar)
+            .into(binding.ciWarehouseProfileImageFragmentCreateWarehouse)
+
+    }
+
+    private fun runFragmentInCreateMode() {
+        //nastaví editmode ve viewmodelu na false - vytváříme nový sklad
+        viewModel.editMode = false
+
+        //nastaví odpovídající title v actionbaru "Ostatní sklady"
+        (activity as MainActivity).supportActionBar!!.title = resources.getString(R.string.CreateNewWarehouse)
+
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
