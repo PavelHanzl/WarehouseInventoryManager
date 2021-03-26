@@ -104,6 +104,10 @@ dependencies {
     //backsupport DateTimeFormatter
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
+    //barcode scanner
+    implementation 'com.budiyev.android:code-scanner:2.1.0'
+
+
     //implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.0"
     //implementation "androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha02"
 

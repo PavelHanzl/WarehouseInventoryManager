@@ -110,11 +110,11 @@
     <fragment
         android:id="@+id/scannerFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.scanner.ScannerFragment"
-        android:label="fragment_scanner"
-        tools:layout="@layout/fragment_scanner" >
+        android:label="Skener"
+        tools:layout="@layout/fragment_scanner">
         <argument
             android:name="mode"
-            app:argType="string"
-            android:defaultValue="reading" />
+            android:defaultValue="reading"
+            app:argType="string" />
     </fragment>
 </navigation>
