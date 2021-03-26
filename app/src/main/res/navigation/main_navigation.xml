@@ -84,6 +84,9 @@
         <argument
             android:name="ownWarehouse"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_ownWarehouseDetailFragment_to_scannerFragment"
+            app:destination="@id/scannerFragment" />
     </fragment>
     <fragment
         android:id="@+id/itemDetailFragment"
@@ -104,4 +107,14 @@
             android:name="ownWarehouse"
             android:defaultValue="true" />
     </action>
+    <fragment
+        android:id="@+id/scannerFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.scanner.ScannerFragment"
+        android:label="fragment_scanner"
+        tools:layout="@layout/fragment_scanner" >
+        <argument
+            android:name="mode"
+            app:argType="string"
+            android:defaultValue="reading" />
+    </fragment>
 </navigation>

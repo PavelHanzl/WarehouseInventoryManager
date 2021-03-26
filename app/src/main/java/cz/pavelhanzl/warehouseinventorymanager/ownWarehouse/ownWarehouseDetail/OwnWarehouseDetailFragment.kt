@@ -97,6 +97,8 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
         binding.fabOwnWhDetailAddItemByScan.setOnClickListener {
             Toast.makeText(requireContext(), "add by scan", Toast.LENGTH_SHORT).show()
+            val action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToScannerFragment("adding")
+            findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailRemoveItem.setOnClickListener {
@@ -109,6 +111,8 @@ class OwnWarehouseDetailFragment : BaseFragment() {
 
         binding.fabOwnWhDetailRemoveItemByScan.setOnClickListener {
             Toast.makeText(requireContext(), "remove by scan", Toast.LENGTH_SHORT).show()
+            val action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToScannerFragment("removing")
+            findNavController().navigate(action)
         }
     }
 
