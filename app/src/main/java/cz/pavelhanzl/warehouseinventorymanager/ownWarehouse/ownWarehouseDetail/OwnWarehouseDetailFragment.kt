@@ -8,12 +8,14 @@ import android.view.View.VISIBLE
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getColor
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
@@ -194,27 +196,60 @@ class OwnWarehouseDetailFragment : BaseFragment() {
                 Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
             }
 
-            R.id.miOwnWarehouseDelete -> {
+            R.id.miOwnWarehouseDelete -> deleteOfOwnWarehouse()
+
+            R.id.miOwnWarehouseLeave -> leaveSharedWarehouse()
+
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun leaveSharedWarehouse() {
+        //zobrazí dialog s výzvou k opuštění cizího skladu
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.leave_warehouse_title))
+            .setMessage(R.string.leave_warehouse_description)
+            .setNegativeButton(R.string.no) { dialog, which ->
+                /* zrušení dialogu*/
+            }
+            .setPositiveButton(R.string.yes) { dialog, which ->
+                //volá opuštění skladu pro aktuálně pihlášeného usera
+                viewModel.leaveWarehouse()
+
+                //zobrazí snackar s možností  vrácení akce opuštění skladu
+                Snackbar.make(this.requireView(), getString(R.string.you_left_the_warehouse), Snackbar.LENGTH_LONG)
+                    .setAction(R.string.back) {
+                        viewModel.undoChangesOfWarehouseDocument()
+                    }.show()
+
+                //naviguje na předchozí lokaci
+                findNavController().navigateUp()
+            }
+            .show()
+    }
+
+    private fun deleteOfOwnWarehouse() {
+        //zobrazí dialog s výzvou k potvrzení ke smazání skladu
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.delete_warehouse_title)
+            .setMessage(R.string.delete_warehouse_description)
+            .setNegativeButton(R.string.no) { dialog, which ->
+                /* zrušení dialogu*/
+            }
+            .setPositiveButton(R.string.yes) { dialog, which ->
+                //volá smazání skladu
                 viewModel.deleteWarehouse()
 
+                //zobrazí snackar s možností  vrácení akce smazání skladu
                 Snackbar.make(this.requireView(), getString(R.string.warehouse_was_deleted), Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.restore)) {
                         viewModel.undoChangesOfWarehouseDocument()
                     }.show()
+
+                //naviguje na předchozí lokaci
                 findNavController().navigateUp()
             }
-
-            R.id.miOwnWarehouseLeave -> {
-                viewModel.leaveWarehouse()
-
-                Snackbar.make(this.requireView(), "Opustili jste sklad!", Snackbar.LENGTH_LONG)
-                    .setAction("Zpět") {
-                        viewModel.undoChangesOfWarehouseDocument()
-                    }.show()
-                findNavController().navigateUp()
-            }
-        }
-        return super.onOptionsItemSelected(item)
+            .show()
     }
 
     private fun setUpRecycleView() {

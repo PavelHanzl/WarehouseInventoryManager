@@ -1,4 +1,7 @@
 <resources>
+    <string name="yes">Ano</string>
+    <string name="no">Ne</string>
+    <string name="back">Zpět</string>
     <string name="app_name">Warehouse + Inventory Manager</string>
     <string name="loginLable">Přihlášení</string>
     <string name="emailLable">E-mail</string>
@@ -73,7 +76,6 @@
     <string name="ownWarehouses">Mé sklady</string>
     <string name="warehouse_name">Jméno skladu</string>
     <string name="CreateNewWarehouse">Založit nový sklad</string>
-    <string name="back">Zpět</string>
     <string name="makeNewWarehouse">Založit sklad</string>
     <string name="Note">Poznámka</string>
     <string name="warehouseName">Název skladu</string>
@@ -84,5 +86,10 @@
     <string name="restore">Obnovit</string>
     <string name="item_name">Jméno položky</string>
     <string name="item_detail">Detail položky</string>
+    <string name="leave_warehouse_title">Opustit sklad?</string>
+    <string name="leave_warehouse_description">"Pokud opustíte sklad, tak k němu ztratíte přístup. Jeho vlastník vás do něj ovšem bude moci znovu pozvat.\n\nOpravdu chcete sklad opustit?"</string>
+    <string name="delete_warehouse_title">Odstranit sklad?</string>
+    <string name="delete_warehouse_description">Odstraněním skladu odstraníte také všechny položky v něm umístěné.\n\nOpravdu chcete sklad odstranit?</string>
+    <string name="you_left_the_warehouse">Opustili jste sklad!</string>
 
 </resources>
