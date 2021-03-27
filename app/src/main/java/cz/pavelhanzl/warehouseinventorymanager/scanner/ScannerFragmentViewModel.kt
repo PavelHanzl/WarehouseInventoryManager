@@ -9,5 +9,9 @@ class ScannerFragmentViewModel: BaseViewModel() {
     val barcodeValue: LiveData<String> get() = _barcodeValue
 
 
+    var scanningSpeed = MutableLiveData<Int>(2)
+
+    var continuouslyScaning = MutableLiveData<Boolean>(false)
+
 
 }

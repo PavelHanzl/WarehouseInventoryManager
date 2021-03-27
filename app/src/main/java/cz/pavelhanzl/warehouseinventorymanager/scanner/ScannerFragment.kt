@@ -2,33 +2,32 @@ package cz.pavelhanzl.warehouseinventorymanager.scanner
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.media.AudioManager
+import android.media.ToneGenerator
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ScanMode
-
-import cz.pavelhanzl.warehouseinventorymanager.scanner.ScannerFragmentArgs
-
+import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentScannerBinding
-
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 
 class ScannerFragment : BaseFragment() {
     private lateinit var codeScanner: CodeScanner
@@ -64,37 +63,73 @@ class ScannerFragment : BaseFragment() {
         val scannerView = binding.scannerView
         val activity = requireActivity()
         codeScanner = CodeScanner(activity, scannerView)
-        codeScanner.scanMode = ScanMode.CONTINUOUS
+
+        codeScanner.scanMode = ScanMode.SINGLE
+
+        //observer na switch pro kontinuální skenování
+        viewModel.continuouslyScaning.observe(viewLifecycleOwner, Observer { it ->
+            if (it){
+                Log.d("Switch", "true")
+                codeScanner.startPreview()
+                //codeScanner.scanMode = ScanMode.CONTINUOUS
+            } else {
+                Log.d("Switch", "false")
+               // codeScanner.scanMode = ScanMode.SINGLE
+            }
+        })
 
         viewModel._barcodeValue.postValue("0")
 
-
+        Log.d("Scanner", "pred callbackem" )
         codeScanner.decodeCallback = DecodeCallback {
+            Log.d("Scanner", "v callbacku pred corutinou" )
+
+
+
             activity.runOnUiThread {
-                GlobalScope.launch (Dispatchers.IO){
 
+                Log.d("Scanner", "zacatek uithreadu" )
+                GlobalScope.launch(Dispatchers.IO){
+                    Log.d("Scanner", "zacatek corutine" )
                     vibratePhone()
-                    codeScanner.stopPreview()
+                    playBeepSound()
 
-
+                    Log.d("Scanner", "uprostred mezi ifama pred delay" )
                     var counter = viewModel._barcodeValue.value!!.toInt()
                     counter++
-                    //Toast.makeText(activity, it.text, Toast.LENGTH_LONG).show()
+
                     viewModel._barcodeValue.postValue(counter.toString())
-                    delay(1000)
-                    codeScanner.startPreview()
+
+
+                    withContext(Main){
+                    Toast.makeText(activity, it.text, Toast.LENGTH_LONG).show()
+                    }
+
+                    if(viewModel.continuouslyScaning.value!!) {
+                        delay(viewModel.scanningSpeed.value!!*1000L)
+                        codeScanner.startPreview()
+                    }
+
+
+                    Log.d("Scanner", "konec corutine" )
 
                 }
 
-
+                Log.d("Scanner", "konec ui threadu" )
             }
+            Log.d("Scanner", "v callbacku za corutine" )
         }
 
-        scannerView.setOnClickListener {
+
+
+        binding.fabStartScaning.setOnClickListener {
             codeScanner.startPreview()
         }
 
 
+        binding.sliderScanningSpeed.addOnChangeListener { slider, value, fromUser ->
+            viewModel.scanningSpeed.value=value.toInt()
+        }
 
 
 
@@ -122,6 +157,11 @@ class ScannerFragment : BaseFragment() {
     override fun onPause() {
         codeScanner.releaseResources()
         super.onPause()
+    }
+
+    private fun playBeepSound(){
+        val toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
+        toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 150)
     }
 
      private fun vibratePhone() {
