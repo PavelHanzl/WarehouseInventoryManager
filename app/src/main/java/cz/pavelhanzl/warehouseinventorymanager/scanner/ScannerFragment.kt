@@ -1,7 +1,11 @@
 package cz.pavelhanzl.warehouseinventorymanager.scanner
 
+import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +25,10 @@ import cz.pavelhanzl.warehouseinventorymanager.scanner.ScannerFragmentArgs
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentScannerBinding
 
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ScannerFragment : BaseFragment() {
     private lateinit var codeScanner: CodeScanner
@@ -56,12 +64,29 @@ class ScannerFragment : BaseFragment() {
         val scannerView = binding.scannerView
         val activity = requireActivity()
         codeScanner = CodeScanner(activity, scannerView)
-        codeScanner.scanMode = ScanMode.SINGLE
+        codeScanner.scanMode = ScanMode.CONTINUOUS
+
+        viewModel._barcodeValue.postValue("0")
+
 
         codeScanner.decodeCallback = DecodeCallback {
             activity.runOnUiThread {
-                Toast.makeText(activity, it.text, Toast.LENGTH_LONG).show()
-                viewModel._barcodeValue.postValue(it.text)
+                GlobalScope.launch (Dispatchers.IO){
+
+                    vibratePhone()
+                    codeScanner.stopPreview()
+
+
+                    var counter = viewModel._barcodeValue.value!!.toInt()
+                    counter++
+                    //Toast.makeText(activity, it.text, Toast.LENGTH_LONG).show()
+                    viewModel._barcodeValue.postValue(counter.toString())
+                    delay(1000)
+                    codeScanner.startPreview()
+
+                }
+
+
             }
         }
 
@@ -97,6 +122,15 @@ class ScannerFragment : BaseFragment() {
     override fun onPause() {
         codeScanner.releaseResources()
         super.onPause()
+    }
+
+     private fun vibratePhone() {
+        val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(200)
+        }
     }
 
     private fun setupPermissions() {
