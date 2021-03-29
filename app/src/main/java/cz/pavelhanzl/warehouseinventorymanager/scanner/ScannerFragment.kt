@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -24,14 +25,17 @@ import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ScanMode
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
+import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentScannerBinding
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
+import java.text.NumberFormat
+import java.util.*
 
 class ScannerFragment : BaseFragment() {
     private lateinit var codeScanner: CodeScanner
-    private val CAMERA_REQUEST_CODE = 101
+    private val CAMERA_REQUEST_CODE = 1016
 
     private val args: ScannerFragmentArgs by navArgs()
     private lateinit var binding: FragmentScannerBinding
@@ -58,95 +62,72 @@ class ScannerFragment : BaseFragment() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        registerObservers()
 
 
         val scannerView = binding.scannerView
         val activity = requireActivity()
         codeScanner = CodeScanner(activity, scannerView)
-
         codeScanner.scanMode = ScanMode.SINGLE
 
-        //observer na switch pro kontinuální skenování
-        viewModel.continuouslyScaning.observe(viewLifecycleOwner, Observer { it ->
-            if (it){
-                Log.d("Switch", "true")
-                codeScanner.startPreview()
-                //codeScanner.scanMode = ScanMode.CONTINUOUS
-            } else {
-                Log.d("Switch", "false")
-               // codeScanner.scanMode = ScanMode.SINGLE
-            }
-        })
+
 
         viewModel._barcodeValue.postValue("0")
 
-        Log.d("Scanner", "pred callbackem" )
         codeScanner.decodeCallback = DecodeCallback {
-            Log.d("Scanner", "v callbacku pred corutinou" )
-
-
-
-            activity.runOnUiThread {
-
-                Log.d("Scanner", "zacatek uithreadu" )
-                GlobalScope.launch(Dispatchers.IO){
-                    Log.d("Scanner", "zacatek corutine" )
-                    vibratePhone()
-                    playBeepSound()
-
-                    Log.d("Scanner", "uprostred mezi ifama pred delay" )
-                    var counter = viewModel._barcodeValue.value!!.toInt()
-                    counter++
-
-                    viewModel._barcodeValue.postValue(counter.toString())
-
-
-                    withContext(Main){
-                    Toast.makeText(activity, it.text, Toast.LENGTH_LONG).show()
-                    }
-
-                    if(viewModel.continuouslyScaning.value!!) {
-                        delay(viewModel.scanningSpeed.value!!*1000L)
-                        codeScanner.startPreview()
-                    }
-
-
-                    Log.d("Scanner", "konec corutine" )
-
-                }
-
-                Log.d("Scanner", "konec ui threadu" )
-            }
-            Log.d("Scanner", "v callbacku za corutine" )
+            viewModel.decodeCode()
         }
 
 
-
-        binding.fabStartScaning.setOnClickListener {
-            codeScanner.startPreview()
-        }
-
-
-        binding.sliderScanningSpeed.addOnChangeListener { slider, value, fromUser ->
-            viewModel.scanningSpeed.value=value.toInt()
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
+        setUpSliderForScanningSpeed()
 
 
 
         return binding.root
+    }
+
+    private fun registerObservers() {
+
+        //observer na switch pro kontinuální skenování
+        viewModel.continuouslyScaning.observe(viewLifecycleOwner, Observer { it ->
+            if (it) {//skenujeme kontinuálně
+                //při switchi ze single modu chceme aktivovat scanner
+                viewModel.scannerStartPreview()
+            }
+        })
+
+        //při úspěšném decodu provede tyto akce
+        viewModel.barcodeScanned.observe(viewLifecycleOwner, Observer { it ->
+            if (it) {
+                playBeepSound()
+                vibratePhone()
+            }
+        })
+
+        //zapíná preview v kontinuálním módu po uběhnutí časového limitu
+        viewModel.scannerStartPreview.observe(viewLifecycleOwner, Observer { it ->
+            if (it) {
+                codeScanner.startPreview()
+            }
+        })
+    }
+
+    private fun setUpSliderForScanningSpeed() {
+        //nastavuje rychlost skenování při posunu slideru, složité na realizaci v MVVM, proto change listener
+        binding.sliderScanningSpeed.addOnChangeListener { slider, value, fromUser ->
+            viewModel.scanningSpeed.value = value
+            viewModel._scanningProgress.value = if(value.toInt()==0){viewModel.minimumSpeed*1000}else{value*1000}
+            Log.d("hodnota","Speed:" + viewModel.scanningSpeed.value.toString())
+            Log.d("hodnota","Progress:" + viewModel._scanningProgress.value.toString())
+            Log.d("hodnota","Max:" + viewModel.scanningMaxProgress.value.toString())
+            //_scanningProgress.postValue(scanningSpeed.value!! * 1000)
+        }
+
+        //nastavuje label u slideru pro rychlost automatického snímání
+        binding.sliderScanningSpeed.setLabelFormatter { value: Float ->
+            val format = resources.getString(R.string.scanningSpeedLabel) + "${value.toInt()}"+ resources.getString(R.string.secondsShotFormat)
+            format.format(value.toDouble())
+        }
     }
 
     override fun onResume() {
@@ -159,12 +140,12 @@ class ScannerFragment : BaseFragment() {
         super.onPause()
     }
 
-    private fun playBeepSound(){
+    private fun playBeepSound() {
         val toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
         toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 150)
     }
 
-     private fun vibratePhone() {
+    private fun vibratePhone() {
         val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (Build.VERSION.SDK_INT >= 26) {
             vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))

@@ -63,6 +63,11 @@ class OwnWarehouseDetailFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        //definuje počáteční stav fab tlačítek pro přidání/odebírání
+        addItemClicked = false
+        removeItemClicked = false
+
+
         //binduje a přiřazuje viewmodel
         binding = FragmentOwnWarehouseDetailBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
@@ -160,12 +165,16 @@ class OwnWarehouseDetailFragment : BaseFragment() {
             "add" -> {
                 if (!clicked) {
                     Log.d("Animace", "Add visi - not clicked")
-                    binding.fabOwnWhDetailAddItemByScan.visibility = VISIBLE
-                    binding.fabOwnWhDetailAddItemByHand.visibility = VISIBLE
+                    binding.fabOwnWhDetailAddItemByScan.show()
+                    binding.fabOwnWhDetailAddItemByHand.show()
+                 /*   binding.fabOwnWhDetailAddItemByScan.visibility = VISIBLE
+                    binding.fabOwnWhDetailAddItemByHand.visibility = VISIBLE*/
                 } else {
                     Log.d("Animace", "Add visi - clicked")
-                    binding.fabOwnWhDetailAddItemByScan.visibility = INVISIBLE
-                    binding.fabOwnWhDetailAddItemByHand.visibility = INVISIBLE
+                    binding.fabOwnWhDetailAddItemByScan.hide()
+                    binding.fabOwnWhDetailAddItemByHand.hide()
+                    /*binding.fabOwnWhDetailAddItemByScan.visibility = INVISIBLE
+                    binding.fabOwnWhDetailAddItemByHand.visibility = INVISIBLE*/
                 }
             }
             "remove" -> {
