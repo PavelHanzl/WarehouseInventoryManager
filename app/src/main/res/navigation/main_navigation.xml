@@ -87,6 +87,9 @@
         <action
             android:id="@+id/action_ownWarehouseDetailFragment_to_scannerFragment"
             app:destination="@id/scannerFragment" />
+        <action
+            android:id="@+id/action_ownWarehouseDetailFragment_to_addRemoveItem"
+            app:destination="@id/addRemoveItem" />
     </fragment>
     <fragment
         android:id="@+id/itemDetailFragment"
@@ -117,4 +120,9 @@
             android:defaultValue="reading"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/addRemoveItem"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.addRemoveItem.AddRemoveItem"
+        android:label="fragment_add_remove_item"
+        tools:layout="@layout/fragment_add_remove_item" />
 </navigation>

@@ -16,6 +16,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
+    val ADDING = "adding"
+    val REMOVING = "removing"
+
+    lateinit var addRemoveFragmentMode: String
+
+
     var warehouseID = MutableLiveData<String>("")
     var warehouseObject = MutableLiveData<Warehouse>()
     lateinit var warehouseSnapshot: Map<String, Any>

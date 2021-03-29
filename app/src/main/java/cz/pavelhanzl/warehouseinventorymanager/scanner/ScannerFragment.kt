@@ -158,7 +158,6 @@ class ScannerFragment : BaseFragment() {
 
     private fun setupPermissions() {
 
-        //TODO padá při prvním průchodu, musí se dořešit
         val cameraPermission = ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
             reqestCameraPermission()
