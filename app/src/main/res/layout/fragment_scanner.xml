@@ -102,7 +102,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
             android:clickable="true"
-            android:visibility="@{viewmodel.continuouslyScaning ? View.GONE : View.VISIBLE}"
             android:onClick="@{()->viewmodel.scannerStartPreview()}"
             android:src="@drawable/ic_scaner"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
@@ -113,6 +112,12 @@
             android:id="@+id/slider_scanning_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
+            app:trackColorActive="@color/secondaryColor"
+            app:trackColorInactive="@color/transparentColor"
+            app:thumbColor="@color/secondaryColor"
+            app:tickColor="@color/secondaryColor"
+
             android:stepSize="1"
             android:valueFrom="0"
             android:valueTo="5"

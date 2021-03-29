@@ -2,7 +2,6 @@ package cz.pavelhanzl.warehouseinventorymanager.scanner
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.media.AudioManager
 import android.media.ToneGenerator
 import android.os.Build
@@ -14,23 +13,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
+import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
-import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentScannerBinding
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Main
-import java.text.NumberFormat
 import java.util.*
 
 class ScannerFragment : BaseFragment() {
@@ -43,7 +38,6 @@ class ScannerFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupPermissions()
 
         //předá argumenty do viewmodelu
         if (savedInstanceState == null) {
@@ -57,6 +51,7 @@ class ScannerFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        setupPermissions()
         //binduje a přiřazuje viewmodel
         binding = FragmentScannerBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
@@ -68,6 +63,7 @@ class ScannerFragment : BaseFragment() {
         val scannerView = binding.scannerView
         val activity = requireActivity()
         codeScanner = CodeScanner(activity, scannerView)
+        codeScanner.formats = CodeScanner.ONE_DIMENSIONAL_FORMATS
         codeScanner.scanMode = ScanMode.SINGLE
 
 
@@ -78,6 +74,9 @@ class ScannerFragment : BaseFragment() {
             viewModel.decodeCode()
         }
 
+        codeScanner.errorCallback = ErrorCallback {
+           Log.e("camera error", it.message!!)
+        }
 
         setUpSliderForScanningSpeed()
 
@@ -93,7 +92,10 @@ class ScannerFragment : BaseFragment() {
             if (it) {//skenujeme kontinuálně
                 //při switchi ze single modu chceme aktivovat scanner
                 viewModel.scannerStartPreview()
-            }
+                binding.fabStartScaning.hide()
+            } else (
+                binding.fabStartScaning.show()
+            )
         })
 
         //při úspěšném decodu provede tyto akce
@@ -155,6 +157,8 @@ class ScannerFragment : BaseFragment() {
     }
 
     private fun setupPermissions() {
+
+        //TODO padá při prvním průchodu, musí se dořešit
         val cameraPermission = ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
             reqestCameraPermission()
@@ -162,16 +166,19 @@ class ScannerFragment : BaseFragment() {
     }
 
     private fun reqestCameraPermission() {
-        ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
+        requestPermissions(arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+
         when (requestCode) {
             CAMERA_REQUEST_CODE -> {
                 if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(requireContext(), "Aplikace potřebuje získat povolení ke kameře, abyste mohli využívat tuto funkci.", Toast.LENGTH_LONG).show()
+                    Log.d("práva", "práva ke kameře neudělena")
+                    Toast.makeText(requireContext(), resources.getString(R.string.needsCameraPermission), Toast.LENGTH_LONG).show()
                     findNavController().navigateUp()
                 } else {
+                    Log.d("práva", "práva ke kameře udělena")
                     // permisions successfuly granted
                 }
             }
