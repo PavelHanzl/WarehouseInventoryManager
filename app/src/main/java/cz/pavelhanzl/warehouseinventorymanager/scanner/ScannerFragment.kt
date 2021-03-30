@@ -14,19 +14,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.withCreated
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.google.zxing.Result
+import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentScannerBinding
+import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
+import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
-import kotlinx.coroutines.*
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class ScannerFragment : BaseFragment() {
     private lateinit var codeScanner: CodeScanner
@@ -42,6 +49,7 @@ class ScannerFragment : BaseFragment() {
         //předá argumenty do viewmodelu
         if (savedInstanceState == null) {
             viewModel = ViewModelProvider(this).get(ScannerFragmentViewModel::class.java)
+
             viewModel._barcodeValue.postValue(args.mode)
         }
     }
@@ -56,9 +64,14 @@ class ScannerFragment : BaseFragment() {
         binding = FragmentScannerBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
         registerObservers()
 
+        //nastaví fragment do požadovaného módu
+        when (args.mode) {
+            Constants.ADDING_STRING -> runFragmentInAddingMode()
+            Constants.REMOVING_STRING -> runFragmentInRemovingMode()
+            Constants.READING_STRING -> runFragmentInReadingMode()
+        }
 
         val scannerView = binding.scannerView
         val activity = requireActivity()
@@ -71,11 +84,17 @@ class ScannerFragment : BaseFragment() {
         viewModel._barcodeValue.postValue("0")
 
         codeScanner.decodeCallback = DecodeCallback {
-            viewModel.decodeCode()
+            requireActivity().runOnUiThread() {
+
+                viewModel.decodeCode(it)
+
+
+                handleDecodeCallbackIfScannerIsInReadingMode(it)
+            }
         }
 
         codeScanner.errorCallback = ErrorCallback {
-           Log.e("camera error", it.message!!)
+            Log.e("camera error", it.message!!)
         }
 
         setUpSliderForScanningSpeed()
@@ -85,17 +104,52 @@ class ScannerFragment : BaseFragment() {
         return binding.root
     }
 
+    private fun handleDecodeCallbackIfScannerIsInReadingMode(it: Result) {
+
+        if (viewModel.scannerMode == Constants.READING_STRING) {
+            // vloží do argumentu výsledek skennování a předá observeru ve fragmentu, který vyvolal skenner ve čtecím režimu
+            findNavController().previousBackStackEntry?.savedStateHandle?.set("scannedBarcode", it.text)
+            //pokud se nacházíme ve čtecím režimu tak se chceme hned dostat zpět na lokaci odkud jsme na skenner přišli
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun runFragmentInReadingMode() {
+        hideKeyboard(requireActivity())
+        viewModel.scannerMode = Constants.READING_STRING
+
+
+        Toast.makeText(requireContext(), "Reading!!", Toast.LENGTH_SHORT).show()
+        binding.guideline2.setGuidelinePercent(1F)
+
+        binding.llSwitchContinuouslyScan.visibility = View.GONE
+        binding.fabStartScaning.hide()
+        Log.d("fabik", "reading")
+    }
+
+    private fun runFragmentInRemovingMode() {
+        viewModel.scannerMode = Constants.REMOVING_STRING
+        Toast.makeText(requireContext(), "Removing!!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun runFragmentInAddingMode() {
+        viewModel.scannerMode = Constants.ADDING_STRING
+        Toast.makeText(requireContext(), "Adding!!", Toast.LENGTH_SHORT).show()
+    }
+
     private fun registerObservers() {
 
         //observer na switch pro kontinuální skenování
         viewModel.continuouslyScaning.observe(viewLifecycleOwner, Observer { it ->
-            if (it) {//skenujeme kontinuálně
+            if (it || args.mode == Constants.READING_STRING) {//skenujeme kontinuálně nebo jsme v reading modu
                 //při switchi ze single modu chceme aktivovat scanner
                 viewModel.scannerStartPreview()
                 binding.fabStartScaning.hide()
-            } else (
+            } else {
+                Log.d("fabik", "if")
                 binding.fabStartScaning.show()
-            )
+            }
+
         })
 
         //při úspěšném decodu provede tyto akce
@@ -118,16 +172,20 @@ class ScannerFragment : BaseFragment() {
         //nastavuje rychlost skenování při posunu slideru, složité na realizaci v MVVM, proto change listener
         binding.sliderScanningSpeed.addOnChangeListener { slider, value, fromUser ->
             viewModel.scanningSpeed.value = value
-            viewModel._scanningProgress.value = if(value.toInt()==0){viewModel.minimumSpeed*1000}else{value*1000}
-            Log.d("hodnota","Speed:" + viewModel.scanningSpeed.value.toString())
-            Log.d("hodnota","Progress:" + viewModel._scanningProgress.value.toString())
-            Log.d("hodnota","Max:" + viewModel.scanningMaxProgress.value.toString())
+            viewModel._scanningProgress.value = if (value.toInt() == 0) {
+                viewModel.minimumSpeed * 1000
+            } else {
+                value * 1000
+            }
+            Log.d("hodnota", "Speed:" + viewModel.scanningSpeed.value.toString())
+            Log.d("hodnota", "Progress:" + viewModel._scanningProgress.value.toString())
+            Log.d("hodnota", "Max:" + viewModel.scanningMaxProgress.value.toString())
             //_scanningProgress.postValue(scanningSpeed.value!! * 1000)
         }
 
         //nastavuje label u slideru pro rychlost automatického snímání
         binding.sliderScanningSpeed.setLabelFormatter { value: Float ->
-            val format = resources.getString(R.string.scanningSpeedLabel) + "${value.toInt()}"+ resources.getString(R.string.secondsShotFormat)
+            val format = resources.getString(R.string.scanningSpeedLabel) + "${value.toInt()}" + resources.getString(R.string.secondsShotFormat)
             format.format(value.toDouble())
         }
     }

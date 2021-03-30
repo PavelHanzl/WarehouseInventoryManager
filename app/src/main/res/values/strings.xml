@@ -97,6 +97,9 @@
     <string name="secondsShotFormat">"s."</string>
     <string name="scanContinuously">Snímat nepřetržitě</string>
     <string name="needsCameraPermission">Aplikace potřebuje získat povolení ke kameře, abyste mohli využívat funkci skenneru.</string>
+    <string name="addItem">Přidat</string>
+    <string name="removeItem">Odebrat</string>
+    <string name="scanBarcode">Naskenujte čárový kód</string>
 
 
 </resources>

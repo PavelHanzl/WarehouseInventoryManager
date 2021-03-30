@@ -1,15 +1,9 @@
 package cz.pavelhanzl.warehouseinventorymanager.scanner
 
-import android.content.Context
-import android.media.AudioManager
-import android.media.ToneGenerator
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.google.zxing.Result
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -17,6 +11,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ScannerFragmentViewModel : BaseViewModel() {
+
+
+
+    lateinit var scannerMode: String
 
     //kontinální skenování
     var continuouslyScaning = MutableLiveData<Boolean>(false)
@@ -67,7 +65,7 @@ class ScannerFragmentViewModel : BaseViewModel() {
         barcodeScanned.postValue(true)
     }
 
-    fun decodeCode() {
+    fun decodeCode(result: Result) {
         GlobalScope.launch(Dispatchers.IO) {
 
             scanSuccessful()
@@ -75,6 +73,8 @@ class ScannerFragmentViewModel : BaseViewModel() {
             var counterOfScanning = _barcodeValue.value!!.toInt()
             counterOfScanning++
             _barcodeValue.postValue(counterOfScanning.toString())
+
+
 
 
             if (continuouslyScaning.value!!) {

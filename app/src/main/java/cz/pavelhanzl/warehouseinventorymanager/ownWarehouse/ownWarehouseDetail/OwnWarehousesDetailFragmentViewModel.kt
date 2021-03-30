@@ -12,15 +12,15 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
 
     //******************Start of variables forAddRemoveItemFragment**********************//
-    val ADDING = "adding"
-    val REMOVING = "removing"
 
     lateinit var addRemoveFragmentMode: String
 
@@ -34,7 +34,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     var _itemBarcodeError = MutableLiveData<String>("")
     val itemBarcodeError: LiveData<String> get() = _itemBarcodeError
 
-    var itemCountContent = MutableLiveData<String>("1")
+    var itemCountContent = MutableLiveData<String>("")
     var _itemCountError = MutableLiveData<String>("")
     val itemCountError: LiveData<String> get() = _itemCountError
 
@@ -42,13 +42,40 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     val addRemoveButtonEnabled: LiveData<Boolean> get() = _addRemoveButtonEnabled
 
 
-    private val _goBackToPreviousScreen = MutableLiveData<Boolean>(false)
-    val goBackToPreviousScreen: LiveData<Boolean> get() = _goBackToPreviousScreen
 
+    sealed class Event {
+        object NavigateBack : Event()
+        //data class CreateEdit(val debtID: String?) : Event()
+    }
+
+    private val eventChannel = Channel<Event>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
 
 
 
     //******************End of variables for AddRemoveItemFragment**********************//
+
+    //******************Start of functions forAddRemoveItemFragment**********************//
+    fun initVariablesForAddRemoveFragment(){
+        _loading.value=false
+        _itemNameError.value=""
+
+        itemBarcodeContent.value=""
+        _itemBarcodeError.value=""
+
+        itemCountContent.value=""
+        _itemCountError.value=""
+
+        _addRemoveButtonEnabled.value = true
+
+    }
+
+    fun onAddRemoveItemButtonClicked() {
+
+        //todo zbyva implementovat
+
+    }
+    //******************End of functions  for AddRemoveItemFragment**********************//
 
     var warehouseID = MutableLiveData<String>("")
     var warehouseObject = MutableLiveData<Warehouse>()
@@ -111,11 +138,14 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
 
 
 
-
-    fun onAddRemoveItemButtonClicked() {}
-
     fun onBackButtonClicked() {
-        _goBackToPreviousScreen.postValue(true)
+        GlobalScope.launch { eventChannel.send(Event.NavigateBack) }
+
+    }
+
+    override fun onCleared() {
+        Log.d("wipe", "wiped")
+        super.onCleared()
     }
 
 }

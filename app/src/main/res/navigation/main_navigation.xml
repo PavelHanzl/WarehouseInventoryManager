@@ -113,7 +113,7 @@
     <fragment
         android:id="@+id/scannerFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.scanner.ScannerFragment"
-        android:label="Skener"
+        android:label="@string/scanBarcode"
         tools:layout="@layout/fragment_scanner">
         <argument
             android:name="mode"
@@ -123,6 +123,9 @@
     <fragment
         android:id="@+id/addRemoveItem"
         android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.addRemoveItem.AddRemoveItemFragment"
-        android:label="fragment_add_remove_item"
-        tools:layout="@layout/fragment_add_remove_item" />
+        tools:layout="@layout/fragment_add_remove_item" >
+        <action
+            android:id="@+id/action_addRemoveItem_to_scannerFragment"
+            app:destination="@id/scannerFragment" />
+    </fragment>
 </navigation>

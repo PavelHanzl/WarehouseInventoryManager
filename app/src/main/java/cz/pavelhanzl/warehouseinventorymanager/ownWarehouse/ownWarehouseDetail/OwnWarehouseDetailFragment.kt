@@ -23,6 +23,7 @@ import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentOwnWarehouseDetailBinding
 import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesFragmentDirections
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
@@ -98,14 +99,14 @@ class OwnWarehouseDetailFragment : BaseFragment() {
         }
 
         binding.fabOwnWhDetailAddItemByHand.setOnClickListener {
-            viewModel.addRemoveFragmentMode = viewModel.ADDING
+            viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
             Toast.makeText(requireContext(), "add by hand", Toast.LENGTH_SHORT).show()
             val action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToAddRemoveItem()
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailAddItemByScan.setOnClickListener {
-            viewModel.addRemoveFragmentMode = viewModel.ADDING
+            viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
             Toast.makeText(requireContext(), "add by scan", Toast.LENGTH_SHORT).show()
             val action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToScannerFragment("adding")
             findNavController().navigate(action)
@@ -117,14 +118,14 @@ class OwnWarehouseDetailFragment : BaseFragment() {
         }
 
         binding.fabOwnWhDetailRemoveItemByHand.setOnClickListener {
-            viewModel.addRemoveFragmentMode = viewModel.REMOVING
+            viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
             Toast.makeText(requireContext(), "remove by hand", Toast.LENGTH_SHORT).show()
             val action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToAddRemoveItem()
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailRemoveItemByScan.setOnClickListener {
-            viewModel.addRemoveFragmentMode = viewModel.REMOVING
+            viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
             Toast.makeText(requireContext(), "remove by scan", Toast.LENGTH_SHORT).show()
             val action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToScannerFragment("removing")
             findNavController().navigate(action)
