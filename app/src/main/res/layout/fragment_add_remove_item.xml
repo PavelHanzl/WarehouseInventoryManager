@@ -7,38 +7,182 @@
     >
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="sharedViewmodel"
             type="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel" />
     </data>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ownWarehouse.addRemoveItem.AddRemoveItem">
-
+        tools:context=".ownWarehouse.addRemoveItem.AddRemoveItemFragment">
 
         <TextView
-            android:id="@+id/tv_addRemItem"
+            android:id="@+id/testAddRemTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hello_blank_fragment"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+            app:layout_constraintEnd_toEndOf="@+id/scrollView2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_addRemItemMode"
-            android:layout_width="wrap_content"
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toTopOf="@+id/btn_BackButton_FragmentCreateWarehouse"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/linearProgressIndicator2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:visibility="@{sharedViewmodel.loading ? View.VISIBLE : View.GONE}"
+                    app:hideAnimationBehavior="inward"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:showAnimationBehavior="outward" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/dropdownItemSelector_addRemoveFragment"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Vyberte položku"
+                    app:errorEnabled="true"
+
+                    app:errorText="@{sharedViewmodel.itemNameError}"
+                    app:layout_constraintEnd_toStartOf="@+id/floatingActionButton"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/dropdownItemSelectorContent_addRemoveFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="a" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tf_barcodeValue_addRemoveFragment"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Zadejte čárový kód"
+                    android:layout_marginEnd="16dp"
+                    app:errorEnabled="true"
+                    app:errorText="@{sharedViewmodel.itemBarcodeError}"
+                    app:layout_constraintEnd_toStartOf="@+id/floatingActionButton2"
+                    app:layout_constraintStart_toStartOf="@+id/dropdownItemSelector_addRemoveFragment"
+                    app:layout_constraintTop_toBottomOf="@+id/dropdownItemSelector_addRemoveFragment">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tf_barcodeValueContent_addRemoveFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="@={sharedViewmodel.itemBarcodeContent}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tf_itemCount_addRemoveFragment"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:hint="Zadejte počet přidávaných kusů"
+                    app:errorEnabled="true"
+                    app:errorText="@{sharedViewmodel.itemCountError}"
+                    app:layout_constraintEnd_toStartOf="@+id/floatingActionButton2"
+                    app:layout_constraintStart_toStartOf="@+id/tf_barcodeValue_addRemoveFragment"
+                    app:layout_constraintTop_toBottomOf="@+id/tf_barcodeValue_addRemoveFragment">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tf_itemCountContent_addRemoveFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:text="@={sharedViewmodel.itemCountContent}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/floatingActionButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:clickable="true"
+                    android:src="@drawable/ic_plus"
+                    app:layout_constraintBottom_toBottomOf="@+id/dropdownItemSelector_addRemoveFragment"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/dropdownItemSelector_addRemoveFragment"
+                    app:layout_constraintVertical_bias="0.19" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/floatingActionButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:clickable="true"
+                    android:src="@drawable/ic_scaner"
+                    app:layout_constraintBottom_toBottomOf="@+id/tf_barcodeValue_addRemoveFragment"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tf_barcodeValue_addRemoveFragment"
+                    app:layout_constraintVertical_bias="0.19" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btn_BackButton_FragmentCreateWarehouse"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/hello_blank_fragment"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:onClick="@{()-> sharedViewmodel.onBackButtonClicked()}"
+            android:text="@string/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <Button
+            android:id="@+id/btn_CreateWarehouse_FragmentCreateWarehouse"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/secondaryColor"
+            android:enabled="@{sharedViewmodel.addRemoveButtonEnabled}"
+            android:onClick="@{()-> sharedViewmodel.onAddRemoveItemButtonClicked()}"
+            android:text="Přidat/odebrat"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_addRemItem" />
-
+            app:layout_constraintStart_toStartOf="@+id/guideline" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

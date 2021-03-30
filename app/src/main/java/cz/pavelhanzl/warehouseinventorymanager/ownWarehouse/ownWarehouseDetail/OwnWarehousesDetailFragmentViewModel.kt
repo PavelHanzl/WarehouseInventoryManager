@@ -1,6 +1,7 @@
 package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
@@ -16,11 +17,38 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
+
+    //******************Start of variables forAddRemoveItemFragment**********************//
     val ADDING = "adding"
     val REMOVING = "removing"
 
     lateinit var addRemoveFragmentMode: String
 
+    private val _loading = MutableLiveData<Boolean>(false)
+    val loading: LiveData<Boolean> get() = _loading
+
+    var _itemNameError = MutableLiveData<String>("")
+    val itemNameError: LiveData<String> get() = _itemNameError
+
+    var itemBarcodeContent = MutableLiveData<String>("")
+    var _itemBarcodeError = MutableLiveData<String>("")
+    val itemBarcodeError: LiveData<String> get() = _itemBarcodeError
+
+    var itemCountContent = MutableLiveData<String>("1")
+    var _itemCountError = MutableLiveData<String>("")
+    val itemCountError: LiveData<String> get() = _itemCountError
+
+    private val _addRemoveButtonEnabled = MutableLiveData<Boolean>(true)
+    val addRemoveButtonEnabled: LiveData<Boolean> get() = _addRemoveButtonEnabled
+
+
+    private val _goBackToPreviousScreen = MutableLiveData<Boolean>(false)
+    val goBackToPreviousScreen: LiveData<Boolean> get() = _goBackToPreviousScreen
+
+
+
+
+    //******************End of variables for AddRemoveItemFragment**********************//
 
     var warehouseID = MutableLiveData<String>("")
     var warehouseObject = MutableLiveData<Warehouse>()
@@ -79,6 +107,15 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
         }
 
 
+    }
+
+
+
+
+    fun onAddRemoveItemButtonClicked() {}
+
+    fun onBackButtonClicked() {
+        _goBackToPreviousScreen.postValue(true)
     }
 
 }
