@@ -6,9 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.toObject
 import cz.pavelhanzl.warehouseinventorymanager.repository.User
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
+import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -41,7 +44,9 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     private val _addRemoveButtonEnabled = MutableLiveData<Boolean>(true)
     val addRemoveButtonEnabled: LiveData<Boolean> get() = _addRemoveButtonEnabled
 
-
+    private lateinit var allItemsInDb: Task<QuerySnapshot>
+    val localListOfAllItems = mutableListOf<WarehouseItem>()
+    val localListOfAllItemNames = mutableListOf<String>()
 
     sealed class Event {
         object NavigateBack : Event()
@@ -51,23 +56,39 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
-
-
     //******************End of variables for AddRemoveItemFragment**********************//
 
     //******************Start of functions forAddRemoveItemFragment**********************//
-    fun initVariablesForAddRemoveFragment(){
-        _loading.value=false
-        _itemNameError.value=""
+    fun initVariablesForAddRemoveFragment() {
+        _loading.value = false
+        _itemNameError.value = ""
 
-        itemBarcodeContent.value=""
-        _itemBarcodeError.value=""
+        itemBarcodeContent.value = ""
+        _itemBarcodeError.value = ""
 
-        itemCountContent.value=""
-        _itemCountError.value=""
+        itemCountContent.value = ""
+        _itemCountError.value = ""
 
         _addRemoveButtonEnabled.value = true
 
+        localListOfAllItemNames.clear()
+        localListOfAllItems.clear()
+
+    }
+
+    fun getListOfActualWarehouseItems() {
+        allItemsInDb = db.collection("warehouses").document(warehouseID.value!!).collection("items").orderBy("name", Query.Direction.ASCENDING).get()
+        allItemsInDb.addOnSuccessListener { documents ->
+            for (document in documents) {
+                //Log.d("položky", "${document.id} => ${document.data}")
+
+                localListOfAllItems.add(document.toObject(WarehouseItem::class.java))
+                localListOfAllItemNames.add(document.toObject(WarehouseItem::class.java).name)
+            }
+        }
+            .addOnFailureListener { exception ->
+                Log.d("položky", "Error getting documents: " + exception.message)
+            }
     }
 
     fun onAddRemoveItemButtonClicked() {
@@ -82,7 +103,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     lateinit var warehouseSnapshot: Map<String, Any>
 
     suspend fun makeWarehouseSnapshot() {
-            warehouseSnapshot = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).get().await().data!!
+        warehouseSnapshot = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).get().await().data!!
     }
 
     fun undoChangesOfWarehouseDocument() {
@@ -99,6 +120,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
             db.collection("warehouses").document(warehouseObject.value!!.warehouseID).delete()
         }
     }
+
     //odstraní přihlášeného uživatele z uživatelů skladu. Již se přihlášenmu uživateli nebude zobrazovat v sekci "ostatní sklady".
     fun leaveWarehouse() {
         GlobalScope.launch(Dispatchers.IO) {
@@ -135,8 +157,6 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
 
 
     }
-
-
 
     fun onBackButtonClicked() {
         GlobalScope.launch { eventChannel.send(Event.NavigateBack) }
