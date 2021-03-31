@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
@@ -26,8 +25,8 @@ class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var own
 
             Glide.with(itemView)
                 .load(warehouse.photoURL)
-                .placeholder(R.drawable.avatar_ownwarehouseavatar)
-                .error(R.drawable.avatar_ownwarehouseavatar)
+                .placeholder(R.drawable.avatar_ownwarehouseavatar_primary_color)
+                .error(R.drawable.avatar_ownwarehouseavatar_primary_color)
                 .into(itemView.rv_ownWarehousesListWarehouseProfileImage)
 
         }

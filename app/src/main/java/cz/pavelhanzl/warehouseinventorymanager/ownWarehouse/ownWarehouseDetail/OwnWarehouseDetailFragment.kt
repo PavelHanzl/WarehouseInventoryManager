@@ -178,25 +178,21 @@ class OwnWarehouseDetailFragment : BaseFragment() {
                     Log.d("Animace", "Add visi - not clicked")
                     binding.fabOwnWhDetailAddItemByScan.show()
                     binding.fabOwnWhDetailAddItemByHand.show()
-                 /*   binding.fabOwnWhDetailAddItemByScan.visibility = VISIBLE
-                    binding.fabOwnWhDetailAddItemByHand.visibility = VISIBLE*/
                 } else {
                     Log.d("Animace", "Add visi - clicked")
                     binding.fabOwnWhDetailAddItemByScan.hide()
                     binding.fabOwnWhDetailAddItemByHand.hide()
-                    /*binding.fabOwnWhDetailAddItemByScan.visibility = INVISIBLE
-                    binding.fabOwnWhDetailAddItemByHand.visibility = INVISIBLE*/
                 }
             }
             "remove" -> {
                 if (!clicked) {
                     Log.d("Animace", "Remove visi - not clicked")
-                    binding.fabOwnWhDetailRemoveItemByScan.visibility = VISIBLE
-                    binding.fabOwnWhDetailRemoveItemByHand.visibility = VISIBLE
+                    binding.fabOwnWhDetailRemoveItemByScan.show()
+                    binding.fabOwnWhDetailRemoveItemByHand.show()
                 } else {
                     Log.d("Animace", "Remove visi - clicked")
-                    binding.fabOwnWhDetailRemoveItemByScan.visibility = INVISIBLE
-                    binding.fabOwnWhDetailRemoveItemByScan.visibility = INVISIBLE
+                    binding.fabOwnWhDetailRemoveItemByScan.hide()
+                    binding.fabOwnWhDetailRemoveItemByScan.hide()
                 }
             }
         }

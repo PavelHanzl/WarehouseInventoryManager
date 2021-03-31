@@ -18,7 +18,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/avatar_ownwarehouseavatar"
+        android:src="@drawable/avatar_ownwarehouseavatar_primary_color"
         app:civ_border_color="@color/primaryColor"
         app:civ_border_width="2dp"
         app:layout_constraintBottom_toBottomOf="parent"

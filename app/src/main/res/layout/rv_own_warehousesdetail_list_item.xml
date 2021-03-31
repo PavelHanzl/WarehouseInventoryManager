@@ -17,7 +17,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_avatar_warehouse_item"
+        android:src="@drawable/avatar_warehouse_item_primary_color"
         app:civ_border_color="@color/primaryColor"
         app:civ_border_width="2dp"
         app:layout_constraintBottom_toBottomOf="parent"

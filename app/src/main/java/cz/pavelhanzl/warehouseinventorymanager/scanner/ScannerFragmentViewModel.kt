@@ -56,7 +56,6 @@ class ScannerFragmentViewModel : BaseViewModel() {
     }
 
 
-
     fun scannerStopPreview() {
         scannerStopPreview.postValue(true)
     }

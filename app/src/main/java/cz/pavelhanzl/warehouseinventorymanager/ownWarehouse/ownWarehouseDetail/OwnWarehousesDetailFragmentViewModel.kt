@@ -47,6 +47,8 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     private lateinit var allItemsInDb: Task<QuerySnapshot>
     val localListOfAllItems = mutableListOf<WarehouseItem>()
     val localListOfAllItemNames = mutableListOf<String>()
+    val localListOfAllItemCodes = mutableListOf<String>()
+    val dropdownMenuDataReady = MutableLiveData<Boolean>(false)
 
     sealed class Event {
         object NavigateBack : Event()
@@ -71,24 +73,33 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
 
         _addRemoveButtonEnabled.value = true
 
-        localListOfAllItemNames.clear()
-        localListOfAllItems.clear()
-
     }
 
     fun getListOfActualWarehouseItems() {
+
+        localListOfAllItemNames.clear()
+        localListOfAllItemCodes.clear()
+        localListOfAllItems.clear()
+
         allItemsInDb = db.collection("warehouses").document(warehouseID.value!!).collection("items").orderBy("name", Query.Direction.ASCENDING).get()
         allItemsInDb.addOnSuccessListener { documents ->
             for (document in documents) {
                 //Log.d("položky", "${document.id} => ${document.data}")
-
+                //naplní listy současnými položkami z databáze
                 localListOfAllItems.add(document.toObject(WarehouseItem::class.java))
                 localListOfAllItemNames.add(document.toObject(WarehouseItem::class.java).name)
+                localListOfAllItemCodes.add(document.toObject(WarehouseItem::class.java).code)
             }
+
+            //spustí observer ve fragmentu, který naplní dropdown menu
+            dropdownMenuDataReady.postValue(true)
+
         }
             .addOnFailureListener { exception ->
                 Log.d("položky", "Error getting documents: " + exception.message)
             }
+
+
     }
 
     fun onAddRemoveItemButtonClicked() {

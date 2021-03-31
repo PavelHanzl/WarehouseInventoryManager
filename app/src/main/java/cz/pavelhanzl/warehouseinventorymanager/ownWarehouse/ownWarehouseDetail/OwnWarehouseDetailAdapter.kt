@@ -12,13 +12,8 @@ import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import cz.pavelhanzl.warehouseinventorymanager.R
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesAdapter
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesFragmentDirections
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.itemDetail.ItemDetailFragment
-import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
-import kotlinx.android.synthetic.main.rv_own_warehouses_list_item.view.*
 import kotlinx.android.synthetic.main.rv_own_warehousesdetail_list_item.view.*
 
 class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>) :
@@ -31,8 +26,8 @@ class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>
 
             Glide.with(itemView)
                 .load(warehouseItem.photoURL)
-                .placeholder(R.drawable.ic_avatar_warehouse_item)
-                .error(R.drawable.ic_avatar_warehouse_item)
+                .placeholder(R.drawable.avatar_warehouse_item_primary_color)
+                .error(R.drawable.avatar_warehouse_item_primary_color)
                 .into(itemView.rv_ownWarehousesDetailListItemProfileImage)
         }
 

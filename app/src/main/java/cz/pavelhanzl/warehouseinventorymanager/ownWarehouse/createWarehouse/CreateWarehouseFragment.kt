@@ -1,21 +1,13 @@
 package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.createWarehouse
 
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Intent
-import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 
 import androidx.lifecycle.ViewModelProvider
@@ -26,11 +18,8 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateWarehouseBinding
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehouseDetailFragmentArgs
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_warehouse.*
-import kotlinx.android.synthetic.main.rv_own_warehouses_list_item.view.*
 
 class CreateWarehouseFragment : Fragment() {
     private lateinit var binding: FragmentCreateWarehouseBinding
@@ -93,10 +82,12 @@ class CreateWarehouseFragment : Fragment() {
         //změní text na vytvářejícím tllačítku na "upravit sklad"
         binding.btnCreateWarehouseFragmentCreateWarehouse.text = getString(R.string.edit_warehouse)
 
+
+
         Glide.with(requireContext())
             .load(viewModel.edittedWarehouse.photoURL)
-            .placeholder(R.drawable.avatar_ownwarehouseavatar)
-            .error(R.drawable.avatar_ownwarehouseavatar)
+            .placeholder(R.drawable.avatar_ownwarehouseavatar_secondary_color)
+            .error(R.drawable.avatar_ownwarehouseavatar_secondary_color)
             .into(binding.ciWarehouseProfileImageFragmentCreateWarehouse)
 
     }
