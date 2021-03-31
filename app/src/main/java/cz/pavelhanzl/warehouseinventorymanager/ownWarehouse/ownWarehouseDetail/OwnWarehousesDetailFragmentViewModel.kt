@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.toObject
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.User
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
@@ -30,6 +31,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
 
+    var itemNameContent = MutableLiveData<String>("")
     var _itemNameError = MutableLiveData<String>("")
     val itemNameError: LiveData<String> get() = _itemNameError
 
@@ -63,6 +65,8 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     //******************Start of functions forAddRemoveItemFragment**********************//
     fun initVariablesForAddRemoveFragment() {
         _loading.value = false
+
+        itemNameContent.value = ""
         _itemNameError.value = ""
 
         itemBarcodeContent.value = ""
@@ -103,8 +107,10 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     }
 
     fun onAddRemoveItemButtonClicked() {
-
-        //todo zbyva implementovat
+        when(addRemoveFragmentMode){
+            Constants.ADDING_STRING -> runAddingTransaction(itemBarcodeContent.value.toString(),itemCountContent.value!!.toInt())
+            Constants.REMOVING_STRING -> Log.d("transaction","removing") //todo
+        }
 
     }
     //******************End of functions  for AddRemoveItemFragment**********************//
@@ -115,6 +121,28 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
 
     suspend fun makeWarehouseSnapshot() {
         warehouseSnapshot = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).get().await().data!!
+    }
+
+    fun runAddingTransaction(code:String, count: Int = 100) {
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val sfQueryRef= db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code",code).limit(1).get().await()
+
+            val sfDocRef = sfQueryRef.documents[0].reference
+            db.runTransaction { transaction ->
+                val snapshot = transaction.get(sfDocRef)
+
+                val newCount = snapshot.getString("count")!!.toInt() + count
+                transaction.update(sfDocRef, "count", newCount.toString())
+
+                // Success
+                null
+            }.addOnSuccessListener { Log.d("Transakce", "Transaction success!") }
+                .addOnFailureListener { e -> Log.w("Transakce", "Transaction failure.", e) }
+
+        }
+
+
     }
 
     fun undoChangesOfWarehouseDocument() {
