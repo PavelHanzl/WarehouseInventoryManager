@@ -31,6 +31,8 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
 
+    var itemPhotoUrl = MutableLiveData<String>("")
+
     var itemNameContent = MutableLiveData<String>("")
     var _itemNameError = MutableLiveData<String>("")
     val itemNameError: LiveData<String> get() = _itemNameError
@@ -66,6 +68,8 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     fun initVariablesForAddRemoveFragment() {
         _loading.value = false
 
+        itemPhotoUrl.value=""
+
         itemNameContent.value = ""
         _itemNameError.value = ""
 
@@ -81,9 +85,11 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
 
     fun getListOfActualWarehouseItems() {
 
+        dropdownMenuDataReady.postValue(false)
         localListOfAllItemNames.clear()
         localListOfAllItemCodes.clear()
         localListOfAllItems.clear()
+        Log.d("Populuju","vse smazano ted")
 
         allItemsInDb = db.collection("warehouses").document(warehouseID.value!!).collection("items").orderBy("name", Query.Direction.ASCENDING).get()
         allItemsInDb.addOnSuccessListener { documents ->
@@ -95,6 +101,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
                 localListOfAllItemCodes.add(document.toObject(WarehouseItem::class.java).code)
             }
 
+            Log.d("Populuju","vse nahrano")
             //spustí observer ve fragmentu, který naplní dropdown menu
             dropdownMenuDataReady.postValue(true)
 

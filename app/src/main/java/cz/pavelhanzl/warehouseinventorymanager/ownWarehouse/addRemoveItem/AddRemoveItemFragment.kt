@@ -11,6 +11,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -27,22 +28,31 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
 import kotlinx.android.synthetic.main.fragment_add_remove_item.*
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.onEach
-import kotlin.reflect.full.memberProperties
 
 class AddRemoveItemFragment : BaseFragment() {
     private lateinit var binding: FragmentAddRemoveItemBinding
     private val sharedViewModel: OwnWarehousesDetailFragmentViewModel by activityViewModels()
+    private var addingMode = false
 
-    private lateinit var dropDownItemsMenu: AutoCompleteTextView
-    private lateinit var dropDownBarcodesMenu: AutoCompleteTextView
+    private lateinit var dropDownItemsMenuView: AutoCompleteTextView
+    private lateinit var dropDownBarcodesMenuView: AutoCompleteTextView
+    private lateinit var itemPhotoUrlLiveData: MutableLiveData<String>
+    private lateinit var dropDownItemsMenuLiveData: MutableLiveData<String>
+    private lateinit var dropDownBarcodesMenuLiveData: MutableLiveData<String>
+
     private lateinit var createItemBtn: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("AddRemove", "create" + sharedViewModel.localListOfAllItems.size.toString())
+        //získá list všech aktuálních položek, které se nacházejí na skladě
+        sharedViewModel.getListOfActualWarehouseItems()
         super.onCreate(savedInstanceState)
     }
 
     override fun onDestroy() {
+        Log.d("AddRemove", "destroy" + sharedViewModel.localListOfAllItems.size.toString())
         sharedViewModel.initVariablesForAddRemoveFragment()
         super.onDestroy()
     }
@@ -51,14 +61,20 @@ class AddRemoveItemFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        Log.d("AddRemove", "createView" + sharedViewModel.localListOfAllItems.size.toString())
         binding = FragmentAddRemoveItemBinding.inflate(inflater, container, false)
         binding.sharedViewmodel = sharedViewModel
         binding.fragmentClass = this
         binding.lifecycleOwner = viewLifecycleOwner
 
-        dropDownItemsMenu = binding.dropdownItemSelectorContentAddRemoveFragment
-        dropDownBarcodesMenu = binding.dropdownBarcodeSelectorContentAddRemoveFragment
+        dropDownItemsMenuView = binding.dropdownItemSelectorContentAddRemoveFragment
+        dropDownItemsMenuLiveData = sharedViewModel.itemNameContent
+
+        dropDownBarcodesMenuView = binding.dropdownBarcodeSelectorContentAddRemoveFragment
+        dropDownBarcodesMenuLiveData = sharedViewModel.itemBarcodeContent
+
+        itemPhotoUrlLiveData = sharedViewModel.itemPhotoUrl
+
         createItemBtn = binding.fabCreateItemAddRemoveFragment
 
         //pokud nastaví fragment pode toho jestli přidáváme nebo odebíráme
@@ -67,22 +83,7 @@ class AddRemoveItemFragment : BaseFragment() {
             Constants.REMOVING_STRING -> runFragmentInRemovingMode()
         }
 
-        //získá list všech aktuálních položek, které se nacházejí na skladě
-        sharedViewModel.getListOfActualWarehouseItems()
-
-        //pokud zadaný čárový kód odpovídá nějakému názvu, tak předvyplň název
-        dropDownBarcodesMenu.doAfterTextChanged {
-            Log.d("Hajdin", "TrigBarcodu")
-            //evaluateItemsForBarcodeDropDownMenu()
-            evaluateItems(dropDownBarcodesMenu, dropDownItemsMenu, sharedViewModel.localListOfAllItems, "code", "name")
-        }
-
-        //pokud zadaný název odpovídá nějakému čárovému kódu, tak předvyplň čárový kód
-        dropDownItemsMenu.doAfterTextChanged {
-            Log.d("Hajdin", "TrigNazvu")
-            //evaluateItemsForItemsDropDownMenu()
-            evaluateItems(dropDownItemsMenu, dropDownBarcodesMenu, sharedViewModel.localListOfAllItems, "name", "code")
-        }
+        registerDropdownsDoAfterTextChangeListeners()
 
         showHideFabCreateBtn()
 
@@ -94,19 +95,93 @@ class AddRemoveItemFragment : BaseFragment() {
         return binding.root
     }
 
+    private fun registerDropdownsDoAfterTextChangeListeners() {
+        //pokud zadaný čárový kód odpovídá nějakému názvu, tak předvyplň název
+        dropDownBarcodesMenuView.doAfterTextChanged {
+            if (dropDownBarcodesMenuView.hasFocus()) {//trigne se jen pokud je aktivní view na kterém je nasazen doAfterTextChanged
+
+                val barcodeString = it.toString()
+                setDropdownsBasedOnBarcode(barcodeString)
+
+            }
+        }
+
+        //pokud zadaný název odpovídá nějakému čárovému kódu, tak předvyplň čárový kód
+        dropDownItemsMenuView.doAfterTextChanged {
+            if (dropDownItemsMenuView.hasFocus()) {//trigne se jen pokud je aktivní view na kterém je nasazen doAfterTextChanged
+
+                val itemNameString = it.toString()
+                setDropdownsBasedOnName(itemNameString)
+
+            }
+        }
+    }
+
+    private fun setDropdownsBasedOnName(itemNameString: String) {
+        //ověří jestli se položka s tímto názvem nachází ve skladu a případně jí vrátí
+        val item = returnWarehouseItemWithGivenParameters(itemName = itemNameString, itemBarcode = "", listOfAllWarehouseItems = sharedViewModel.localListOfAllItems)
+
+        if (item != null) {//pokud se položka nachází
+            dropDownBarcodesMenuLiveData.value = item.code //nastaví barcode odpovídající položce
+            itemPhotoUrlLiveData.value = item.photoURL //nastaví fotku odpovídající položce
+            createItemBtn.hide() //skryje možnost vytvoření nové položky
+        } else {//pokud se položka nenachází
+
+            if(addingMode)createItemBtn.show() //zobrazí možnost vytvoření nové položky
+            dropDownBarcodesMenuLiveData.value = "" //vymaže hodnotu v barcode poli
+            itemPhotoUrlLiveData.value = "" //nastaví defaultní obrázek
+
+        }
+    }
+
+    private fun setDropdownsBasedOnBarcode(barcodeString: String) {
+        Log.d("banány", barcodeString)
+
+        //ověří jestli se položka s tímto barcodem nachází ve skladu a případně jí vrátí
+        val item = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = barcodeString, listOfAllWarehouseItems = sharedViewModel.localListOfAllItems)
+
+        Log.d("banány", sharedViewModel.localListOfAllItems.size.toString())
+        if (item != null) {//pokud se položka nachází
+            Log.d("banány", item.name)
+            dropDownItemsMenuLiveData.value = item.name //nastaví název odpovídající barcodu
+            itemPhotoUrlLiveData.value = item.photoURL //nastaví fotku odpovídající položce
+            createItemBtn.hide() //skryje možnost vytvoření nové položky
+        } else {//pokud se položka nenachází
+            Log.d("banány", "barcode null")
+            if(addingMode) createItemBtn.show() //zobrazí možnost vytvoření nové položky
+            dropDownItemsMenuLiveData.value = "" //vymaže hodnotu v poli název
+            itemPhotoUrlLiveData.value = "" //nastaví defaultní obrázek
+        }
+    }
+
+    private fun returnWarehouseItemWithGivenParameters(itemName: String = "", itemBarcode: String = "", listOfAllWarehouseItems: MutableList<WarehouseItem>): WarehouseItem? {
+        var foundObject: WarehouseItem? = null
+
+        listOfAllWarehouseItems.any {
+            if (it.name == itemName || it.code == itemBarcode) {
+                foundObject = it
+                Log.d("hajdin", "Nalezeno - Item:" + foundObject!!.name + " Code:" + foundObject!!.code)
+                true //shoda našli jsme shodu podle jména nebo podle kódu
+            } else false //neshoda nic jsme nenanšli
+        }
+
+        return foundObject
+
+    }
+
     private fun evaluateItemsForBarcodeDropDownMenu() {
         var matchFound = false
         //proveď jen pokud současné pole není prázný string
-        if (dropDownBarcodesMenu.text.toString() != "") {
+        if (dropDownBarcodesMenuView.text.toString() != "") {
             itemBarcodeCheckLoop@ for (item in sharedViewModel.localListOfAllItems) {
                 //pro každou položku se ptá jestli se zadaný text nerovná nějaké položce na listu všech položek
 
-                if (dropDownBarcodesMenu.text.toString() == item.code) {
+                if (dropDownBarcodesMenuView.text.toString() == item.code) {
                     createItemBtn.hide()//položka existuje skryje možnost vytvoření nové položky
                     Log.d("Hajdin", "Skrývám na barcodu")
 
-                    if (dropDownItemsMenu.text.toString() != item.name) {//ochrana proti zacyklení
-                        dropDownItemsMenu.setText(item.name)
+                    if (dropDownItemsMenuView.text.toString() != item.name) {//ochrana proti zacyklení
+                        dropDownItemsMenuView.setText(item.name)
                         Glide.with(requireContext())
                             .load(item.photoURL)
                             .placeholder(R.drawable.avatar_warehouse_item_primary_color)
@@ -127,8 +202,8 @@ class AddRemoveItemFragment : BaseFragment() {
                 }
             }
             //se nenašla shoda a pokud druhé pole již není prázný string, tak zapiš prázdný string do druhého pole
-            if (!matchFound && dropDownItemsMenu.text.toString() != "") {
-                dropDownItemsMenu.setText("")//pokud nedojde ke shodě barcodů, tak smaž obsah pole s názvem položky
+            if (!matchFound && dropDownItemsMenuView.text.toString() != "") {
+                dropDownItemsMenuView.setText("")//pokud nedojde ke shodě barcodů, tak smaž obsah pole s názvem položky
             }
         }
     }
@@ -137,13 +212,13 @@ class AddRemoveItemFragment : BaseFragment() {
         var matchFound = false
 
         //proveď jen pokud současné pole není prázný string
-        if (dropDownItemsMenu.text.toString() != "") {
+        if (dropDownItemsMenuView.text.toString() != "") {
             itemNameCheckLoop@ for (item in sharedViewModel.localListOfAllItems) {
-                if (dropDownItemsMenu.text.toString() == item.name) {
+                if (dropDownItemsMenuView.text.toString() == item.name) {
                     createItemBtn.hide()//položka existuje skryje možnost vytvoření nové položky
                     Log.d("Hajdisn", "Skrývám na dropdownu")
-                    if (dropDownBarcodesMenu.text.toString() != item.code) {//ochrana proti zacyklení
-                        dropDownBarcodesMenu.setText(item.code)
+                    if (dropDownBarcodesMenuView.text.toString() != item.code) {//ochrana proti zacyklení
+                        dropDownBarcodesMenuView.setText(item.code)
                         Glide.with(requireContext())
                             .load(item.photoURL)
                             .placeholder(R.drawable.avatar_warehouse_item_primary_color)
@@ -164,10 +239,10 @@ class AddRemoveItemFragment : BaseFragment() {
             }
 
             //se nenašla shoda a pokud druhé pole již není prázný string, tak zapiš prázdný string do druhého pole
-            if (!matchFound && dropDownBarcodesMenu.text.toString() != "") {
+            if (!matchFound && dropDownBarcodesMenuView.text.toString() != "") {
                 Log.d("Hajdin", "dropdownwipe")
                 Log.d("Hajdin", "Hodnota:" + sharedViewModel.itemBarcodeContent.value.toString())
-                dropDownBarcodesMenu.setText("")//pokud nedojde ke shodě názvů, tak smaž obsah pole s barcodem
+                dropDownBarcodesMenuView.setText("")//pokud nedojde ke shodě názvů, tak smaž obsah pole s barcodem
                 Log.d("Hajdin", "Hodnota:" + sharedViewModel.itemBarcodeContent.value.toString())
             }
         }
@@ -227,15 +302,15 @@ class AddRemoveItemFragment : BaseFragment() {
     }
 
     private fun showHideFabCreateBtn() {
-        dropDownItemsMenu.setOnFocusChangeListener { v, hasFocus ->
+        dropDownItemsMenuView.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus //pole pro výběr názvu má focus
                 && createItemBtn.visibility != View.VISIBLE //fab pro vytvoření ještě není viditelný
-                && dropDownItemsMenu.text.toString() == "" //pole pro výběr názvu nic neobsahuje
+                && dropDownItemsMenuView.text.toString() == "" //pole pro výběr názvu nic neobsahuje
                 && sharedViewModel.addRemoveFragmentMode == Constants.ADDING_STRING //fragment je v modu přidávání
             ) {
                 createItemBtn.show()
             } else if (!hasFocus //pole pro výběr názvu ztratilo focus
-                && dropDownItemsMenu.text.toString() == "" //pole pro výběr názvu nic neobsahuje
+                && dropDownItemsMenuView.text.toString() == "" //pole pro výběr názvu nic neobsahuje
             ) {
                 createItemBtn.hide()
             }
@@ -245,23 +320,27 @@ class AddRemoveItemFragment : BaseFragment() {
 
     //naplní dropdown menu aktualními položkami na skladě
     private fun populateDropdowns() {
-        sharedViewModel.dropdownMenuDataReady.observe(viewLifecycleOwner, Observer {
-            //názvy položek
-            (binding.dropdownItemSelectorAddRemoveFragment.editText as? AutoCompleteTextView)?.setAdapter(
-                ArrayAdapter(
-                    requireContext(),
-                    R.layout.dropdown_item_layout,
-                    sharedViewModel.localListOfAllItemNames
+        sharedViewModel.dropdownMenuDataReady.observe(viewLifecycleOwner, Observer { dataReady ->
+            if (dataReady) {
+
+                Log.d("Populuju", "populuju ted")
+                //názvy položek
+                (binding.dropdownItemSelectorAddRemoveFragment.editText as? AutoCompleteTextView)?.setAdapter(
+                    ArrayAdapter(
+                        requireContext(),
+                        R.layout.dropdown_item_layout,
+                        sharedViewModel.localListOfAllItemNames
+                    )
                 )
-            )
-            //čárové kódy
-            (binding.dropdownBarcodeSelectorAddRemoveFragment.editText as? AutoCompleteTextView)?.setAdapter(
-                ArrayAdapter(
-                    requireContext(),
-                    R.layout.dropdown_item_layout,
-                    sharedViewModel.localListOfAllItemCodes
+                //čárové kódy
+                (binding.dropdownBarcodeSelectorAddRemoveFragment.editText as? AutoCompleteTextView)?.setAdapter(
+                    ArrayAdapter(
+                        requireContext(),
+                        R.layout.dropdown_item_layout,
+                        sharedViewModel.localListOfAllItemCodes
+                    )
                 )
-            )
+            }
         })
     }
 
@@ -289,8 +368,7 @@ class AddRemoveItemFragment : BaseFragment() {
     }
 
     override fun onResume() {
-        Log.d("Hajdin", "resume")
-        binding.dropdownItemSelectorContentAddRemoveFragment.setText(binding.sharedViewmodel!!.itemNameContent.value!!)
+        Log.d("AddRemove", "resume" + sharedViewModel.localListOfAllItems.size.toString())
         super.onResume()
     }
 
@@ -304,10 +382,11 @@ class AddRemoveItemFragment : BaseFragment() {
                 && navBackStackEntry.savedStateHandle.contains("scannedBarcode")
             ) {
                 val result = navBackStackEntry.savedStateHandle.get<String>("scannedBarcode")
-                // Uloží předaný argument ze skenneru do proměnné sharedviewmodelu
 
+                // Uloží předaný argument ze skenneru do proměnné barcode v sharedviewmodelu
                 sharedViewModel.itemBarcodeContent.postValue(result)
-
+                //nastaví dropdowny v závislosti na získané hodnotě ze skenneru
+                setDropdownsBasedOnBarcode(result!!)
 
             }
         }
@@ -328,10 +407,11 @@ class AddRemoveItemFragment : BaseFragment() {
     }
 
     private fun runFragmentInAddingMode() {
-
         //nastaví odpovídající title v actionbaru "Ostatní sklady"
         (activity as MainActivity).supportActionBar!!.title = "Přidat položku na sklad"
 
+        //nastaví private variable o módu tohoto fragmentu
+        addingMode=true
 
     }
 
@@ -342,6 +422,9 @@ class AddRemoveItemFragment : BaseFragment() {
 
         //přepíše hint u počtu
         binding.tfItemCountAddRemoveFragment.hint = "Zadejte počet odebíraných kusů"
+
+        //nastaví private variable o módu tohoto fragmentu
+        addingMode=false
 
     }
 

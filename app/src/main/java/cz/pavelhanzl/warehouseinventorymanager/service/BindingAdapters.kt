@@ -3,9 +3,12 @@ package cz.pavelhanzl.warehouseinventorymanager.service
 import android.renderscript.Sampler
 import android.widget.ProgressBar
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.slider.Slider
 import com.google.android.material.textfield.TextInputLayout
+import cz.pavelhanzl.warehouseinventorymanager.R
+import de.hdodenhof.circleimageview.CircleImageView
 
 object BindingAdapters {
 
@@ -16,20 +19,17 @@ object BindingAdapters {
         view.error = errorMessage
     }
 
-    //nastavuje
-    @JvmStatic
-    @BindingAdapter("progressCurrentValue")
-    fun setCurrentProgress(view: LinearProgressIndicator, value: Int) {
-        view.progress = value
-    }
 
-    //nastavuje
     @JvmStatic
-    @BindingAdapter("progressMaxValue")
-    fun setMaxProgress(view: LinearProgressIndicator, value: Int) {
-        view.max = value!!
-    }
+    @BindingAdapter("imageUrl")
+    fun loadImage(view: CircleImageView, url: String?) {
 
+            Glide.with(view.context)
+                .load(url)
+                .placeholder(R.drawable.avatar_warehouse_item_primary_color)
+                .error(R.drawable.avatar_warehouse_item_primary_color)
+                .into(view)
+    }
 
 
 }
