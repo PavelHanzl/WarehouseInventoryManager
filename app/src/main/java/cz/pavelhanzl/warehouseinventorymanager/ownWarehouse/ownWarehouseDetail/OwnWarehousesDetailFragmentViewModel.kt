@@ -107,9 +107,9 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     }
 
     fun onAddRemoveItemButtonClicked() {
-        when(addRemoveFragmentMode){
-            Constants.ADDING_STRING -> runAddingTransaction(itemBarcodeContent.value.toString(),itemCountContent.value!!.toInt())
-            Constants.REMOVING_STRING -> Log.d("transaction","removing") //todo
+        when (addRemoveFragmentMode) {
+            Constants.ADDING_STRING -> runAddingTransaction(itemBarcodeContent.value.toString(), itemCountContent.value!!.toInt())
+            Constants.REMOVING_STRING -> runAddingTransaction(itemBarcodeContent.value.toString(), itemCountContent.value!!.toInt(),false)
         }
 
     }
@@ -123,16 +123,23 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
         warehouseSnapshot = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).get().await().data!!
     }
 
-    fun runAddingTransaction(code:String, count: Int = 100) {
+    fun runAddingTransaction(code: String, count: Int = 100, addingMode: Boolean = true) {
 
         GlobalScope.launch(Dispatchers.IO) {
-            val sfQueryRef= db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code",code).limit(1).get().await()
+            val sfQueryRef = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code", code).limit(1).get().await()
 
             val sfDocRef = sfQueryRef.documents[0].reference
             db.runTransaction { transaction ->
                 val snapshot = transaction.get(sfDocRef)
 
-                val newCount = snapshot.getString("count")!!.toInt() + count
+                var newCount: Int
+
+                if (addingMode) {//přidáváme
+                    newCount = snapshot.getString("count")!!.toInt() + count
+                } else {//odebíráme
+                    newCount = snapshot.getString("count")!!.toInt() - count
+                }
+
                 transaction.update(sfDocRef, "count", newCount.toString())
 
                 // Success

@@ -57,6 +57,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
+    //reflections
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.4.32"
 
 
     testImplementation 'junit:junit:4.+'
