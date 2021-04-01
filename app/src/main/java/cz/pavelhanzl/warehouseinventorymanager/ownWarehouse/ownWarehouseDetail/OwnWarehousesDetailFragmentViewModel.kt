@@ -23,6 +23,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import java.lang.Exception
 
 class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
 
@@ -135,42 +136,48 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     fun runAddingRemovingTransaction(code: String, count: Double = 1.0, addingMode: Boolean = true) {
 
         GlobalScope.launch(Dispatchers.IO) {
-            _loading.postValue(true)
-            val sfQueryRef = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code", code).limit(1).get().await()
 
-            val sfDocRef = sfQueryRef.documents[0].reference
-            db.runTransaction { transaction ->
-                val snapshot = transaction.get(sfDocRef)
+            try { //todo dořešit aby sem nedošel kód co není v databázi, resp klidně ať dojde, ale nepokusí se zapsat, jelikož ten dokument neexistuje, zatím ošetřeno trycatchem
+                _loading.postValue(true)
+                val sfQueryRef = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code", code).limit(1).get().await()
 
-                var newCount: Double
+                val sfDocRef = sfQueryRef.documents[0].reference
+                db.runTransaction { transaction ->
+                    val snapshot = transaction.get(sfDocRef)
 
-                if (addingMode) {//přidáváme
-                    newCount = snapshot.getDouble("count")!! + count
-                } else {//odebíráme
-                    newCount = snapshot.getDouble("count")!! - count
+                    var newCount: Double
 
+                    if (addingMode) {//přidáváme
+                        newCount = snapshot.getDouble("count")!! + count
+                    } else {//odebíráme
+                        newCount = snapshot.getDouble("count")!! - count
+
+                    }
+
+                    transaction.update(sfDocRef, "count", newCount)
+
+                    // Success
+                    null
+                }.addOnSuccessListener {
+                    _loading.postValue(false)
+
+                    //při úspěchu provede log o operaci
+                    if (addingMode) {//mód přidávání
+                        repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemAdded), itemNameContent.value.toString(), "+$count",warehouseObject.value!!.warehouseID)
+                    }else{//mód odebírání
+                        repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemRemoved), itemNameContent.value.toString(), "-$count",warehouseObject.value!!.warehouseID)
+                    }
+
+
+                    Log.d("Transakce", "Transaction success!")
+                }.addOnFailureListener {
+                    _loading.postValue(false)
+                    Log.d("Transakce", "Transaction failure!!!!!!!!!!")
                 }
-
-                transaction.update(sfDocRef, "count", newCount)
-
-                // Success
-                null
-            }.addOnSuccessListener {
-                _loading.postValue(false)
-
-                //při úspěchu provede log o operaci
-                if (addingMode) {//mód přidávání
-                    repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemAdded), itemNameContent.value.toString(), "+$count",warehouseObject.value!!.warehouseID)
-                }else{//mód odebírání
-                    repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemRemoved), itemNameContent.value.toString(), "-$count",warehouseObject.value!!.warehouseID)
-                     }
-
-
-                Log.d("Transakce", "Transaction success!")
-            }.addOnFailureListener {
-                _loading.postValue(false)
-                Log.d("Transakce", "Transaction failure!!!!!!!!!!")
+            } catch (e: Exception){
+                Log.d("EXCEPTION", e.message!!)
             }
+
 
         }
 

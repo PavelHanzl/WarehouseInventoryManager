@@ -39,6 +39,8 @@ class ScannerFragment : BaseFragment() {
     private lateinit var codeScanner: CodeScanner
     private val CAMERA_REQUEST_CODE = 1016
 
+    private val sharedViewModel: OwnWarehousesDetailFragmentViewModel by activityViewModels()
+
     private val args: ScannerFragmentArgs by navArgs()
     private lateinit var binding: FragmentScannerBinding
     lateinit var viewModel: ScannerFragmentViewModel
@@ -58,6 +60,7 @@ class ScannerFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
 
         setupPermissions()
         //binduje a přiřazuje viewmodel
@@ -88,8 +91,16 @@ class ScannerFragment : BaseFragment() {
 
                 viewModel.decodeCode(it)
 
-
                 handleDecodeCallbackIfScannerIsInReadingMode(it)
+
+                //pokud se nenacházíme ve četcím reřimu, tak budeme zapisovat do databáze
+                if (viewModel.scannerMode != Constants.READING_STRING) {
+                    if (sharedViewModel.addRemoveFragmentMode == Constants.ADDING_STRING) {//přidáváme
+                        sharedViewModel.runAddingRemovingTransaction(it.text.toString(), 1.0, true)
+                    } else { //odebíráme
+                        sharedViewModel.runAddingRemovingTransaction(it.text.toString(), 1.0, false)
+                    }
+                }
             }
         }
 
