@@ -9,6 +9,6 @@ data class WarehouseItem (
     var code: String = "",
     var photoURL: String = "",
     var createDate: String = getDateTime(),
-    var price: String = "",
-    var count: String = ""
+    var price: Double = 0.0,
+    var count: Double = 0.0
     )

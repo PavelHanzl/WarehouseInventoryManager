@@ -22,7 +22,7 @@ class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>
     class WarehouseItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindVisible(warehouseItem: WarehouseItem) {
             itemView.rv_ownWarehousesDetailListItemName.text = warehouseItem.name
-            itemView.rv_ownWarehousesDetailListItemCount.text = warehouseItem.count
+            itemView.rv_ownWarehousesDetailListItemCount.text = warehouseItem.count.toString()
 
             Glide.with(itemView)
                 .load(warehouseItem.photoURL)

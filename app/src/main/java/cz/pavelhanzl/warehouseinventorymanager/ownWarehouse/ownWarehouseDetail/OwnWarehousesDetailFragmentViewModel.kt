@@ -9,15 +9,17 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.toObject
+import cz.pavelhanzl.warehouseinventorymanager.MainActivity
+import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
-import cz.pavelhanzl.warehouseinventorymanager.repository.User
+import cz.pavelhanzl.warehouseinventorymanager.repository.RepoComunicationLayer
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
+import cz.pavelhanzl.warehouseinventorymanager.stringResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -68,7 +70,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     fun initVariablesForAddRemoveFragment() {
         _loading.value = false
 
-        itemPhotoUrl.value=""
+        itemPhotoUrl.value = ""
 
         itemNameContent.value = ""
         _itemNameError.value = ""
@@ -89,7 +91,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
         localListOfAllItemNames.clear()
         localListOfAllItemCodes.clear()
         localListOfAllItems.clear()
-        Log.d("Populuju","vse smazano ted")
+        Log.d("Populuju", "vse smazano ted")
 
         allItemsInDb = db.collection("warehouses").document(warehouseID.value!!).collection("items").orderBy("name", Query.Direction.ASCENDING).get()
         allItemsInDb.addOnSuccessListener { documents ->
@@ -101,7 +103,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
                 localListOfAllItemCodes.add(document.toObject(WarehouseItem::class.java).code)
             }
 
-            Log.d("Populuju","vse nahrano")
+            Log.d("Populuju", "vse nahrano")
             //spustí observer ve fragmentu, který naplní dropdown menu
             dropdownMenuDataReady.postValue(true)
 
@@ -115,8 +117,8 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
 
     fun onAddRemoveItemButtonClicked() {
         when (addRemoveFragmentMode) {
-            Constants.ADDING_STRING -> runAddingTransaction(itemBarcodeContent.value.toString(), itemCountContent.value!!.toInt())
-            Constants.REMOVING_STRING -> runAddingTransaction(itemBarcodeContent.value.toString(), itemCountContent.value!!.toInt(),false)
+            Constants.ADDING_STRING -> runAddingRemovingTransaction(itemBarcodeContent.value.toString(), itemCountContent.value!!.toDouble())
+            Constants.REMOVING_STRING -> runAddingRemovingTransaction(itemBarcodeContent.value.toString(), itemCountContent.value!!.toDouble(), false)
         }
 
     }
@@ -130,29 +132,45 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
         warehouseSnapshot = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).get().await().data!!
     }
 
-    fun runAddingTransaction(code: String, count: Int = 100, addingMode: Boolean = true) {
+    fun runAddingRemovingTransaction(code: String, count: Double = 1.0, addingMode: Boolean = true) {
 
         GlobalScope.launch(Dispatchers.IO) {
+            _loading.postValue(true)
             val sfQueryRef = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code", code).limit(1).get().await()
 
             val sfDocRef = sfQueryRef.documents[0].reference
             db.runTransaction { transaction ->
                 val snapshot = transaction.get(sfDocRef)
 
-                var newCount: Int
+                var newCount: Double
 
                 if (addingMode) {//přidáváme
-                    newCount = snapshot.getString("count")!!.toInt() + count
+                    newCount = snapshot.getDouble("count")!! + count
                 } else {//odebíráme
-                    newCount = snapshot.getString("count")!!.toInt() - count
+                    newCount = snapshot.getDouble("count")!! - count
+
                 }
 
-                transaction.update(sfDocRef, "count", newCount.toString())
+                transaction.update(sfDocRef, "count", newCount)
 
                 // Success
                 null
-            }.addOnSuccessListener { Log.d("Transakce", "Transaction success!") }
-                .addOnFailureListener { e -> Log.w("Transakce", "Transaction failure.", e) }
+            }.addOnSuccessListener {
+                _loading.postValue(false)
+
+                //při úspěchu provede log o operaci
+                if (addingMode) {//mód přidávání
+                    repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemAdded), itemNameContent.value.toString(), "+$count",warehouseObject.value!!.warehouseID)
+                }else{//mód odebírání
+                    repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemRemoved), itemNameContent.value.toString(), "-$count",warehouseObject.value!!.warehouseID)
+                     }
+
+
+                Log.d("Transakce", "Transaction success!")
+            }.addOnFailureListener {
+                _loading.postValue(false)
+                Log.d("Transakce", "Transaction failure!!!!!!!!!!")
+            }
 
         }
 
