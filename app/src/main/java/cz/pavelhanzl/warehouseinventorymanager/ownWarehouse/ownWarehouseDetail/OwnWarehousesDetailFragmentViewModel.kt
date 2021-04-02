@@ -31,7 +31,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     //******************Start of variables forAddRemoveItemFragment**********************//
 
     lateinit var addRemoveFragmentMode: String
-    private var addingMode = false
+    var addingMode = false
 
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading

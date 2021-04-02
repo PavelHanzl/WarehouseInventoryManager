@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentAddRemoveItemBinding
+import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehouseDetailFragmentDirections
 import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
@@ -34,7 +35,6 @@ import kotlinx.coroutines.flow.onEach
 class AddRemoveItemFragment : BaseFragment() {
     private lateinit var binding: FragmentAddRemoveItemBinding
     private val sharedViewModel: OwnWarehousesDetailFragmentViewModel by activityViewModels()
-    private var addingMode = false
 
     private lateinit var dropDownItemsMenuView: AutoCompleteTextView
     private lateinit var dropDownBarcodesMenuView: AutoCompleteTextView
@@ -80,7 +80,11 @@ class AddRemoveItemFragment : BaseFragment() {
 
         populateDropdowns()
 
-
+        binding.fabCreateItemAddRemoveFragment.setOnClickListener {
+            Log.d("create item", "pressed")
+            //var action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
+            //findNavController().navigate(action)
+        }
 
 
         return binding.root
@@ -215,8 +219,10 @@ class AddRemoveItemFragment : BaseFragment() {
                     }
                     is OwnWarehousesDetailFragmentViewModel.Event.SetVisibilityOfCreateItemBtnt -> {
                         if (it.visibility){
+                            Log.d("create", it.visibility.toString())
                             createItemBtn.show()
                         }else{
+                            Log.d("create", it.visibility.toString())
                             createItemBtn.hide()
                         }
 
@@ -278,7 +284,7 @@ class AddRemoveItemFragment : BaseFragment() {
         (activity as MainActivity).supportActionBar!!.title = "Přidat položku na sklad"
 
         //nastaví private variable o módu tohoto fragmentu
-        addingMode=true
+        sharedViewModel.addingMode=true
 
     }
 
@@ -291,7 +297,7 @@ class AddRemoveItemFragment : BaseFragment() {
         binding.tfItemCountAddRemoveFragment.hint = "Zadejte počet odebíraných kusů"
 
         //nastaví private variable o módu tohoto fragmentu
-        addingMode=false
+        sharedViewModel.addingMode=false
 
     }
 
