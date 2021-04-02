@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.listOfWarehouses
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +15,7 @@ import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import kotlinx.android.synthetic.main.rv_own_warehouses_list_item.view.*
 
-class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var ownWarehouse: Boolean) : FirestoreRecyclerAdapter<Warehouse, OwnWarehousesAdapter.WarehouseViewHolder>(options) {
+class ListOfWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var ownWarehouse: Boolean) : FirestoreRecyclerAdapter<Warehouse, ListOfWarehousesAdapter.WarehouseViewHolder>(options) {
 
     inner class WarehouseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val holders = itemView
@@ -33,7 +33,7 @@ class OwnWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var own
 
         fun  bindID(warehouseID: String){
             itemView.setOnClickListener{
-                var action = OwnWarehousesFragmentDirections.actionOwnWarehouseFragmentToOwnWarehouseDetailFragment(warehouseID, ownWarehouse)
+                var action = ListOfWarehousesFragmentDirections.actionOwnWarehouseFragmentToOwnWarehouseDetailFragment(warehouseID, ownWarehouse)
                 itemView.findNavController().navigate(action)
                 Log.d("test",warehouseID)
             }

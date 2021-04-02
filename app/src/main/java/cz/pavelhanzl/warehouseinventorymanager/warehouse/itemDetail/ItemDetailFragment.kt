@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.itemDetail
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.itemDetail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,12 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentItemDetailBinding
-import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentOwnWarehouseDetailBinding
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehouseDetailFragmentArgs
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 
 class ItemDetailFragment : BaseFragment() {

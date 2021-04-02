@@ -8,13 +8,13 @@
     <data>
         <variable
             name="viewmodel"
-            type="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.itemDetail.ItemDetaiFragmentViewModel" />
+            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.itemDetail.ItemDetaiFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ownWarehouse.itemDetail.ItemDetailFragment">
+        tools:context=".warehouse.itemDetail.ItemDetailFragment">
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:layout_width="match_parent"

@@ -12,18 +12,18 @@
 
         <variable
             name="sharedViewmodel"
-            type="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel" />
+            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel" />
 
         <variable
             name="fragmentClass"
-            type="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.addRemoveItem.AddRemoveItemFragment" />
+            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.addRemoveItem.AddRemoveItemFragment" />
     </data>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ownWarehouse.addRemoveItem.AddRemoveItemFragment">
+        tools:context=".warehouse.addRemoveItem.AddRemoveItemFragment">
 
         <ScrollView
             android:id="@+id/scrollView2"

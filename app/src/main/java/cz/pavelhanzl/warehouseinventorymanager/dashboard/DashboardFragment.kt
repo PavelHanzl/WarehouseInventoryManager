@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager
+package cz.pavelhanzl.warehouseinventorymanager.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
+import cz.pavelhanzl.warehouseinventorymanager.dashboard.DashboardFragmentDirections
+import cz.pavelhanzl.warehouseinventorymanager.R
 import kotlinx.android.synthetic.main.fragment_dashboard.*
-import kotlinx.android.synthetic.main.fragment_dashboard.view.*
 
 class DashboardFragment : Fragment() {
 

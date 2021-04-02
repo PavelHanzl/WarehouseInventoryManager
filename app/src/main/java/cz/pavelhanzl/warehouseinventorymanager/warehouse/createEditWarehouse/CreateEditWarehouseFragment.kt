@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.createWarehouse
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditWarehouse
 
 import android.app.Activity
 import android.content.Intent
@@ -21,10 +21,10 @@ import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateWarehou
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_create_warehouse.*
 
-class CreateWarehouseFragment : Fragment() {
+class CreateEditWarehouseFragment : Fragment() {
     private lateinit var binding: FragmentCreateWarehouseBinding
-    lateinit var viewModel: CreateWarehouseFragmentViewModel
-    private val args: CreateWarehouseFragmentArgs by navArgs()
+    lateinit var viewModel: CreateEditWarehouseFragmentViewModel
+    private val args: CreateEditWarehouseFragmentArgs by navArgs()
 
 
 
@@ -35,7 +35,7 @@ class CreateWarehouseFragment : Fragment() {
     ): View? {
 
         //binduje a přiřazuje viewmodel
-        viewModel = ViewModelProvider(this).get(CreateWarehouseFragmentViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(CreateEditWarehouseFragmentViewModel::class.java)
         binding = FragmentCreateWarehouseBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner

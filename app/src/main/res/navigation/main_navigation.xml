@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@id/dashboardFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.DashboardFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.dashboard.DashboardFragment"
         android:label="@string/Dashboard"
         tools:layout="@layout/fragment_dashboard" >
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.SettingsFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.settings.SettingsFragment"
         android:label="@string/Settings"
         tools:layout="@layout/fragment_settings" >
         <action
@@ -45,7 +45,7 @@
         tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/ownWarehouseFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.listOfWarehouses.ListOfWarehousesFragment"
         tools:layout="@layout/fragment_own_warehouses">
         <action
             android:id="@+id/action_ownWarehouseFragment_to_createWarehouseFragment"
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/createWarehouseFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.createWarehouse.CreateWarehouseFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditWarehouse.CreateEditWarehouseFragment"
         tools:layout="@layout/fragment_create_warehouse">
         <argument
             android:name="warehouseObject"
@@ -70,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/ownWarehouseDetailFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehouseDetailFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail.OwnWarehouseDetailFragment"
         tools:layout="@layout/fragment_own_warehouse_detail">
         <argument
             android:name="warehouseID"
@@ -93,7 +93,7 @@
     </fragment>
     <fragment
         android:id="@+id/itemDetailFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.itemDetail.ItemDetailFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.itemDetail.ItemDetailFragment"
         android:label="@string/item_detail"
         tools:layout="@layout/fragment_item_detail">
         <argument
@@ -122,7 +122,7 @@
     </fragment>
     <fragment
         android:id="@+id/addRemoveItem"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.addRemoveItem.AddRemoveItemFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.addRemoveItem.AddRemoveItemFragment"
         tools:layout="@layout/fragment_add_remove_item" >
         <action
             android:id="@+id/action_addRemoveItem_to_scannerFragment"

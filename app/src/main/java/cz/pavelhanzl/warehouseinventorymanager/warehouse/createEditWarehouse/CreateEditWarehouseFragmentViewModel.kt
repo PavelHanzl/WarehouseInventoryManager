@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.createWarehouse
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditWarehouse
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentReference
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
@@ -18,7 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
-class CreateWarehouseFragmentViewModel : BaseViewModel() {
+class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
 
     val TAG = "CreateWarehouseVM"
     var editMode = false

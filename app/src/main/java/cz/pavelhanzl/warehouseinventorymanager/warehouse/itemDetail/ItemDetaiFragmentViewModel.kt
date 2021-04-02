@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.itemDetail
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.itemDetail
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData

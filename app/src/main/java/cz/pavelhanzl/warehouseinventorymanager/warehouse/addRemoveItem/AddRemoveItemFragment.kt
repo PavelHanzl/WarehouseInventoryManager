@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.addRemoveItem
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.addRemoveItem
 
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +11,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -20,8 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentAddRemoveItemBinding
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehouseDetailFragmentDirections
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel
+import cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.repository.getField

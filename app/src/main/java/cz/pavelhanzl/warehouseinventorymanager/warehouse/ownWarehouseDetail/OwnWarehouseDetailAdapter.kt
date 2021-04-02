@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail
 
 import android.util.Log
 import android.view.LayoutInflater

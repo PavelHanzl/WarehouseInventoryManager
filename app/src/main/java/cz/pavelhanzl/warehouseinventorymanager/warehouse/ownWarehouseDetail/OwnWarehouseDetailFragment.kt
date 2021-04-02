@@ -1,18 +1,13 @@
-package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail
 
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,15 +17,10 @@ import com.google.android.material.snackbar.Snackbar
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentOwnWarehouseDetailBinding
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.OwnWarehousesFragmentDirections
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
-import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.android.synthetic.main.fragment_own_warehouse_detail.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.tasks.await
 
 class OwnWarehouseDetailFragment : BaseFragment() {
 

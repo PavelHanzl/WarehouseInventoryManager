@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.withCreated
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.budiyev.android.codescanner.CodeScanner
@@ -25,15 +24,12 @@ import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.google.zxing.Result
-import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentScannerBinding
-import cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel
+import cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class ScannerFragment : BaseFragment() {
     private lateinit var codeScanner: CodeScanner

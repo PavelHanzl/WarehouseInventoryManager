@@ -1,7 +1,6 @@
-package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail
 
 import android.util.Log
-import android.widget.AutoCompleteTextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
@@ -10,10 +9,8 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.toObject
-import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
-import cz.pavelhanzl.warehouseinventorymanager.repository.RepoComunicationLayer
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel

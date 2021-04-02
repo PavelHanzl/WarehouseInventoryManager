@@ -1,6 +1,5 @@
-package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.listOfWarehouses
 
-import android.app.DownloadManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +10,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.Query
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
@@ -20,8 +17,8 @@ import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_own_warehouses.*
 
-class OwnWarehousesFragment : BaseFragment() {
-    val args: OwnWarehousesFragmentArgs by navArgs()
+class ListOfWarehousesFragment : BaseFragment() {
+    val args: ListOfWarehousesFragmentArgs by navArgs()
     lateinit var navigationView: NavigationView
     var ownWarehouse: Boolean = false
 
@@ -48,7 +45,7 @@ class OwnWarehousesFragment : BaseFragment() {
         //tlačítko na vytvoření nového skladu
         fab_ownWarehouses_addNewOwnWarehouse.setOnClickListener {
             val action =
-                OwnWarehousesFragmentDirections.actionOwnWarehouseFragmentToCreateWarehouseFragment()
+                ListOfWarehousesFragmentDirections.actionOwnWarehouseFragmentToCreateWarehouseFragment()
             Navigation.findNavController(view).navigate(action)
         }
 
@@ -112,7 +109,7 @@ class OwnWarehousesFragment : BaseFragment() {
             }
 
         val options = FirestoreRecyclerOptions.Builder<Warehouse>().setQuery(query, Warehouse::class.java).setLifecycleOwner(this).build()
-        val ownWarehousesAdapter = OwnWarehousesAdapter(options, ownWarehouse)
+        val ownWarehousesAdapter = ListOfWarehousesAdapter(options, ownWarehouse)
 
 
         rv_ownWarehousesList.apply {

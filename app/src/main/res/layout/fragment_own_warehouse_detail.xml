@@ -8,13 +8,13 @@
 
         <variable
             name="viewmodel"
-            type="cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel" />
+            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ownWarehouse.ownWarehouseDetail.OwnWarehouseDetailFragment">
+        tools:context=".warehouse.ownWarehouseDetail.OwnWarehouseDetailFragment">
 
 
         <androidx.recyclerview.widget.RecyclerView
