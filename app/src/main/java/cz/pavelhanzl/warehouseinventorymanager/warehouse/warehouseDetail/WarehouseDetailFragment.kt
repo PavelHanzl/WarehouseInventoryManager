@@ -91,14 +91,14 @@ class WarehouseDetailFragment : BaseFragment() {
         binding.fabOwnWhDetailAddItemByHand.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
             Toast.makeText(requireContext(), "add by hand", Toast.LENGTH_SHORT).show()
-            val action =  WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToAddRemoveItem()
+            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToAddRemoveItem()
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailAddItemByScan.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
             Toast.makeText(requireContext(), "add by scan", Toast.LENGTH_SHORT).show()
-            val action =  WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToScannerFragment("adding")
+            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment("adding")
             findNavController().navigate(action)
         }
 
@@ -110,14 +110,14 @@ class WarehouseDetailFragment : BaseFragment() {
         binding.fabOwnWhDetailRemoveItemByHand.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
             Toast.makeText(requireContext(), "remove by hand", Toast.LENGTH_SHORT).show()
-            val action =  WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToAddRemoveItem()
+            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToAddRemoveItem()
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailRemoveItemByScan.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
             Toast.makeText(requireContext(), "remove by scan", Toast.LENGTH_SHORT).show()
-            val action =  WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToScannerFragment("removing")
+            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment("removing")
             findNavController().navigate(action)
         }
     }
@@ -206,7 +206,7 @@ class WarehouseDetailFragment : BaseFragment() {
         when (item!!.itemId) {
             R.id.miOwnWarehouseEdit -> {
                 Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
-                var action =  WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
+                var action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
                 findNavController().navigate(action)
             }
 

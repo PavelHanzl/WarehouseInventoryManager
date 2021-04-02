@@ -26,12 +26,12 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         llButtonOwnWarehouse.setOnClickListener {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToOwnWarehouseFragment(true)
+            val action = DashboardFragmentDirections.actionDashboardFragmentToListOfWarehousesFragment(true)
             Navigation.findNavController(view).navigate(action)
         }
 
         llButtonSharedWarehouse.setOnClickListener {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToOwnWarehouseFragment(false)
+            val action = DashboardFragmentDirections.actionDashboardFragmentToListOfWarehousesFragment(false)
             Navigation.findNavController(view).navigate(action)
         }
 

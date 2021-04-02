@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
             setOf(//nastaví u kterých destinací (fragmentů a aktivit) se má u drawer menu zobrazovat hamburger ikona
                 R.id.dashboardFragment,
                 R.id.settingsFragment,
-                R.id.ownWarehouseFragment
+                R.id.listOfWarehousesFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -33,7 +33,7 @@ class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>) :
 
         fun bindID(id: String) {
             itemView.setOnClickListener {
-                var action = WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToItemDetailFragment(id)
+                var action = WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToItemDetailFragment(id)
                 itemView.findNavController().navigate(action)
                 Log.d("test", id)
             }

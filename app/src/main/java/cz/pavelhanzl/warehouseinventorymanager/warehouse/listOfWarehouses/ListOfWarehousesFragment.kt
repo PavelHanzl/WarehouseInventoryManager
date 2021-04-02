@@ -45,7 +45,7 @@ class ListOfWarehousesFragment : BaseFragment() {
         //tlačítko na vytvoření nového skladu
         fab_ownWarehouses_addNewOwnWarehouse.setOnClickListener {
             val action =
-                ListOfWarehousesFragmentDirections.actionOwnWarehouseFragmentToCreateWarehouseFragment()
+                ListOfWarehousesFragmentDirections.actionListOfWarehousesFragmentToCreateEditWarehouseFragment()
             Navigation.findNavController(view).navigate(action)
         }
 

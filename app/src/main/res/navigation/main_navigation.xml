@@ -16,8 +16,8 @@
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right" />
         <action
-            android:id="@+id/action_dashboardFragment_to_ownWarehouseFragment"
-            app:destination="@id/ownWarehouseFragment" />
+            android:id="@+id/action_dashboardFragment_to_listOfWarehousesFragment"
+            app:destination="@id/listOfWarehousesFragment" />
 
     </fragment>
     <fragment
@@ -44,22 +44,22 @@
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
     <fragment
-        android:id="@+id/ownWarehouseFragment"
+        android:id="@+id/listOfWarehousesFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.listOfWarehouses.ListOfWarehousesFragment"
         tools:layout="@layout/fragment_own_warehouses">
         <action
-            android:id="@+id/action_ownWarehouseFragment_to_createWarehouseFragment"
-            app:destination="@id/createWarehouseFragment" />
+            android:id="@+id/action_listOfWarehousesFragment_to_createEditWarehouseFragment"
+            app:destination="@id/createEditWarehouseFragment" />
         <action
-            android:id="@+id/action_ownWarehouseFragment_to_ownWarehouseDetailFragment"
-            app:destination="@id/ownWarehouseDetailFragment" />
+            android:id="@+id/action_listOfWarehousesFragment_to_warehouseDetailFragment"
+            app:destination="@id/warehouseDetailFragment" />
         <argument
             android:name="ownWarehouse"
             android:defaultValue="true"
             app:argType="boolean" />
     </fragment>
     <fragment
-        android:id="@+id/createWarehouseFragment"
+        android:id="@+id/createEditWarehouseFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditWarehouse.CreateEditWarehouseFragment"
         tools:layout="@layout/fragment_create_warehouse">
         <argument
@@ -69,26 +69,26 @@
             app:nullable="true" />
     </fragment>
     <fragment
-        android:id="@+id/ownWarehouseDetailFragment"
+        android:id="@+id/warehouseDetailFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehouseDetailFragment"
         tools:layout="@layout/fragment_own_warehouse_detail">
         <argument
             android:name="warehouseID"
             app:argType="string" />
         <action
-            android:id="@+id/action_ownWarehouseDetailFragment_to_itemDetailFragment"
+            android:id="@+id/action_warehouseDetailFragment_to_itemDetailFragment"
             app:destination="@id/itemDetailFragment" />
         <action
-            android:id="@+id/action_ownWarehouseDetailFragment_to_createWarehouseFragment"
-            app:destination="@id/createWarehouseFragment" />
+            android:id="@+id/action_warehouseDetailFragment_to_createWarehouseFragment"
+            app:destination="@id/createEditWarehouseFragment" />
         <argument
             android:name="ownWarehouse"
             app:argType="boolean" />
         <action
-            android:id="@+id/action_ownWarehouseDetailFragment_to_scannerFragment"
+            android:id="@+id/action_warehouseDetailFragment_to_scannerFragment"
             app:destination="@id/scannerFragment" />
         <action
-            android:id="@+id/action_ownWarehouseDetailFragment_to_addRemoveItem"
+            android:id="@+id/action_warehouseDetailFragment_to_addRemoveItem"
             app:destination="@id/addRemoveItem" />
     </fragment>
     <fragment
@@ -100,12 +100,12 @@
             android:name="itemId"
             app:argType="string" />
     </fragment>
-    <action android:id="@+id/action_global_ownWarehouseFragment_false" app:destination="@id/ownWarehouseFragment">
+    <action android:id="@+id/action_global_listOfWarehousesFragment_false" app:destination="@id/listOfWarehousesFragment">
         <argument
             android:name="ownWarehouse"
             android:defaultValue="false" />
     </action>
-    <action android:id="@+id/action_global_ownWarehouseFragment_true" app:destination="@id/ownWarehouseFragment" >
+    <action android:id="@+id/action_global_listOfWarehousesFragment_true" app:destination="@id/listOfWarehousesFragment" >
         <argument
             android:name="ownWarehouse"
             android:defaultValue="true" />
