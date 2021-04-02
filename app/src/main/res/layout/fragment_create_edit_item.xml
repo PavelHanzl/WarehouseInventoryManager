@@ -6,26 +6,226 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
+        <import type="cz.pavelhanzl.warehouseinventorymanager.repository.Constants"/>
+
         <variable
             name="viewmodel"
-            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditItem.CreateEditItemViewModel" />
+            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditItem.CreateEditItemFragmentViewModel" />
+
+        <variable
+            name="fragmentClass"
+            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditItem.CreateEditItemFragment" />
+
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".warehouse.createEditItem.CreateEditItemFragment">
-
-
-    <TextView
-        android:id="@+id/tv_warehouseID_createEdiItemFragment"
-        android:layout_width="wrap_content"
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/linearProgressIndicator2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@{viewmodel.warehouseId}"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:indeterminate="true"
+        android:visibility="@{viewmodel.loading ? View.VISIBLE : View.GONE}"
+        app:hideAnimationBehavior="inward"
+        app:layout_constraintTop_toTopOf="parent"
+        app:showAnimationBehavior="outward" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/btn_BackButton_createEditItemFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ci_ItemProfileImage_AddRemoveFragment"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/avatar_warehouse_item_secondary_color"
+                app:civ_border_color="@color/secondaryColor"
+                app:civ_border_width="2dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tf_itemName_createEditItemFragment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tf_itemName_createEditItemFragment"
+                app:layout_constraintVertical_bias="0.19" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tf_itemName_createEditItemFragment"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="@string/enterItemName"
+                app:errorEnabled="true"
+                app:errorText="@{viewmodel.itemNameError}"
+                app:layout_constraintEnd_toStartOf="@+id/ci_ItemProfileImage_AddRemoveFragment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tf_itemNameContent_createEditItemFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="@={viewmodel.itemNameContent}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tf_itemBarcode_createEditItemFragment"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:hint="@string/enterBarcode"
+                app:errorEnabled="true"
+                app:errorText="@{viewmodel.itemBarcodeError}"
+                app:layout_constraintEnd_toStartOf="@+id/fab_startScan_addRemoveFragment"
+                app:layout_constraintStart_toStartOf="@+id/tf_itemName_createEditItemFragment"
+                app:layout_constraintTop_toBottomOf="@+id/tf_itemName_createEditItemFragment">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tf_itemBarcodeContent_createEditItemFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="@={viewmodel.itemBarcodeContent}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tf_initialItemCount_createEditItemFragment"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/enterInitialNumberOfItems"
+                app:errorEnabled="true"
+                app:errorText="@{viewmodel.initialItemCountError}"
+                app:layout_constraintEnd_toEndOf="@+id/tf_itemName_createEditItemFragment"
+                app:layout_constraintStart_toStartOf="@+id/tf_itemBarcode_createEditItemFragment"
+                app:layout_constraintTop_toBottomOf="@+id/tf_itemBarcode_createEditItemFragment">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tf_initialItemCountContent_createEditItemFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@={viewmodel.initialItemCountContent}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tf_itemPrice_createEditItemFragment"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/enterItemPrice"
+                app:errorEnabled="true"
+                app:errorText="@{viewmodel.itemPriceError}"
+                app:layout_constraintEnd_toEndOf="@+id/tf_itemName_createEditItemFragment"
+                app:layout_constraintStart_toStartOf="@+id/tf_itemBarcode_createEditItemFragment"
+                app:layout_constraintTop_toBottomOf="@+id/tf_initialItemCount_createEditItemFragment">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tf_itemPriceContent_createEditItemFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@={viewmodel.itemPriceContent}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tf_itemNote_createEditItemFragment"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/Note"
+                app:counterEnabled="true"
+                app:counterMaxLength="200"
+                app:errorEnabled="true"
+                app:errorText="@{viewmodel.itemNoteError}"
+                app:layout_constraintEnd_toEndOf="@+id/tf_itemPrice_createEditItemFragment"
+                app:layout_constraintStart_toStartOf="@+id/tf_itemPrice_createEditItemFragment"
+                app:layout_constraintTop_toBottomOf="@+id/tf_itemPrice_createEditItemFragment">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tf_itemNoteContent_createEditItemFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={viewmodel.itemNoteContent}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_startScan_addRemoveFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:clickable="true"
+                android:onClick="@{()->fragmentClass.navigateToScanner()}"
+                android:src="@drawable/ic_scaner"
+                app:layout_constraintBottom_toBottomOf="@+id/tf_itemBarcode_createEditItemFragment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tf_itemBarcode_createEditItemFragment"
+                app:layout_constraintVertical_bias="0.19"
+                android:focusable="true" />
+
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_BackButton_createEditItemFragment"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="@{()-> viewmodel.onBackButtonClicked()}"
+        android:text="@string/back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <Button
+        android:id="@+id/btn_AddRemoveItem_addRemoveFragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/secondaryColor"
+        android:enabled="@{viewmodel.createEditButtonEnabled}"
+        android:onClick="@{()-> viewmodel.onCreateEditItemButtonClicked()}"
+        android:text="@{viewmodel.createEditItemFragmentMode == Constants.CREATING_STRING ? @string/create : @string/edit}"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

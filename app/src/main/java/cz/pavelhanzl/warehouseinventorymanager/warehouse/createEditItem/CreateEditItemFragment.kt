@@ -5,26 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import cz.pavelhanzl.warehouseinventorymanager.R
+import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateEditItemBinding
-import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentItemDetailBinding
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
+import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.itemDetail.ItemDetaiFragmentViewModel
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.itemDetail.ItemDetailFragmentArgs
+import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
+import kotlinx.coroutines.flow.onEach
 
 class CreateEditItemFragment : BaseFragment() {
 
     private val args: CreateEditItemFragmentArgs by navArgs()
     private lateinit var binding: FragmentCreateEditItemBinding
-    lateinit var viewModel: CreateEditItemViewModel
+    lateinit var viewModel: CreateEditItemFragmentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         //předá argumenty do viewmodelu
         if (savedInstanceState == null) {
-            viewModel = ViewModelProvider(this).get(CreateEditItemViewModel::class.java)
+            viewModel = ViewModelProvider(this).get(CreateEditItemFragmentViewModel::class.java)
             viewModel.setdata(args.warehouseId)
         }
 
@@ -47,6 +50,24 @@ class CreateEditItemFragment : BaseFragment() {
 
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.viewmodel!!.eventsFlow
+            .onEach {
+                when (it) {
+                    CreateEditItemFragmentViewModel.Event.NavigateBack -> {
+                        findNavController().navigateUp()
+                        hideKeyboard(activity as MainActivity)
+                    }
+                }
+            }.observeInLifecycle(viewLifecycleOwner)
+    }
+
+    fun navigateToScanner() {
+        val action = CreateEditItemFragmentDirections.actionCreateEditItemFragmentToScannerFragment(Constants.READING_STRING)
+        Navigation.findNavController(requireView()).navigate(action)
     }
 
 }

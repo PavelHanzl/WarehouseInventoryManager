@@ -134,10 +134,12 @@
     <fragment
         android:id="@+id/createEditItemFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditItem.CreateEditItemFragment"
-        android:label="fragment_create_edit_item"
-        tools:layout="@layout/fragment_create_edit_item" >
+        tools:layout="@layout/fragment_create_edit_item">
         <argument
             android:name="warehouseId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_createEditItemFragment_to_scannerFragment"
+            app:destination="@id/scannerFragment" />
     </fragment>
 </navigation>

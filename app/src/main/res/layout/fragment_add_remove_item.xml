@@ -25,12 +25,21 @@
         android:layout_height="match_parent"
         tools:context=".warehouse.addRemoveItem.AddRemoveItemFragment">
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/linearProgressIndicator2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="@{sharedViewmodel.loading ? View.VISIBLE : View.GONE}"
+            app:hideAnimationBehavior="inward"
+            app:layout_constraintTop_toTopOf="parent"
+            app:showAnimationBehavior="outward" />
+
         <ScrollView
-            android:id="@+id/scrollView2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
-            app:layout_constraintBottom_toTopOf="@+id/btn_BackButton_FragmentCreateWarehouse"
+            app:layout_constraintBottom_toTopOf="@+id/btn_BackButton_addRemoveFragment"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -39,23 +48,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.google.android.material.progressindicator.LinearProgressIndicator
-                    android:id="@+id/linearProgressIndicator2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:indeterminate="true"
-                    android:visibility="@{sharedViewmodel.loading ? View.VISIBLE : View.GONE}"
-                    app:hideAnimationBehavior="inward"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:showAnimationBehavior="outward" />
+
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/ci_ItemProfileImage_AddRemoveFragment"
+                    android:id="@+id/ci_ItemProfileImage_AddRemoveItemFragment"
+                    imageUrl="@{sharedViewmodel.itemPhotoUrl}"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginEnd="16dp"
                     android:src="@drawable/avatar_warehouse_item_primary_color"
-                    imageUrl="@{sharedViewmodel.itemPhotoUrl}"
                     app:civ_border_color="@color/primaryColor"
                     app:civ_border_width="2dp"
                     app:layout_constraintBottom_toBottomOf="@+id/dropdownItemSelector_addRemoveFragment"
@@ -71,10 +72,10 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:hint="Vyberte položku"
+                    android:hint="@string/chooseItem"
                     app:errorEnabled="true"
                     app:errorText="@{sharedViewmodel.itemNameError}"
-                    app:layout_constraintEnd_toStartOf="@+id/ci_ItemProfileImage_AddRemoveFragment"
+                    app:layout_constraintEnd_toStartOf="@+id/ci_ItemProfileImage_AddRemoveItemFragment"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -83,8 +84,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:text="@={sharedViewmodel.itemNameContent}"
-                        />
+                        android:text="@={sharedViewmodel.itemNameContent}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,8 +94,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Zadejte čárový kód"
                     android:layout_marginEnd="16dp"
+                    android:hint="@string/enterBarcode"
                     app:errorEnabled="true"
                     app:errorText="@{sharedViewmodel.itemBarcodeError}"
                     app:layout_constraintEnd_toStartOf="@+id/fab_startScan_addRemoveFragment"
@@ -116,7 +116,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Zadejte počet přidávaných kusů"
+                    android:hint="@string/insertCountOfAddedItems"
                     app:errorEnabled="true"
                     app:errorText="@{sharedViewmodel.itemCountError}"
                     app:layout_constraintEnd_toEndOf="@+id/dropdownItemSelector_addRemoveFragment"
@@ -127,7 +127,7 @@
                         android:id="@+id/tf_itemCountContent_addRemoveFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:text="@={sharedViewmodel.itemCountContent}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -139,9 +139,10 @@
                     android:clickable="true"
                     android:src="@drawable/ic_plus"
                     android:visibility="invisible"
-                    app:layout_constraintBottom_toBottomOf="@+id/ci_ItemProfileImage_AddRemoveFragment"
-                    app:layout_constraintEnd_toEndOf="@+id/ci_ItemProfileImage_AddRemoveFragment"
-                    app:layout_constraintTop_toTopOf="@+id/ci_ItemProfileImage_AddRemoveFragment" />
+                    app:layout_constraintBottom_toBottomOf="@+id/ci_ItemProfileImage_AddRemoveItemFragment"
+                    app:layout_constraintEnd_toEndOf="@+id/ci_ItemProfileImage_AddRemoveItemFragment"
+                    app:layout_constraintTop_toTopOf="@+id/ci_ItemProfileImage_AddRemoveItemFragment"
+                    android:focusable="true" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fab_startScan_addRemoveFragment"
@@ -154,7 +155,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/dropdownBarcodeSelector_addRemoveFragment"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/dropdownBarcodeSelector_addRemoveFragment"
-                    app:layout_constraintVertical_bias="0.19" />
+                    app:layout_constraintVertical_bias="0.19"
+                    android:focusable="true" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

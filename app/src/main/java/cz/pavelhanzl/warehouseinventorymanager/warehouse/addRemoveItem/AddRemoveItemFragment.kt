@@ -137,7 +137,7 @@ class AddRemoveItemFragment : BaseFragment() {
                             .load(item.photoURL)
                             .placeholder(R.drawable.avatar_warehouse_item_primary_color)
                             .error(R.drawable.avatar_warehouse_item_primary_color)
-                            .into(binding.ciItemProfileImageAddRemoveFragment)
+                            .into(binding.ciItemProfileImageAddRemoveItemFragment)
                     }
                     matchFound = true
                     break@itemCheckLoop //při první shodě ukončí forloop
@@ -148,7 +148,7 @@ class AddRemoveItemFragment : BaseFragment() {
                     //pokud nedošlo ke shodě, zobraz v avataru defaultní obrázek
                     Glide.with(requireContext())
                         .load(R.drawable.avatar_warehouse_item_primary_color)
-                        .into(binding.ciItemProfileImageAddRemoveFragment)
+                        .into(binding.ciItemProfileImageAddRemoveItemFragment)
                 }
             }
 

@@ -82,17 +82,16 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tf_ownWarehouseNote_FragmentCreateWarehouse"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
                     android:hint="@string/Note"
                     app:counterEnabled="true"
                     app:counterMaxLength="200"
                     app:errorEnabled="true"
                     app:errorText="@{viewmodel.warehouseNoteError}"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/tf_ownWarehouseName_FragmentCreateWarehouse"
+                    app:layout_constraintStart_toStartOf="@+id/tf_ownWarehouseName_FragmentCreateWarehouse"
                     app:layout_constraintTop_toBottomOf="@+id/tf_ownWarehouseName_FragmentCreateWarehouse">
 
                     <com.google.android.material.textfield.TextInputEditText

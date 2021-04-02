@@ -99,9 +99,17 @@
     <string name="needsCameraPermission">Aplikace potřebuje získat povolení ke kameře, abyste mohli využívat funkci skenneru.</string>
     <string name="addItem">Přidat</string>
     <string name="removeItem">Odebrat</string>
+    <string name="create">Vytvořit</string>
+    <string name="edit">Upravit</string>
     <string name="scanBarcode">Naskenujte čárový kód</string>
     <string name="itemAdded">Položka přidána.</string>
     <string name="itemRemoved">Položka odebrána.</string>
+    <string name="chooseItem">Vyberte položku</string>
+    <string name="enterBarcode">Zadejte čárový kód</string>
+    <string name="insertCountOfAddedItems">Zadejte počet přidávaných kusů</string>
+    <string name="enterInitialNumberOfItems">Zadejte počáteční počet kusů</string>
+    <string name="enterItemPrice">Zadejte cenu za jednotku</string>
+    <string name="enterItemName">Zadejte název položky</string>
 
 
 </resources>

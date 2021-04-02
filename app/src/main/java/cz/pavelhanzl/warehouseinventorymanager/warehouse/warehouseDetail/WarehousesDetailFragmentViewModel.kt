@@ -57,9 +57,6 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
     val dropdownMenuDataReady = MutableLiveData<Boolean>(false)
 
 
-    //private lateinit var itemPhotoUrlLiveData: MutableLiveData<String>
-    //private lateinit var dropDownItemsMenuLiveData: MutableLiveData<String>
-    //private lateinit var dropDownBarcodesMenuLiveData: MutableLiveData<String>
 
     sealed class Event {
         object NavigateBack : Event()
