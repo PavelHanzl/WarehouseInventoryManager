@@ -15,7 +15,7 @@ import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_own_warehouses.*
+import kotlinx.android.synthetic.main.fragment_list_of_warehouses.*
 
 class ListOfWarehousesFragment : BaseFragment() {
     val args: ListOfWarehousesFragmentArgs by navArgs()
@@ -35,7 +35,7 @@ class ListOfWarehousesFragment : BaseFragment() {
     ): View? {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_own_warehouses, container, false)
+        return inflater.inflate(R.layout.fragment_list_of_warehouses, container, false)
 
     }
 

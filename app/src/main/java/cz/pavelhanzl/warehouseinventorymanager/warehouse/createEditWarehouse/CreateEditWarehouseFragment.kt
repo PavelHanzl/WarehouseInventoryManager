@@ -17,12 +17,12 @@ import com.bumptech.glide.Glide
 import com.github.dhaval2404.imagepicker.ImagePicker
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
-import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateWarehouseBinding
+import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateEditWarehouseBinding
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
-import kotlinx.android.synthetic.main.fragment_create_warehouse.*
+import kotlinx.android.synthetic.main.fragment_create_edit_warehouse.*
 
 class CreateEditWarehouseFragment : Fragment() {
-    private lateinit var binding: FragmentCreateWarehouseBinding
+    private lateinit var binding: FragmentCreateEditWarehouseBinding
     lateinit var viewModel: CreateEditWarehouseFragmentViewModel
     private val args: CreateEditWarehouseFragmentArgs by navArgs()
 
@@ -36,7 +36,7 @@ class CreateEditWarehouseFragment : Fragment() {
 
         //binduje a přiřazuje viewmodel
         viewModel = ViewModelProvider(this).get(CreateEditWarehouseFragmentViewModel::class.java)
-        binding = FragmentCreateWarehouseBinding.inflate(inflater, container, false)
+        binding = FragmentCreateEditWarehouseBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 

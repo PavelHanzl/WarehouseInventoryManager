@@ -16,17 +16,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
-import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentOwnWarehouseDetailBinding
+import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentWarehouseDetailBinding
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
-import kotlinx.android.synthetic.main.fragment_own_warehouse_detail.*
+import kotlinx.android.synthetic.main.fragment_warehouse_detail.*
 
 class WarehouseDetailFragment : BaseFragment() {
 
 
     private val args: WarehouseDetailFragmentArgs by navArgs()
-    private lateinit var binding: FragmentOwnWarehouseDetailBinding
+    private lateinit var binding: FragmentWarehouseDetailBinding
     private val viewModel: WarehousesDetailFragmentViewModel by activityViewModels()
 
     private val fabAddItemAnimFromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom) }
@@ -61,7 +61,7 @@ class WarehouseDetailFragment : BaseFragment() {
 
 
         //binduje a přiřazuje viewmodel
-        binding = FragmentOwnWarehouseDetailBinding.inflate(inflater, container, false)
+        binding = FragmentWarehouseDetailBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 

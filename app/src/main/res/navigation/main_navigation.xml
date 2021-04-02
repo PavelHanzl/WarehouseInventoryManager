@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/listOfWarehousesFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.listOfWarehouses.ListOfWarehousesFragment"
-        tools:layout="@layout/fragment_own_warehouses">
+        tools:layout="@layout/fragment_list_of_warehouses">
         <action
             android:id="@+id/action_listOfWarehousesFragment_to_createEditWarehouseFragment"
             app:destination="@id/createEditWarehouseFragment" />
@@ -61,7 +61,7 @@
     <fragment
         android:id="@+id/createEditWarehouseFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditWarehouse.CreateEditWarehouseFragment"
-        tools:layout="@layout/fragment_create_warehouse">
+        tools:layout="@layout/fragment_create_edit_warehouse">
         <argument
             android:name="warehouseObject"
             android:defaultValue="@null"
@@ -71,7 +71,7 @@
     <fragment
         android:id="@+id/warehouseDetailFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehouseDetailFragment"
-        tools:layout="@layout/fragment_own_warehouse_detail">
+        tools:layout="@layout/fragment_warehouse_detail">
         <argument
             android:name="warehouseID"
             app:argType="string" />
