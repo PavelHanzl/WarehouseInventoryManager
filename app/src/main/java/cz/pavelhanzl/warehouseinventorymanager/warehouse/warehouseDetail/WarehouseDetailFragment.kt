@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail
 
 import android.os.Bundle
 import android.util.Log
@@ -22,12 +22,12 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.android.synthetic.main.fragment_own_warehouse_detail.*
 
-class OwnWarehouseDetailFragment : BaseFragment() {
+class WarehouseDetailFragment : BaseFragment() {
 
 
-    private val args: OwnWarehouseDetailFragmentArgs by navArgs()
+    private val args: WarehouseDetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentOwnWarehouseDetailBinding
-    private val viewModel: OwnWarehousesDetailFragmentViewModel by activityViewModels()
+    private val viewModel: WarehousesDetailFragmentViewModel by activityViewModels()
 
     private val fabAddItemAnimFromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom) }
     private val fabAddItemAnimToBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_to_bottom) }
@@ -91,14 +91,14 @@ class OwnWarehouseDetailFragment : BaseFragment() {
         binding.fabOwnWhDetailAddItemByHand.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
             Toast.makeText(requireContext(), "add by hand", Toast.LENGTH_SHORT).show()
-            val action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToAddRemoveItem()
+            val action =  WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToAddRemoveItem()
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailAddItemByScan.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
             Toast.makeText(requireContext(), "add by scan", Toast.LENGTH_SHORT).show()
-            val action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToScannerFragment("adding")
+            val action =  WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToScannerFragment("adding")
             findNavController().navigate(action)
         }
 
@@ -110,14 +110,14 @@ class OwnWarehouseDetailFragment : BaseFragment() {
         binding.fabOwnWhDetailRemoveItemByHand.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
             Toast.makeText(requireContext(), "remove by hand", Toast.LENGTH_SHORT).show()
-            val action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToAddRemoveItem()
+            val action =  WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToAddRemoveItem()
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailRemoveItemByScan.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
             Toast.makeText(requireContext(), "remove by scan", Toast.LENGTH_SHORT).show()
-            val action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToScannerFragment("removing")
+            val action =  WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToScannerFragment("removing")
             findNavController().navigate(action)
         }
     }
@@ -206,7 +206,7 @@ class OwnWarehouseDetailFragment : BaseFragment() {
         when (item!!.itemId) {
             R.id.miOwnWarehouseEdit -> {
                 Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
-                var action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
+                var action =  WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
                 findNavController().navigate(action)
             }
 
@@ -270,7 +270,7 @@ class OwnWarehouseDetailFragment : BaseFragment() {
         //nastaví recycleview
         val query = db.collection("warehouses").document(args.warehouseID).collection("items")
         val options = FirestoreRecyclerOptions.Builder<WarehouseItem>().setQuery(query, WarehouseItem::class.java).setLifecycleOwner(this).build()
-        val ownWarehouseDetailAdapter = OwnWarehouseDetailAdapter(options)
+        val ownWarehouseDetailAdapter = WarehouseDetailAdapter(options)
 
         rv_ownWarehouseDetailList.apply {
             layoutManager = LinearLayoutManager(activity)

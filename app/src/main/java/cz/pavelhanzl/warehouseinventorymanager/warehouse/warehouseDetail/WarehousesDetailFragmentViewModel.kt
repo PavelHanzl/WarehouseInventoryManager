@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 
-class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
+class WarehousesDetailFragmentViewModel : BaseViewModel() {
 
     //******************Start of variables forAddRemoveItemFragment**********************//
 
@@ -234,7 +234,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
                     Log.d("Transakce", "Transaction success!")
                 }.addOnFailureListener {
                     _loading.postValue(false)
-                    Log.d("Transakce", "Transaction failure!!!!!!!!!!")
+                    Log.d("Transakce", "Transaction failure!!!!!!!!!!"+ it.message)
                 }
             } catch (e: Exception){
                 Log.d("EXCEPTION", e.message!!)

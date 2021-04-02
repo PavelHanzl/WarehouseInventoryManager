@@ -26,7 +26,7 @@ import com.budiyev.android.codescanner.ScanMode
 import com.google.zxing.Result
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentScannerBinding
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel
+import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehousesDetailFragmentViewModel
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
@@ -35,7 +35,7 @@ class ScannerFragment : BaseFragment() {
     private lateinit var codeScanner: CodeScanner
     private val CAMERA_REQUEST_CODE = 1016
 
-    private val sharedViewModel: OwnWarehousesDetailFragmentViewModel by activityViewModels()
+    private val sharedViewModel: WarehousesDetailFragmentViewModel by activityViewModels()
 
     private val args: ScannerFragmentArgs by navArgs()
     private lateinit var binding: FragmentScannerBinding

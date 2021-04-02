@@ -70,7 +70,7 @@
     </fragment>
     <fragment
         android:id="@+id/ownWarehouseDetailFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail.OwnWarehouseDetailFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehouseDetailFragment"
         tools:layout="@layout/fragment_own_warehouse_detail">
         <argument
             android:name="warehouseID"

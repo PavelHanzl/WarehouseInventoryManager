@@ -12,7 +12,7 @@
 
         <variable
             name="sharedViewmodel"
-            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel" />
+            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehousesDetailFragmentViewModel" />
 
         <variable
             name="fragmentClass"

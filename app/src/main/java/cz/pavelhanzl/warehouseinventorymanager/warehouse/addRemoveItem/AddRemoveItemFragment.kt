@@ -19,7 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentAddRemoveItemBinding
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail.OwnWarehousesDetailFragmentViewModel
+import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehousesDetailFragmentViewModel
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.repository.getField
@@ -32,7 +32,7 @@ import kotlinx.coroutines.flow.onEach
 
 class AddRemoveItemFragment : BaseFragment() {
     private lateinit var binding: FragmentAddRemoveItemBinding
-    private val sharedViewModel: OwnWarehousesDetailFragmentViewModel by activityViewModels()
+    private val sharedViewModel: WarehousesDetailFragmentViewModel by activityViewModels()
 
     private lateinit var dropDownItemsMenuView: AutoCompleteTextView
     private lateinit var dropDownBarcodesMenuView: AutoCompleteTextView
@@ -211,11 +211,11 @@ class AddRemoveItemFragment : BaseFragment() {
         binding.sharedViewmodel!!.eventsFlow
             .onEach {
                 when (it) {
-                    OwnWarehousesDetailFragmentViewModel.Event.NavigateBack -> {
+                    WarehousesDetailFragmentViewModel.Event.NavigateBack -> {
                         findNavController().navigateUp()
                         hideKeyboard(activity as MainActivity)
                     }
-                    is OwnWarehousesDetailFragmentViewModel.Event.SetVisibilityOfCreateItemBtnt -> {
+                    is WarehousesDetailFragmentViewModel.Event.SetVisibilityOfCreateItemBtnt -> {
                         if (it.visibility){
                             Log.d("create", it.visibility.toString())
                             createItemBtn.show()
@@ -225,7 +225,7 @@ class AddRemoveItemFragment : BaseFragment() {
                         }
 
                     }
-                    /* is OwnWarehousesDetailFragmentViewModel.Event.CreateEditDebt -> {
+                    /* is WarehousesDetailFragmentViewModel.Event.CreateEditDebt -> {
                         val action = FriendDetailFragmentDirections.actionFriendDetailFragmentToAddEditDebtFragment(it.debtID,
                             viewModel.friendshipData.value!!,
                             viewModel.friendData.value!!.name)

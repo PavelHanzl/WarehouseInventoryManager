@@ -1,4 +1,4 @@
-package cz.pavelhanzl.warehouseinventorymanager.warehouse.ownWarehouseDetail
+package cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,8 +16,8 @@ import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import kotlinx.android.synthetic.main.rv_own_warehousesdetail_list_item.view.*
 
-class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>) :
-    FirestoreRecyclerAdapter<WarehouseItem, OwnWarehouseDetailAdapter.WarehouseItemViewHolder>(options) {
+class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>) :
+    FirestoreRecyclerAdapter<WarehouseItem, WarehouseDetailAdapter.WarehouseItemViewHolder>(options) {
 
     class WarehouseItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindVisible(warehouseItem: WarehouseItem) {
@@ -33,7 +33,7 @@ class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>
 
         fun bindID(id: String) {
             itemView.setOnClickListener {
-                var action = OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToItemDetailFragment(id)
+                var action = WarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToItemDetailFragment(id)
                 itemView.findNavController().navigate(action)
                 Log.d("test", id)
             }
@@ -43,7 +43,7 @@ class OwnWarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OwnWarehouseDetailAdapter.WarehouseItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WarehouseDetailAdapter.WarehouseItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
             R.layout.rv_own_warehousesdetail_list_item,
             parent,
