@@ -127,5 +127,17 @@
         <action
             android:id="@+id/action_addRemoveItem_to_scannerFragment"
             app:destination="@id/scannerFragment" />
+        <action
+            android:id="@+id/action_addRemoveItem_to_createEditItemFragment"
+            app:destination="@id/createEditItemFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createEditItemFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditItem.CreateEditItemFragment"
+        android:label="fragment_create_edit_item"
+        tools:layout="@layout/fragment_create_edit_item" >
+        <argument
+            android:name="warehouseId"
+            app:argType="string" />
     </fragment>
 </navigation>

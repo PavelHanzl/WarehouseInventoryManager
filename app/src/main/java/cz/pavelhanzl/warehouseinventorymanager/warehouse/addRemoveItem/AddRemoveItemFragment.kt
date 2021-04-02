@@ -80,8 +80,8 @@ class AddRemoveItemFragment : BaseFragment() {
 
         binding.fabCreateItemAddRemoveFragment.setOnClickListener {
             Log.d("create item", "pressed")
-            //var action =  OwnWarehouseDetailFragmentDirections.actionOwnWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
-            //findNavController().navigate(action)
+            val action = AddRemoveItemFragmentDirections.actionAddRemoveItemToCreateEditItemFragment(sharedViewModel.warehouseID.value!!)
+            findNavController().navigate(action)
         }
 
 
