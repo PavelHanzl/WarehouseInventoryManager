@@ -23,6 +23,7 @@ class CreateEditItemFragmentViewModel:BaseViewModel() {
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
 
+    var itemProfilePhoto = MutableLiveData<ByteArray>()
     var itemPhotoUrl = MutableLiveData<String>("")
 
     var itemNameContent = MutableLiveData<String>("")

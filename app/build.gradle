@@ -101,7 +101,11 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     //Image picker
-    implementation 'com.github.dhaval2404:imagepicker:1.8'
+    //implementation 'com.github.dhaval2404:imagepicker:1.8'
+
+    //Image picker later implemented
+    implementation 'com.github.drjacky:ImagePicker:1.8.1'
+
 
     //backsupport DateTimeFormatter
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'

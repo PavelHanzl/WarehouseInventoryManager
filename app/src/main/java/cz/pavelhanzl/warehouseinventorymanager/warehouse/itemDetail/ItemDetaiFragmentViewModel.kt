@@ -6,13 +6,13 @@ import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 
 class ItemDetaiFragmentViewModel: BaseViewModel() {
     var itemId = MutableLiveData<String>("")
-    var visibility=MutableLiveData<Int>(View.VISIBLE )
+    var visibility=MutableLiveData<Int>(View.INVISIBLE )
 
 
 
     fun setdata(itemId: String){
         this.itemId.value = itemId
-        visibility.value=View.VISIBLE
+
 
     }
 
