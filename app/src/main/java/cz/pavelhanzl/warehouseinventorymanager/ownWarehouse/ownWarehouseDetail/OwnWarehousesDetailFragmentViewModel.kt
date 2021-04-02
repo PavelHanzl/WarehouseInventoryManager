@@ -1,6 +1,7 @@
 package cz.pavelhanzl.warehouseinventorymanager.ownWarehouse.ownWarehouseDetail
 
 import android.util.Log
+import android.widget.AutoCompleteTextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
@@ -30,6 +31,7 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     //******************Start of variables forAddRemoveItemFragment**********************//
 
     lateinit var addRemoveFragmentMode: String
+    private var addingMode = false
 
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
@@ -57,8 +59,14 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
     val localListOfAllItemCodes = mutableListOf<String>()
     val dropdownMenuDataReady = MutableLiveData<Boolean>(false)
 
+
+    //private lateinit var itemPhotoUrlLiveData: MutableLiveData<String>
+    //private lateinit var dropDownItemsMenuLiveData: MutableLiveData<String>
+    //private lateinit var dropDownBarcodesMenuLiveData: MutableLiveData<String>
+
     sealed class Event {
         object NavigateBack : Event()
+        data class SetVisibilityOfCreateItemBtnt(val visibility: Boolean) : Event()
         //data class CreateEdit(val debtID: String?) : Event()
     }
 
@@ -123,6 +131,63 @@ class OwnWarehousesDetailFragmentViewModel : BaseViewModel() {
         }
 
     }
+
+   fun setDropdownsBasedOnName(itemNameString: String) {
+        //ověří jestli se položka s tímto názvem nachází ve skladu a případně jí vrátí
+        val item = returnWarehouseItemWithGivenParameters(itemName = itemNameString, itemBarcode = "", listOfAllWarehouseItems = localListOfAllItems)
+
+        if (item != null) {//pokud se položka nachází
+            itemBarcodeContent.value = item.code //nastaví barcode odpovídající položce
+            itemPhotoUrl.value = item.photoURL //nastaví fotku odpovídající položce
+            GlobalScope.launch { eventChannel.send(Event.SetVisibilityOfCreateItemBtnt(false)) }//skryje možnost vytvoření nové položky
+            //createItemBtn.hide() //skryje možnost vytvoření nové položky
+        } else {//pokud se položka nenachází
+            if(addingMode) GlobalScope.launch { eventChannel.send(Event.SetVisibilityOfCreateItemBtnt(true)) }//zobrazí možnost vytvoření nové položky
+            //if(addingMode)createItemBtn.show() //zobrazí možnost vytvoření nové položky
+            itemBarcodeContent.value = "" //vymaže hodnotu v barcode poli
+            itemPhotoUrl.value = "" //nastaví defaultní obrázek
+
+        }
+    }
+
+   fun setDropdownsBasedOnBarcode(barcodeString: String) {
+        Log.d("banány", barcodeString)
+
+        //ověří jestli se položka s tímto barcodem nachází ve skladu a případně jí vrátí
+        val item = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = barcodeString, listOfAllWarehouseItems = localListOfAllItems)
+
+        Log.d("banány", localListOfAllItems.size.toString())
+        if (item != null) {//pokud se položka nachází
+            Log.d("banány", item.name)
+            itemNameContent.value = item.name //nastaví název odpovídající barcodu
+            itemPhotoUrl.value = item.photoURL //nastaví fotku odpovídající položce
+            GlobalScope.launch { eventChannel.send(Event.SetVisibilityOfCreateItemBtnt(false)) }//skryje možnost vytvoření nové položky
+            //createItemBtn.hide() //skryje možnost vytvoření nové položky
+        } else {//pokud se položka nenachází
+            Log.d("banány", "barcode null")
+            if(addingMode) GlobalScope.launch { eventChannel.send(Event.SetVisibilityOfCreateItemBtnt(true)) }//zobrazí možnost vytvoření nové položky
+            //if(addingMode) createItemBtn.show() //zobrazí možnost vytvoření nové položky
+            itemNameContent.value = "" //vymaže hodnotu v poli název
+            itemPhotoUrl.value = "" //nastaví defaultní obrázek
+        }
+    }
+
+    private fun returnWarehouseItemWithGivenParameters(itemName: String = "", itemBarcode: String = "", listOfAllWarehouseItems: MutableList<WarehouseItem>): WarehouseItem? {
+        var foundObject: WarehouseItem? = null
+
+        listOfAllWarehouseItems.any {
+            if (it.name == itemName || it.code == itemBarcode) {
+                foundObject = it
+                Log.d("hajdin", "Nalezeno - Item:" + foundObject!!.name + " Code:" + foundObject!!.code)
+                true //shoda našli jsme shodu podle jména nebo podle kódu
+            } else false //neshoda nic jsme nenanšli
+        }
+
+        return foundObject
+
+    }
+
+
     //******************End of functions  for AddRemoveItemFragment**********************//
 
     var warehouseID = MutableLiveData<String>("")

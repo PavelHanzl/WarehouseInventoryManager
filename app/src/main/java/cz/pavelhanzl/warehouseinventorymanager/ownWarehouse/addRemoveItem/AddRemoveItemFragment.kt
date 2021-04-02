@@ -38,9 +38,6 @@ class AddRemoveItemFragment : BaseFragment() {
 
     private lateinit var dropDownItemsMenuView: AutoCompleteTextView
     private lateinit var dropDownBarcodesMenuView: AutoCompleteTextView
-    private lateinit var itemPhotoUrlLiveData: MutableLiveData<String>
-    private lateinit var dropDownItemsMenuLiveData: MutableLiveData<String>
-    private lateinit var dropDownBarcodesMenuLiveData: MutableLiveData<String>
 
     private lateinit var createItemBtn: FloatingActionButton
 
@@ -68,13 +65,7 @@ class AddRemoveItemFragment : BaseFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         dropDownItemsMenuView = binding.dropdownItemSelectorContentAddRemoveFragment
-        dropDownItemsMenuLiveData = sharedViewModel.itemNameContent
-
         dropDownBarcodesMenuView = binding.dropdownBarcodeSelectorContentAddRemoveFragment
-        dropDownBarcodesMenuLiveData = sharedViewModel.itemBarcodeContent
-
-        itemPhotoUrlLiveData = sharedViewModel.itemPhotoUrl
-
         createItemBtn = binding.fabCreateItemAddRemoveFragment
 
         //pokud nastaví fragment pode toho jestli přidáváme nebo odebíráme
@@ -101,7 +92,7 @@ class AddRemoveItemFragment : BaseFragment() {
             if (dropDownBarcodesMenuView.hasFocus()) {//trigne se jen pokud je aktivní view na kterém je nasazen doAfterTextChanged
 
                 val barcodeString = it.toString()
-                setDropdownsBasedOnBarcode(barcodeString)
+                sharedViewModel.setDropdownsBasedOnBarcode(barcodeString)
 
             }
         }
@@ -111,139 +102,8 @@ class AddRemoveItemFragment : BaseFragment() {
             if (dropDownItemsMenuView.hasFocus()) {//trigne se jen pokud je aktivní view na kterém je nasazen doAfterTextChanged
 
                 val itemNameString = it.toString()
-                setDropdownsBasedOnName(itemNameString)
+                sharedViewModel.setDropdownsBasedOnName(itemNameString)
 
-            }
-        }
-    }
-
-    private fun setDropdownsBasedOnName(itemNameString: String) {
-        //ověří jestli se položka s tímto názvem nachází ve skladu a případně jí vrátí
-        val item = returnWarehouseItemWithGivenParameters(itemName = itemNameString, itemBarcode = "", listOfAllWarehouseItems = sharedViewModel.localListOfAllItems)
-
-        if (item != null) {//pokud se položka nachází
-            dropDownBarcodesMenuLiveData.value = item.code //nastaví barcode odpovídající položce
-            itemPhotoUrlLiveData.value = item.photoURL //nastaví fotku odpovídající položce
-            createItemBtn.hide() //skryje možnost vytvoření nové položky
-        } else {//pokud se položka nenachází
-
-            if(addingMode)createItemBtn.show() //zobrazí možnost vytvoření nové položky
-            dropDownBarcodesMenuLiveData.value = "" //vymaže hodnotu v barcode poli
-            itemPhotoUrlLiveData.value = "" //nastaví defaultní obrázek
-
-        }
-    }
-
-    private fun setDropdownsBasedOnBarcode(barcodeString: String) {
-        Log.d("banány", barcodeString)
-
-        //ověří jestli se položka s tímto barcodem nachází ve skladu a případně jí vrátí
-        val item = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = barcodeString, listOfAllWarehouseItems = sharedViewModel.localListOfAllItems)
-
-        Log.d("banány", sharedViewModel.localListOfAllItems.size.toString())
-        if (item != null) {//pokud se položka nachází
-            Log.d("banány", item.name)
-            dropDownItemsMenuLiveData.value = item.name //nastaví název odpovídající barcodu
-            itemPhotoUrlLiveData.value = item.photoURL //nastaví fotku odpovídající položce
-            createItemBtn.hide() //skryje možnost vytvoření nové položky
-        } else {//pokud se položka nenachází
-            Log.d("banány", "barcode null")
-            if(addingMode) createItemBtn.show() //zobrazí možnost vytvoření nové položky
-            dropDownItemsMenuLiveData.value = "" //vymaže hodnotu v poli název
-            itemPhotoUrlLiveData.value = "" //nastaví defaultní obrázek
-        }
-    }
-
-    private fun returnWarehouseItemWithGivenParameters(itemName: String = "", itemBarcode: String = "", listOfAllWarehouseItems: MutableList<WarehouseItem>): WarehouseItem? {
-        var foundObject: WarehouseItem? = null
-
-        listOfAllWarehouseItems.any {
-            if (it.name == itemName || it.code == itemBarcode) {
-                foundObject = it
-                Log.d("hajdin", "Nalezeno - Item:" + foundObject!!.name + " Code:" + foundObject!!.code)
-                true //shoda našli jsme shodu podle jména nebo podle kódu
-            } else false //neshoda nic jsme nenanšli
-        }
-
-        return foundObject
-
-    }
-
-    private fun evaluateItemsForBarcodeDropDownMenu() {
-        var matchFound = false
-        //proveď jen pokud současné pole není prázný string
-        if (dropDownBarcodesMenuView.text.toString() != "") {
-            itemBarcodeCheckLoop@ for (item in sharedViewModel.localListOfAllItems) {
-                //pro každou položku se ptá jestli se zadaný text nerovná nějaké položce na listu všech položek
-
-                if (dropDownBarcodesMenuView.text.toString() == item.code) {
-                    createItemBtn.hide()//položka existuje skryje možnost vytvoření nové položky
-                    Log.d("Hajdin", "Skrývám na barcodu")
-
-                    if (dropDownItemsMenuView.text.toString() != item.name) {//ochrana proti zacyklení
-                        dropDownItemsMenuView.setText(item.name)
-                        Glide.with(requireContext())
-                            .load(item.photoURL)
-                            .placeholder(R.drawable.avatar_warehouse_item_primary_color)
-                            .error(R.drawable.avatar_warehouse_item_primary_color)
-                            .into(binding.ciItemProfileImageAddRemoveFragment)
-                    }
-
-                    matchFound = true
-                    break@itemBarcodeCheckLoop//při první shodě ukončí forloop
-                } else if (sharedViewModel.addRemoveFragmentMode == Constants.ADDING_STRING) { // zobrazí fab s možností vytvoření  pouze pokud jsme v módu pro přidání položky na sklad
-                    createItemBtn.show()//položka neexistuje zobrazí možnost vytvoření nové položky
-                    Log.d("Hajdin", "Odkrývám na barcodu")
-                } else if (sharedViewModel.addRemoveFragmentMode == Constants.REMOVING_STRING) {
-                    //pokud nedošlo ke shodě, zobraz v avataru defaultní obrázek
-                    Glide.with(requireContext())
-                        .load(R.drawable.avatar_warehouse_item_primary_color)
-                        .into(binding.ciItemProfileImageAddRemoveFragment)
-                }
-            }
-            //se nenašla shoda a pokud druhé pole již není prázný string, tak zapiš prázdný string do druhého pole
-            if (!matchFound && dropDownItemsMenuView.text.toString() != "") {
-                dropDownItemsMenuView.setText("")//pokud nedojde ke shodě barcodů, tak smaž obsah pole s názvem položky
-            }
-        }
-    }
-
-    private fun evaluateItemsForItemsDropDownMenu() {
-        var matchFound = false
-
-        //proveď jen pokud současné pole není prázný string
-        if (dropDownItemsMenuView.text.toString() != "") {
-            itemNameCheckLoop@ for (item in sharedViewModel.localListOfAllItems) {
-                if (dropDownItemsMenuView.text.toString() == item.name) {
-                    createItemBtn.hide()//položka existuje skryje možnost vytvoření nové položky
-                    Log.d("Hajdisn", "Skrývám na dropdownu")
-                    if (dropDownBarcodesMenuView.text.toString() != item.code) {//ochrana proti zacyklení
-                        dropDownBarcodesMenuView.setText(item.code)
-                        Glide.with(requireContext())
-                            .load(item.photoURL)
-                            .placeholder(R.drawable.avatar_warehouse_item_primary_color)
-                            .error(R.drawable.avatar_warehouse_item_primary_color)
-                            .into(binding.ciItemProfileImageAddRemoveFragment)
-                    }
-                    matchFound = true
-                    break@itemNameCheckLoop //při první shodě ukončí forloop
-                } else if (sharedViewModel.addRemoveFragmentMode == Constants.ADDING_STRING) { // zobrazí fab s možností vytvoření  pouze pokud jsme v módu pro přidání položky na sklad
-                    createItemBtn.show()//položka neexistuje zobrazí možnost vytvoření nové položky
-                    Log.d("Hajdin", "Odkrývám na dropdownu")
-                } else if (sharedViewModel.addRemoveFragmentMode == Constants.REMOVING_STRING) {
-                    //pokud nedošlo ke shodě, zobraz v avataru defaultní obrázek
-                    Glide.with(requireContext())
-                        .load(R.drawable.avatar_warehouse_item_primary_color)
-                        .into(binding.ciItemProfileImageAddRemoveFragment)
-                }
-            }
-
-            //se nenašla shoda a pokud druhé pole již není prázný string, tak zapiš prázdný string do druhého pole
-            if (!matchFound && dropDownBarcodesMenuView.text.toString() != "") {
-                Log.d("Hajdin", "dropdownwipe")
-                Log.d("Hajdin", "Hodnota:" + sharedViewModel.itemBarcodeContent.value.toString())
-                dropDownBarcodesMenuView.setText("")//pokud nedojde ke shodě názvů, tak smaž obsah pole s barcodem
-                Log.d("Hajdin", "Hodnota:" + sharedViewModel.itemBarcodeContent.value.toString())
             }
         }
     }
@@ -353,6 +213,14 @@ class AddRemoveItemFragment : BaseFragment() {
                         findNavController().navigateUp()
                         hideKeyboard(activity as MainActivity)
                     }
+                    is OwnWarehousesDetailFragmentViewModel.Event.SetVisibilityOfCreateItemBtnt -> {
+                        if (it.visibility){
+                            createItemBtn.show()
+                        }else{
+                            createItemBtn.hide()
+                        }
+
+                    }
                     /* is OwnWarehousesDetailFragmentViewModel.Event.CreateEditDebt -> {
                         val action = FriendDetailFragmentDirections.actionFriendDetailFragmentToAddEditDebtFragment(it.debtID,
                             viewModel.friendshipData.value!!,
@@ -386,8 +254,7 @@ class AddRemoveItemFragment : BaseFragment() {
                 // Uloží předaný argument ze skenneru do proměnné barcode v sharedviewmodelu
                 sharedViewModel.itemBarcodeContent.postValue(result)
                 //nastaví dropdowny v závislosti na získané hodnotě ze skenneru
-                setDropdownsBasedOnBarcode(result!!)
-
+                sharedViewModel.setDropdownsBasedOnBarcode(result!!)
             }
         }
         navBackStackEntry.lifecycle.addObserver(observer)
