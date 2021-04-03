@@ -52,7 +52,9 @@
             android:background="@color/whiteColor"
             app:titleTextColor="@color/primaryColor"
             android:minHeight="100dp"
-            android:theme="?attr/actionBarTheme" />
+            android:theme="?attr/actionBarTheme" >
+
+        </androidx.appcompat.widget.Toolbar>
 
         <fragment
             android:id="@+id/fragment"
