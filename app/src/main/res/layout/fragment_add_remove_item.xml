@@ -25,6 +25,18 @@
         android:layout_height="match_parent"
         tools:context=".warehouse.addRemoveItem.AddRemoveItemFragment">
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_sucessErrorAnim_AddRemoveItemFragment"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/btn_AddRemoveItem_addRemoveFragment"
+            app:layout_constraintEnd_toEndOf="@+id/btn_AddRemoveItem_addRemoveFragment"
+            app:layout_constraintStart_toStartOf="@+id/btn_AddRemoveItem_addRemoveFragment"
+            app:lottie_fileName="success.json"
+            />
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/linearProgressIndicator2"
             android:layout_width="match_parent"
@@ -36,6 +48,7 @@
             app:showAnimationBehavior="outward" />
 
         <ScrollView
+            android:id="@+id/scrollView2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
@@ -47,7 +60,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -137,12 +149,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
+                    android:focusable="true"
                     android:src="@drawable/ic_plus"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@+id/ci_ItemProfileImage_AddRemoveItemFragment"
                     app:layout_constraintEnd_toEndOf="@+id/ci_ItemProfileImage_AddRemoveItemFragment"
-                    app:layout_constraintTop_toTopOf="@+id/ci_ItemProfileImage_AddRemoveItemFragment"
-                    android:focusable="true" />
+                    app:layout_constraintTop_toTopOf="@+id/ci_ItemProfileImage_AddRemoveItemFragment" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/fab_startScan_addRemoveFragment"
@@ -150,13 +162,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:clickable="true"
+                    android:focusable="true"
                     android:onClick="@{()->fragmentClass.navigateToScanner()}"
                     android:src="@drawable/ic_scaner"
                     app:layout_constraintBottom_toBottomOf="@+id/dropdownBarcodeSelector_addRemoveFragment"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/dropdownBarcodeSelector_addRemoveFragment"
-                    app:layout_constraintVertical_bias="0.19"
-                    android:focusable="true" />
+                    app:layout_constraintVertical_bias="0.19" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

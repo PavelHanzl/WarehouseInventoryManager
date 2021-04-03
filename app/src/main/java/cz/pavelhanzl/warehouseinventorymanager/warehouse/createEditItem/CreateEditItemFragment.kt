@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.github.drjacky.imagepicker.ImagePicker
+
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateEditItemBinding
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
@@ -53,6 +54,7 @@ class CreateEditItemFragment : BaseFragment() {
 binding.ciItemProfileImageAddRemoveFragment.setOnClickListener{
 
     ImagePicker.with(this)
+        .cropOval()
         .cropSquare()	    			//Crop image(Optional), Check Customization for more option
         .compress(1024)			//Final image size will be less than 1 MB(Optional)
         .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)

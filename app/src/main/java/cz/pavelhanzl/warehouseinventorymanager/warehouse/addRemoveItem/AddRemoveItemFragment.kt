@@ -1,9 +1,12 @@
 package cz.pavelhanzl.warehouseinventorymanager.warehouse.addRemoveItem
 
+import android.animation.Animator
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -19,13 +22,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentAddRemoveItemBinding
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehousesDetailFragmentViewModel
-import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
-import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
-import cz.pavelhanzl.warehouseinventorymanager.repository.getField
-import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
+import cz.pavelhanzl.warehouseinventorymanager.repository.*
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
+import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehousesDetailFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_add_remove_item.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.onEach
@@ -216,14 +216,20 @@ class AddRemoveItemFragment : BaseFragment() {
                         hideKeyboard(activity as MainActivity)
                     }
                     is WarehousesDetailFragmentViewModel.Event.SetVisibilityOfCreateItemBtnt -> {
-                        if (it.visibility){
+                        if (it.visibility) {
                             Log.d("create", it.visibility.toString())
                             createItemBtn.show()
-                        }else{
+                        } else {
                             Log.d("create", it.visibility.toString())
                             createItemBtn.hide()
                         }
 
+                    }
+                    WarehousesDetailFragmentViewModel.Event.PlaySuccessAnimation -> {
+                        playSuccessErrorAnimation(true)
+                    }
+                    WarehousesDetailFragmentViewModel.Event.PlayErrorAnimation -> {
+                        playSuccessErrorAnimation(false)
                     }
                     /* is WarehousesDetailFragmentViewModel.Event.CreateEditDebt -> {
                         val action = FriendDetailFragmentDirections.actionFriendDetailFragmentToAddEditDebtFragment(it.debtID,
@@ -282,7 +288,7 @@ class AddRemoveItemFragment : BaseFragment() {
         (activity as MainActivity).supportActionBar!!.title = "Přidat položku na sklad"
 
         //nastaví private variable o módu tohoto fragmentu
-        sharedViewModel.addingMode=true
+        sharedViewModel.addingMode = true
 
     }
 
@@ -295,8 +301,54 @@ class AddRemoveItemFragment : BaseFragment() {
         binding.tfItemCountAddRemoveFragment.hint = "Zadejte počet odebíraných kusů"
 
         //nastaví private variable o módu tohoto fragmentu
-        sharedViewModel.addingMode=false
+        sharedViewModel.addingMode = false
 
+    }
+
+    private fun playSuccessErrorAnimation(success: Boolean) {
+
+        //nastaví odpovídající animaci
+        if (success) {
+            binding.lottieSucessErrorAnimAddRemoveItemFragment.setAnimation("success.json")
+
+            //zavibruje
+            vibratePhoneSuccess(requireContext())
+        } else {
+            binding.lottieSucessErrorAnimAddRemoveItemFragment.setAnimation("error.json")
+            //zavibruje
+            vibratePhoneError(requireContext())
+        }
+
+
+
+        binding.lottieSucessErrorAnimAddRemoveItemFragment.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator?) {
+                //Log.d("Animation:", "start")
+
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                //Log.d("Animation:", "end")
+                //skryje animaci po dokončení
+                try {
+                    binding.lottieSucessErrorAnimAddRemoveItemFragment.visibility = GONE
+                } catch (ex: Exception) {
+                    ex.toString()
+                }
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+                //Log.e("Animation:", "cancel")
+            }
+
+            override fun onAnimationRepeat(animation: Animator?) {
+                //Log.e("Animation:", "repeat")
+            }
+        })
+
+        //zobrazí a přehraje animaci
+        binding.lottieSucessErrorAnimAddRemoveItemFragment.visibility = VISIBLE
+        binding.lottieSucessErrorAnimAddRemoveItemFragment.playAnimation()
     }
 
 

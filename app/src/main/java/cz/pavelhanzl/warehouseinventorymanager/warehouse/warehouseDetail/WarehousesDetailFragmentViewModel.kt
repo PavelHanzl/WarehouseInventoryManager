@@ -60,6 +60,8 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
 
     sealed class Event {
         object NavigateBack : Event()
+        object PlaySuccessAnimation: Event()
+        object PlayErrorAnimation: Event()
         data class SetVisibilityOfCreateItemBtnt(val visibility: Boolean) : Event()
         //data class CreateEdit(val debtID: String?) : Event()
     }
@@ -227,10 +229,17 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
                         repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemRemoved), itemNameContent.value.toString(), "-$count",warehouseObject.value!!.warehouseID)
                     }
 
+                    //přehraje animaci úspěchu
+                    GlobalScope.launch { eventChannel.send(Event.PlaySuccessAnimation) }
+
 
                     Log.d("Transakce", "Transaction success!")
                 }.addOnFailureListener {
                     _loading.postValue(false)
+
+                    //přehraje animaci neúspěchu
+                    GlobalScope.launch { eventChannel.send(Event.PlayErrorAnimation) }
+
                     Log.d("Transakce", "Transaction failure!!!!!!!!!!"+ it.message)
                 }
             } catch (e: Exception){
