@@ -115,6 +115,9 @@
     <string name="initialQuantity">"Počáteční množství: "</string>
     <string name="editItem">Upravit položku</string>
     <string name="CreateNewItem">Vytvořit novou položku</string>
+    <string name="itemWithZhisNameAlreadyExists">Položka s tímto názvem již na skladě existuje. Zadejte prosím unikátní název položky.</string>
+    <string name="itemWithThisBarcodeAreadyExistsPart1">"Pod tímto čárovým kódem již máte vedenou položku: "</string>
+    <string name="itemWithThisBarcodeAreadyExistsPart2">. Zadejte prosím unikátní čárový kód.</string>
 
 
 </resources>

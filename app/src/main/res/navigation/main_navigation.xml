@@ -89,7 +89,7 @@
             app:destination="@id/scannerFragment" />
         <action
             android:id="@+id/action_warehouseDetailFragment_to_addRemoveItem"
-            app:destination="@id/addRemoveItem" />
+            app:destination="@id/addRemoveItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/itemDetailFragment"
@@ -121,7 +121,7 @@
             app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/addRemoveItem"
+        android:id="@+id/addRemoveItemFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.addRemoveItem.AddRemoveItemFragment"
         tools:layout="@layout/fragment_add_remove_item" >
         <action

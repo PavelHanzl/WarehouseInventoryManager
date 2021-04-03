@@ -24,6 +24,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
 
     var createEditItemFragmentMode: String = Constants.CREATING_STRING
     var editMode = false
+    var valid = true
 
     //přichází v oncreate z fragmentu, pokud jedeme v editmodu
     var editedWarehouseItem = WarehouseItem()
@@ -117,10 +118,10 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
     }
 
     fun onCreateEditItemButtonClicked() {
-
+        Log.d("Item", "Crt1" + valid.toString())
         //check validity dat
         if (!isValid()) return
-
+        Log.d("Item", "Crt2" + valid.toString())
         GlobalScope.launch(Dispatchers.IO) {
 
             //zobrazí progressbar
@@ -192,7 +193,8 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
     }
 
     fun isValid(): Boolean {
-        var valid = true
+        valid = true
+
         //vyčistí případné errory z předchozího ověření
         _itemNameError.value = ""
         _itemBarcodeError.value = ""
@@ -206,12 +208,8 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
             valid = false
         }
 
-        //položka se stejným názvem již existuje
-        var existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = itemNameContent.value!!,itemBarcode = "",listOfAllWarehouseItems = localListOfAllItems)
-        if (existingWarehouseItem != null){
-            _itemNameError.value = "Položka s tímto názvem již na skladě existuje. Zadejte prosím unikátní název položky."
-            valid = false
-        }
+        checkIfThereIsNoItemWithSameNameInWH()
+
 
 
 
@@ -220,12 +218,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
             valid = false
         }
 
-        //položka se stejným čárovým kódem již existuje
-        existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = "",itemBarcode = itemBarcodeContent.value!!,listOfAllWarehouseItems = localListOfAllItems)
-        if (existingWarehouseItem != null){
-            _itemBarcodeError.value = "Položka s tímto čárovým kódem již na skladě existuje. Zadejte prosím unikátní čárový kód."
-            valid = false
-        }
+        checkIfThereIsNoItemWithSameBarcodeInWH()
 
         if (initialItemCountContent.value!!.isEmpty() || initialItemCountContent.value!!.toDouble() < 0.0) {
             _initialItemCountError.value = stringResource(R.string.typeInValueGraterOrEqualToZero)
@@ -246,6 +239,31 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
 
 
         return valid
+    }
+
+    fun checkIfThereIsNoItemWithSameBarcodeInWH(barcode:String = itemBarcodeContent.value!!) {
+        //todo toto spustit jen v případě že je fragment v módu vytváření, u editace by tato podmínka nedávala smysl
+        Log.d("resul","Barcode:" + barcode)
+        //položka se stejným čárovým kódem již existuje
+        var existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = barcode, listOfAllWarehouseItems = localListOfAllItems)
+        if (existingWarehouseItem != null) {
+            _itemBarcodeError.value = stringResource(R.string.itemWithThisBarcodeAreadyExistsPart1) + existingWarehouseItem.name + stringResource(R.string.itemWithThisBarcodeAreadyExistsPart2)
+            valid = false
+        } else {
+            _itemBarcodeError.value =""
+        }
+    }
+
+    fun checkIfThereIsNoItemWithSameNameInWH(name:String = itemNameContent.value!!){
+        //todo toto spustit jen v případě že je fragment v módu vytváření, u editace by tato podmínka nedávala smysl
+        //položka se stejným názvem již existuje
+        var existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = name, itemBarcode = "", listOfAllWarehouseItems = localListOfAllItems)
+        if (existingWarehouseItem != null) {
+            _itemNameError.value = stringResource(R.string.itemWithZhisNameAlreadyExists)
+            valid = false
+        } else {
+            _itemNameError.value = ""
+        }
     }
 
     private suspend fun createItemAndSaveToDb(itemDocRef: DocumentReference, profileImageURL: Uri?) {

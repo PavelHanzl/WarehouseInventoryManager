@@ -252,7 +252,7 @@ class AddRemoveItemFragment : BaseFragment() {
 
     //zajišťuje předání argumentu z předchozí aktivity (v tomto případě získá result pokud přichází ze skenneru)
     private fun registerObserverForResultOfScanner() {
-        val navBackStackEntry = findNavController().getBackStackEntry(R.id.addRemoveItem)
+        val navBackStackEntry = findNavController().getBackStackEntry(R.id.addRemoveItemFragment)
 
         // Create observer and add it to the NavBackStackEntry's lifecycle
         val observer = LifecycleEventObserver { _, event ->
@@ -279,6 +279,7 @@ class AddRemoveItemFragment : BaseFragment() {
     }
 
     fun navigateToScanner() {
+        Log.d("Navigujus", "navigace ted")
         val action = AddRemoveItemFragmentDirections.actionAddRemoveItemToScannerFragment(Constants.READING_STRING)
         Navigation.findNavController(requireView()).navigate(action)
     }

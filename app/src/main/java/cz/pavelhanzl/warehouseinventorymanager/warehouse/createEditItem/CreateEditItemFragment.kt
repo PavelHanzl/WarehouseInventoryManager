@@ -3,10 +3,14 @@ package cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditItem
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -48,21 +52,30 @@ class CreateEditItemFragment : BaseFragment() {
         //binduje a přiřazuje viewmodel
         binding = FragmentCreateEditItemBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
+        binding.fragmentClass = this
         binding.lifecycleOwner = viewLifecycleOwner
 
         //pokud je předán objekt položky skladu v safeargs, tak jedeme v editmodu, jinak módu vytváření
-        if(args.warehouseItemObject != null) runFragmentInEditMode() else runFragmentInCreateMode()
+        if (args.warehouseItemObject != null) runFragmentInEditMode() else runFragmentInCreateMode()
 
 
-binding.ciItemProfileImageCreateEditItemFragment.setOnClickListener{
+        binding.ciItemProfileImageCreateEditItemFragment.setOnClickListener {
 
-    ImagePicker.with(this)
-        .cropOval()
-        .cropSquare()	    			//Crop image(Optional), Check Customization for more option
-        .compress(1024)			//Final image size will be less than 1 MB(Optional)
-        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-        .start()
-}
+            ImagePicker.with(this)
+                .cropOval()
+                .cropSquare()                    //Crop image(Optional), Check Customization for more option
+                .compress(1024)            //Final image size will be less than 1 MB(Optional)
+                .maxResultSize(1080, 1080)    //Final image resolution will be less than 1080 x 1080(Optional)
+                .start()
+        }
+
+        binding.tfItemNameContentCreateEditItemFragment.doAfterTextChanged {
+            viewModel.checkIfThereIsNoItemWithSameNameInWH(it.toString())
+        }
+
+        binding.tfItemBarcodeContentCreateEditItemFragment.doAfterTextChanged {
+            viewModel.checkIfThereIsNoItemWithSameBarcodeInWH(it.toString())
+        }
 
 
 // Inflate the layout for this fragment
@@ -79,14 +92,17 @@ binding.ciItemProfileImageCreateEditItemFragment.setOnClickListener{
                         hideKeyboard(activity as MainActivity)
                     }
                     CreateEditItemFragmentViewModel.Event.NavigatePopUpBackStackToWarehouseDetail -> {
-                        findNavController().popBackStack(R.id.warehouseDetailFragment,false)
+                        findNavController().popBackStack(R.id.warehouseDetailFragment, false)
                         hideKeyboard(activity as MainActivity)
                     }
                 }
             }.observeInLifecycle(viewLifecycleOwner)
+
+        registerObserverForResultOfScanner()
     }
 
     fun navigateToScanner() {
+        Log.d("Naviguju", "navigace ted")
         val action = CreateEditItemFragmentDirections.actionCreateEditItemFragmentToScannerFragment(Constants.READING_STRING)
         Navigation.findNavController(requireView()).navigate(action)
     }
@@ -102,11 +118,8 @@ binding.ciItemProfileImageCreateEditItemFragment.setOnClickListener{
             val byteArray = inputstream!!.readBytes()
             viewModel.itemProfilePhoto.value = byteArray
 
-
             //You can get File object from intent
             //val file: File = ImagePicker.getFile(data)!!
-
-
 
             //You can also get File Path from intent
             //val filePath:String = ImagePicker.getFilePath(data)!!
@@ -116,9 +129,6 @@ binding.ciItemProfileImageCreateEditItemFragment.setOnClickListener{
             Toast.makeText(requireContext(), "Task Cancelled", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
 
     private fun runFragmentInEditMode() {
         //nastaví editmode ve viewmodelu a vytvoří objekt editované položky skladu na základě skladu předáného v safeargs
@@ -131,7 +141,6 @@ binding.ciItemProfileImageCreateEditItemFragment.setOnClickListener{
         viewModel.itemPriceContent.postValue(args.warehouseItemObject!!.price.toString())
         viewModel.initialItemCountContent.postValue(args.warehouseItemObject!!.count.toString())
         viewModel.itemNoteContent.postValue(args.warehouseItemObject!!.note)
-
 
         //nastaví odpovídající title v actionbaru "Ostatní sklady"
         (activity as MainActivity).supportActionBar!!.title = getString(R.string.editItem)
@@ -158,5 +167,34 @@ binding.ciItemProfileImageCreateEditItemFragment.setOnClickListener{
 
     }
 
+    //zajišťuje předání argumentu z předchozí aktivity (v tomto případě získá result pokud přichází ze skenneru)
+    private fun registerObserverForResultOfScanner() {
+        val navBackStackEntry = findNavController().getBackStackEntry(R.id.createEditItemFragment)
+
+        // Create observer and add it to the NavBackStackEntry's lifecycle
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME
+                && navBackStackEntry.savedStateHandle.contains("scannedBarcode")
+            ) {
+                val result = navBackStackEntry.savedStateHandle.get<String>("scannedBarcode")
+
+                Log.d("resultik", result.toString())
+
+                // Uloží předaný argument ze skenneru do proměnné barcode v sharedviewmodelu
+                viewModel.itemBarcodeContent.postValue(result)
+                viewModel.checkIfThereIsNoItemWithSameBarcodeInWH(result.toString())
+
+            }
+        }
+        navBackStackEntry.lifecycle.addObserver(observer)
+
+        // As addObserver() does not automatically remove the observer, we
+        // call removeObserver() manually when the view lifecycle is destroyed
+        viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                navBackStackEntry.lifecycle.removeObserver(observer)
+            }
+        })
+    }
 
 }

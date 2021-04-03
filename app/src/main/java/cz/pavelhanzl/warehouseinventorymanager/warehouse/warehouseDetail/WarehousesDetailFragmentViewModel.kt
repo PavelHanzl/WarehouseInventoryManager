@@ -229,6 +229,7 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
                         repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemRemoved), itemNameContent.value.toString(), "-$count",warehouseObject.value!!.warehouseID)
                     }
 
+                    //todo dořešit aby se event zkonzumoval už na skenneru
                     //přehraje animaci úspěchu
                     GlobalScope.launch { eventChannel.send(Event.PlaySuccessAnimation) }
 
