@@ -31,11 +31,11 @@ class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>) :
                 .into(itemView.rv_ownWarehousesDetailListItemProfileImage)
         }
 
-        fun bindID(id: String) {
+        fun bindID(warehouseItem: WarehouseItem) {
             itemView.setOnClickListener {
-                var action = WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToItemDetailFragment(id)
+                var action = WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToItemDetailFragment(warehouseItem)
                 itemView.findNavController().navigate(action)
-                Log.d("test", id)
+                Log.d("test", warehouseItem.name)
             }
 
         }
@@ -55,8 +55,8 @@ class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>) :
     override fun onBindViewHolder(holder: WarehouseItemViewHolder, position: Int, model: WarehouseItem) {
 
         holder.bindVisible(model)
-        var id = snapshots.getSnapshot(position).id
-        holder.bindID(id)
+        var warehouseItem = snapshots.getSnapshot(position).toObject(WarehouseItem::class.java)
+        holder.bindID(warehouseItem!!)
     }
 
     override fun onViewAttachedToWindow(holder: WarehouseItemViewHolder) {

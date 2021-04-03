@@ -11,7 +11,7 @@
 
         <variable
             name="viewmodel"
-            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.itemDetail.ItemDetaiFragmentViewModel" />
+            type="cz.pavelhanzl.warehouseinventorymanager.warehouse.itemDetail.ItemDetailFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +49,8 @@
                     android:layout_width="140dp"
                     android:layout_height="140dp"
                     android:elevation="@dimen/cardview_default_elevation"
-                    android:src="@drawable/ic_avatar_warehouse_item_detail_primary_color"
+                    android:src="@drawable/avatar_warehouse_item_detail_primary_color"
+                    itemDetailImageUrl="@{viewmodel.itemProfilePhotoUrl}"
                     app:civ_border_color="@color/primaryColor"
                     app:civ_border_width="2dp"
                     app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat"
@@ -62,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
                     android:layout_marginTop="15dp"
-                    android:background="@color/darkGrayColor"
+                    android:background="@color/blue1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

@@ -12,7 +12,7 @@ import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 class ItemDetailFragment : BaseFragment() {
     private val args: ItemDetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentItemDetailBinding
-    lateinit var viewModel: ItemDetaiFragmentViewModel
+    lateinit var viewModel: ItemDetailFragmentViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,8 +20,8 @@ class ItemDetailFragment : BaseFragment() {
 
         //předá argumenty do viewmodelu
         if (savedInstanceState == null) {
-            viewModel = ViewModelProvider(this).get(ItemDetaiFragmentViewModel::class.java)
-            viewModel.setdata(args.itemId)
+            viewModel = ViewModelProvider(this).get(ItemDetailFragmentViewModel::class.java)
+            viewModel.setdata(args.selectedWarehouseItemObject)
         }
     }
 

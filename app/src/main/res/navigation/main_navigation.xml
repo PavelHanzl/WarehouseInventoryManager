@@ -96,12 +96,12 @@
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.itemDetail.ItemDetailFragment"
         android:label="@string/item_detail"
         tools:layout="@layout/fragment_item_detail">
-        <argument
-            android:name="itemId"
-            app:argType="string" />
         <action
             android:id="@+id/action_itemDetailFragment_to_createEditItemFragment"
             app:destination="@id/createEditItemFragment" />
+        <argument
+            android:name="selectedWarehouseItemObject"
+            app:argType="cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem" />
     </fragment>
     <action android:id="@+id/action_global_listOfWarehousesFragment_false" app:destination="@id/listOfWarehousesFragment">
         <argument
