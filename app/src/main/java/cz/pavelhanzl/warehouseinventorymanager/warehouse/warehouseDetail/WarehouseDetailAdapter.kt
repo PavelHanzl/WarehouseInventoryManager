@@ -16,10 +16,10 @@ import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import kotlinx.android.synthetic.main.rv_own_warehousesdetail_list_item.view.*
 
-class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>) :
+class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>, var ownWarehouse: Boolean) :
     FirestoreRecyclerAdapter<WarehouseItem, WarehouseDetailAdapter.WarehouseItemViewHolder>(options) {
 
-    class WarehouseItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class WarehouseItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindVisible(warehouseItem: WarehouseItem) {
             itemView.rv_ownWarehousesDetailListItemName.text = warehouseItem.name
             itemView.rv_ownWarehousesDetailListItemCount.text = warehouseItem.count.toString()
@@ -33,7 +33,7 @@ class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>) :
 
         fun bindID(warehouseItem: WarehouseItem) {
             itemView.setOnClickListener {
-                var action = WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToItemDetailFragment(warehouseItem)
+                val action = WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToItemDetailFragment(warehouseItem, ownWarehouse)
                 itemView.findNavController().navigate(action)
                 Log.d("test", warehouseItem.name)
             }

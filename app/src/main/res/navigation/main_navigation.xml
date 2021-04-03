@@ -102,6 +102,9 @@
         <argument
             android:name="selectedWarehouseItemObject"
             app:argType="cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem" />
+        <argument
+            android:name="ownWarehouse"
+            app:argType="boolean" />
     </fragment>
     <action android:id="@+id/action_global_listOfWarehousesFragment_false" app:destination="@id/listOfWarehousesFragment">
         <argument

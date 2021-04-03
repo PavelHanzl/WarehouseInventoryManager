@@ -118,6 +118,7 @@
     <string name="itemWithZhisNameAlreadyExists">Položka s tímto názvem již na skladě existuje. Zadejte prosím unikátní název položky.</string>
     <string name="itemWithThisBarcodeAreadyExistsPart1">"Pod tímto čárovým kódem již máte vedenou položku: "</string>
     <string name="itemWithThisBarcodeAreadyExistsPart2">. Zadejte prosím unikátní čárový kód.</string>
+    <string name="itemHasAnyNote">Položka nemá vyplněnou poznámku.</string>
 
 
 </resources>

@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.rv_own_warehouses_list_item.view.*
 class ListOfWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var ownWarehouse: Boolean) : FirestoreRecyclerAdapter<Warehouse, ListOfWarehousesAdapter.WarehouseViewHolder>(options) {
 
     inner class WarehouseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val holders = itemView
 
         fun bindVisible(warehouse: Warehouse) {
             itemView.rv_ownWarehousesListWarehouseName.text = warehouse.name
@@ -33,7 +32,7 @@ class ListOfWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var 
 
         fun  bindID(warehouseID: String){
             itemView.setOnClickListener{
-                var action = ListOfWarehousesFragmentDirections.actionListOfWarehousesFragmentToWarehouseDetailFragment(warehouseID, ownWarehouse)
+                val action = ListOfWarehousesFragmentDirections.actionListOfWarehousesFragmentToWarehouseDetailFragment(warehouseID, ownWarehouse)
                 itemView.findNavController().navigate(action)
                 Log.d("test",warehouseID)
             }
@@ -59,7 +58,6 @@ class ListOfWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var 
     ) {
         holder.bindVisible(model)
         holder.bindID(snapshots.getSnapshot(position).id)
-        holder.holders.animate()
 
     }
 

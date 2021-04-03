@@ -4,9 +4,11 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
+import cz.pavelhanzl.warehouseinventorymanager.stringResource
 
 class ItemDetailFragmentViewModel: BaseViewModel() {
     val TAG = "ItemDetailFragmentVM"
@@ -77,6 +79,10 @@ class ItemDetailFragmentViewModel: BaseViewModel() {
         _itemPrice.value = selectedWarehouseItem.price.toString()
         _totalPrice.value = (selectedWarehouseItem.count * selectedWarehouseItem.price).toString()
         _itemNote.value = selectedWarehouseItem.note
+
+        if(_itemNote.value!!.isEmpty()||_itemNote.value!! == ""){
+            _itemNote.value = stringResource(R.string.itemHasAnyNote)
+        }
         _itemProfilePhotoUrl.value=selectedWarehouseItem.photoURL
     }
 

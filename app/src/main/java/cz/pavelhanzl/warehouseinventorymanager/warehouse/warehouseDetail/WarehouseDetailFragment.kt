@@ -270,7 +270,7 @@ class WarehouseDetailFragment : BaseFragment() {
         //nastaví recycleview
         val query = db.collection("warehouses").document(args.warehouseID).collection("items")
         val options = FirestoreRecyclerOptions.Builder<WarehouseItem>().setQuery(query, WarehouseItem::class.java).setLifecycleOwner(this).build()
-        val ownWarehouseDetailAdapter = WarehouseDetailAdapter(options)
+        val ownWarehouseDetailAdapter = WarehouseDetailAdapter(options,args.ownWarehouse)
 
         rv_ownWarehouseDetailList.apply {
             layoutManager = LinearLayoutManager(activity)
