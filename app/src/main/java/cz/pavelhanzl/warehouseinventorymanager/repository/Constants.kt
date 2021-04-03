@@ -2,6 +2,7 @@ package cz.pavelhanzl.warehouseinventorymanager.repository
 
 object Constants {
     const val MIN_PASSWORD_LENGTH = 6
+    const val MAX_NOTE_LENGTH = 300
 
     const val ADDING_STRING = "adding"
     const val REMOVING_STRING = "removing"

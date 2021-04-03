@@ -48,7 +48,7 @@
 
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ci_ItemProfileImage_AddRemoveFragment"
+                android:id="@+id/ci_ItemProfileImage_createEditItemFragment"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_marginEnd="16dp"
@@ -71,7 +71,7 @@
                 android:hint="@string/enterItemName"
                 app:errorEnabled="true"
                 app:errorText="@{viewmodel.itemNameError}"
-                app:layout_constraintEnd_toStartOf="@+id/ci_ItemProfileImage_AddRemoveFragment"
+                app:layout_constraintEnd_toStartOf="@+id/ci_ItemProfileImage_createEditItemFragment"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -94,7 +94,7 @@
                 android:hint="@string/enterBarcode"
                 app:errorEnabled="true"
                 app:errorText="@{viewmodel.itemBarcodeError}"
-                app:layout_constraintEnd_toStartOf="@+id/fab_startScan_addRemoveFragment"
+                app:layout_constraintEnd_toStartOf="@+id/fab_startScan_createEditItemFragment"
                 app:layout_constraintStart_toStartOf="@+id/tf_itemName_createEditItemFragment"
                 app:layout_constraintTop_toBottomOf="@+id/tf_itemName_createEditItemFragment">
 
@@ -155,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/Note"
                 app:counterEnabled="true"
-                app:counterMaxLength="200"
+                app:counterMaxLength="@{Constants.MAX_NOTE_LENGTH}"
                 app:errorEnabled="true"
                 app:errorText="@{viewmodel.itemNoteError}"
                 app:layout_constraintEnd_toEndOf="@+id/tf_itemPrice_createEditItemFragment"
@@ -172,7 +172,7 @@
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_startScan_addRemoveFragment"
+                android:id="@+id/fab_startScan_createEditItemFragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -214,7 +214,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <Button
-        android:id="@+id/btn_AddRemoveItem_addRemoveFragment"
+        android:id="@+id/btn_CreateEditItem_createEditItemFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

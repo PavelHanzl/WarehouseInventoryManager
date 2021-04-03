@@ -110,6 +110,11 @@
     <string name="enterInitialNumberOfItems">Zadejte počáteční počet kusů</string>
     <string name="enterItemPrice">Zadejte cenu za jednotku</string>
     <string name="enterItemName">Zadejte název položky</string>
+    <string name="typeInValueGraterOrEqualToZero">Zadejte hodnotu větší nebo rovnou nule!</string>
+    <string name="newItemWasCreated">Vytvořena nová položka skladu.</string>
+    <string name="initialQuantity">"Počáteční množství: "</string>
+    <string name="editItem">Upravit položku</string>
+    <string name="CreateNewItem">Vytvořit novou položku</string>
 
 
 </resources>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="cz.pavelhanzl.warehouseinventorymanager.repository.Constants"/>
         <variable
             name="viewmodel"
             type="cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditWarehouse.CreateEditWarehouseFragmentViewModel" />
@@ -87,7 +87,7 @@
                     android:layout_marginTop="16dp"
                     android:hint="@string/Note"
                     app:counterEnabled="true"
-                    app:counterMaxLength="200"
+                    app:counterMaxLength="@{Constants.MAX_NOTE_LENGTH}"
                     app:errorEnabled="true"
                     app:errorText="@{viewmodel.warehouseNoteError}"
                     app:layout_constraintEnd_toEndOf="@+id/tf_ownWarehouseName_FragmentCreateWarehouse"

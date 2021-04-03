@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentReference
 import cz.pavelhanzl.warehouseinventorymanager.R
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
@@ -21,7 +22,8 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
 
     val TAG = "CreateWarehouseVM"
     var editMode = false
-    var edittedWarehouse: Warehouse = Warehouse()
+    //přichází v oncreate z fragmentu, pokud jedeme v editmodu
+    var editedWarehouse: Warehouse = Warehouse()
 
     var warehouseNameContent = MutableLiveData<String>("")
     var warehouseNoteContent = MutableLiveData<String>("")
@@ -80,7 +82,7 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
                     editWarehouseAndSaveToDb(profileImageURL)
 
                     //log o úpravě
-                    repoComunicationLayer.createWarehouseLogItem("Prováděny úpravy základních informací o skladu.", warehouseID = edittedWarehouse.warehouseID)
+                    repoComunicationLayer.createWarehouseLogItem("Prováděny úpravy základních informací o skladu.", warehouseID = editedWarehouse.warehouseID)
                 } else {
                     //vytváříme
                     createWarehouseAndSaveToDb(warehouseDocRef, profileImageURL)
@@ -115,15 +117,15 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
         warehouse.note = warehouseNoteContent.value!!
 
         //pokud užvatel nahrál novou fotku, tak zapíše novou url, jinak nechá původní
-        warehouse.photoURL = profileImageURL?.toString() ?: edittedWarehouse.photoURL
+        warehouse.photoURL = profileImageURL?.toString() ?: editedWarehouse.photoURL
 
         //pokud se nacházíme v editmodu, tak není potřeba opět nastavovat id, proto si jej vezmeme z upravovaného objektu
-        warehouse.warehouseID = edittedWarehouse.warehouseID
+        warehouse.warehouseID = editedWarehouse.warehouseID
 
         //neměnné hodnoty, zachováváme z původního objektu
-        warehouse.owner = edittedWarehouse.owner
-        warehouse.createDate = edittedWarehouse.createDate
-        warehouse.users = edittedWarehouse.users
+        warehouse.owner = editedWarehouse.owner
+        warehouse.createDate = editedWarehouse.createDate
+        warehouse.users = editedWarehouse.users
 
         //zapíše do původního již vytvořeného dokumentu
         db.collection("warehouses").document(warehouse.warehouseID).set(warehouse)
@@ -158,7 +160,7 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
             valid = false
         }
 
-        if (warehouseNoteContent.value!!.length > 200) {
+        if (warehouseNoteContent.value!!.length > Constants.MAX_NOTE_LENGTH) {
             _warehouseNoteError.value = stringResource(R.string.note_to_long)
             valid = false
         }

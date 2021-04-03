@@ -141,5 +141,14 @@
         <action
             android:id="@+id/action_createEditItemFragment_to_scannerFragment"
             app:destination="@id/scannerFragment" />
+        <argument
+            android:name="warehouseItemObject"
+            app:argType="cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_createEditItemFragment_to_warehouseDetailFragment"
+            app:destination="@id/warehouseDetailFragment"
+            app:popUpTo="@id/warehouseDetailFragment" />
     </fragment>
 </navigation>

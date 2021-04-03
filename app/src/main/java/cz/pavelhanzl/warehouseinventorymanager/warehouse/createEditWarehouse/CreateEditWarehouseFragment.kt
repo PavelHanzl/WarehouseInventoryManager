@@ -70,7 +70,7 @@ class CreateEditWarehouseFragment : Fragment() {
     private fun runFragmentInEditMode() {
         //nastaví editmode ve viewmodelu a vytvoří objekt editovaného skladu na základě skladu předáného v safeargs
         viewModel.editMode = true
-        viewModel.edittedWarehouse = args.warehouseObject!!
+        viewModel.editedWarehouse = args.warehouseObject!!
 
         //nastaví pole "název skladu" a "poznámka"
         viewModel.warehouseNameContent.postValue(args.warehouseObject!!.name)
@@ -86,7 +86,7 @@ class CreateEditWarehouseFragment : Fragment() {
 
 
         Glide.with(requireContext())
-            .load(viewModel.edittedWarehouse.photoURL)
+            .load(viewModel.editedWarehouse.photoURL)
             .placeholder(R.drawable.avatar_ownwarehouseavatar_secondary_color)
             .error(R.drawable.avatar_ownwarehouseavatar_secondary_color)
             .into(binding.ciWarehouseProfileImageFragmentCreateWarehouse)

@@ -11,9 +11,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.github.drjacky.imagepicker.ImagePicker
 
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
+import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateEditItemBinding
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
@@ -48,10 +50,11 @@ class CreateEditItemFragment : BaseFragment() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        //pokud je předán objekt položky skladu v safeargs, tak jedeme v editmodu, jinak módu vytváření
+        if(args.warehouseItemObject != null) runFragmentInEditMode() else runFragmentInCreateMode()
 
 
-
-binding.ciItemProfileImageAddRemoveFragment.setOnClickListener{
+binding.ciItemProfileImageCreateEditItemFragment.setOnClickListener{
 
     ImagePicker.with(this)
         .cropOval()
@@ -62,7 +65,7 @@ binding.ciItemProfileImageAddRemoveFragment.setOnClickListener{
 }
 
 
-
+// Inflate the layout for this fragment
         return binding.root
     }
 
@@ -73,6 +76,10 @@ binding.ciItemProfileImageAddRemoveFragment.setOnClickListener{
                 when (it) {
                     CreateEditItemFragmentViewModel.Event.NavigateBack -> {
                         findNavController().navigateUp()
+                        hideKeyboard(activity as MainActivity)
+                    }
+                    CreateEditItemFragmentViewModel.Event.NavigatePopUpBackStackToWarehouseDetail -> {
+                        findNavController().popBackStack(R.id.warehouseDetailFragment,false)
                         hideKeyboard(activity as MainActivity)
                     }
                 }
@@ -89,10 +96,10 @@ binding.ciItemProfileImageAddRemoveFragment.setOnClickListener{
         if (resultCode == Activity.RESULT_OK) {
             //Image Uri will not be null for RESULT_OK
             val fileUri = data?.data
-            binding.ciItemProfileImageAddRemoveFragment.setImageURI(fileUri)
+            binding.ciItemProfileImageCreateEditItemFragment.setImageURI(fileUri)
 
-            var inputstream = requireContext().contentResolver.openInputStream(fileUri!!)
-            var byteArray = inputstream!!.readBytes()
+            val inputstream = requireContext().contentResolver.openInputStream(fileUri!!)
+            val byteArray = inputstream!!.readBytes()
             viewModel.itemProfilePhoto.value = byteArray
 
 
@@ -109,5 +116,47 @@ binding.ciItemProfileImageAddRemoveFragment.setOnClickListener{
             Toast.makeText(requireContext(), "Task Cancelled", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+
+
+    private fun runFragmentInEditMode() {
+        //nastaví editmode ve viewmodelu a vytvoří objekt editované položky skladu na základě skladu předáného v safeargs
+        viewModel.editMode = true
+        viewModel.editedWarehouseItem = args.warehouseItemObject!!
+
+        //nastaví pole "název skladu" a "poznámka"
+        viewModel.itemNameContent.postValue(args.warehouseItemObject!!.name)
+        viewModel.itemBarcodeContent.postValue(args.warehouseItemObject!!.code)
+        viewModel.itemPriceContent.postValue(args.warehouseItemObject!!.price.toString())
+        viewModel.initialItemCountContent.postValue(args.warehouseItemObject!!.count.toString())
+        viewModel.itemNoteContent.postValue(args.warehouseItemObject!!.note)
+
+
+        //nastaví odpovídající title v actionbaru "Ostatní sklady"
+        (activity as MainActivity).supportActionBar!!.title = getString(R.string.editItem)
+
+        //změní text na vytvářejícím tllačítku na "upravit sklad"
+        binding.btnCreateEditItemCreateEditItemFragment.text = getString(R.string.edit_warehouse)
+
+
+
+        Glide.with(requireContext())
+            .load(viewModel.editedWarehouseItem.photoURL)
+            .placeholder(R.drawable.avatar_ownwarehouseavatar_secondary_color)
+            .error(R.drawable.avatar_ownwarehouseavatar_secondary_color)
+            .into(binding.ciItemProfileImageCreateEditItemFragment)
+
+    }
+
+    private fun runFragmentInCreateMode() {
+        //nastaví editmode ve viewmodelu na false - vytváříme novou položku skladu
+        viewModel.editMode = false
+
+        //nastaví odpovídající title v actionbaru
+        (activity as MainActivity).supportActionBar!!.title = resources.getString(R.string.CreateNewItem)
+
+    }
+
 
 }

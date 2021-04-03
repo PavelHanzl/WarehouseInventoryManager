@@ -198,7 +198,7 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
 
         GlobalScope.launch(Dispatchers.IO) {
 
-            try { //todo dořešit aby sem nedošel kód co není v databázi, resp klidně ať dojde, ale nepokusí se zapsat, jelikož ten dokument neexistuje, zatím ošetřeno trycatchem
+            try { //todo dořešit aby sem nedošel barkód co není v databázi, resp klidně ať dojde, ale nepokusí se zapsat, jelikož ten dokument neexistuje, zatím ošetřeno trycatchem
                 _loading.postValue(true)
                 val sfQueryRef = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code", code).limit(1).get().await()
 
