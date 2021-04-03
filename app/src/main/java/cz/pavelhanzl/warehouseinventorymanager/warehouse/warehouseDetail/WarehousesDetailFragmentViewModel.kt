@@ -196,6 +196,7 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
 
     fun runAddingRemovingTransaction(code: String, count: Double = 1.0, addingMode: Boolean = true) {
 
+        //todo přidat validování prázdných polí
         GlobalScope.launch(Dispatchers.IO) {
 
             try { //todo dořešit aby sem nedošel barkód co není v databázi, resp klidně ať dojde, ale nepokusí se zapsat, jelikož ten dokument neexistuje, zatím ošetřeno trycatchem

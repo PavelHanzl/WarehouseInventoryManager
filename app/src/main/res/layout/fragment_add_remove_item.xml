@@ -68,6 +68,7 @@
                     android:layout_width="56dp"
                     android:layout_height="56dp"
                     android:layout_marginEnd="16dp"
+                    android:elevation="@dimen/cardview_default_elevation"
                     android:src="@drawable/avatar_warehouse_item_primary_color"
                     app:civ_border_color="@color/primaryColor"
                     app:civ_border_width="2dp"
