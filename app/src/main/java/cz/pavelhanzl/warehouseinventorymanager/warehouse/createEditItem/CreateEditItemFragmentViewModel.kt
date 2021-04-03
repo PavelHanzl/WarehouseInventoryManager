@@ -6,6 +6,7 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.Query
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
@@ -27,8 +28,8 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
     //přichází v oncreate z fragmentu, pokud jedeme v editmodu
     var editedWarehouseItem = WarehouseItem()
 
-    var warehouseId = MutableLiveData<String>("")
-    var visibility = MutableLiveData<Int>(View.VISIBLE)
+    lateinit var warehouseId: String
+    private val localListOfAllItems = mutableListOf<WarehouseItem>()
 
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
@@ -69,9 +70,46 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
     val eventsFlow = eventChannel.receiveAsFlow()
 
     fun setdata(warehouseId: String) {
-        this.warehouseId.value = warehouseId
-        visibility.value = View.VISIBLE
+        this.warehouseId = warehouseId
+        getListOfActualWarehouseItems()
 
+    }
+
+    private fun getListOfActualWarehouseItems() {
+
+        localListOfAllItems.clear()
+        Log.d("Populuju", "vse smazano ted")
+
+        val warehouseItemsCollection = db.collection(Constants.WAREHOUSES_STRING).document(warehouseId).collection(Constants.ITEMS_STRING).get()
+        warehouseItemsCollection.addOnSuccessListener { documents ->
+            for (document in documents) {
+
+                //naplní list současnými položkami z databáze
+                localListOfAllItems.add(document.toObject(WarehouseItem::class.java))
+            }
+
+            Log.d("Populuju", "vse nahrano")
+
+        }
+            .addOnFailureListener { exception ->
+                Log.d("položky", "Error getting documents: " + exception.message)
+            }
+
+
+    }
+
+    private fun returnWarehouseItemWithGivenParameters(itemName: String = "", itemBarcode: String = "", listOfAllWarehouseItems: MutableList<WarehouseItem>): WarehouseItem? {
+        var foundObject: WarehouseItem? = null
+
+        listOfAllWarehouseItems.any {
+            if (it.name == itemName || it.code == itemBarcode) {
+                foundObject = it
+                Log.d("hajdin", "Nalezeno - Item:" + foundObject!!.name + " Code:" + foundObject!!.code)
+                true //shoda našli jsme shodu podle jména nebo podle kódu
+            } else false //neshoda nic jsme nenanšli
+        }
+
+        return foundObject
     }
 
     fun onBackButtonClicked() {
@@ -79,7 +117,6 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
     }
 
     fun onCreateEditItemButtonClicked() {
-        //todo dodělat
 
         //check validity dat
         if (!isValid()) return
@@ -94,16 +131,16 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
 
             try {
                 var profileImageURL: Uri? = null
-                val itemDocRef = db.collection("warehouses").document(warehouseId.value!!).collection("items").document()
+                val itemDocRef = db.collection("warehouses").document(warehouseId).collection("items").document()
 
                 //pokud uživatel zvolil ve View fotku ze zařízení, tak ji nahraje na server, pokud ne, tak přeskočí
                 if (itemProfilePhoto.value != null) {
                     try {
                         //nahrává na Storage
-                        storage.child("/warehouses/${warehouseId.value!!}/items/${itemDocRef.id}/profileImage.jpg").putBytes(itemProfilePhoto.value!!).await()
+                        storage.child("/warehouses/${warehouseId}/items/${itemDocRef.id}/profileImage.jpg").putBytes(itemProfilePhoto.value!!).await()
 
                         //získává url nahraného souboru
-                        profileImageURL = storage.child("/warehouses/${warehouseId.value!!}/items/${itemDocRef.id}/profileImage.jpg").downloadUrl.await()
+                        profileImageURL = storage.child("/warehouses/${warehouseId}/items/${itemDocRef.id}/profileImage.jpg").downloadUrl.await()
                     } catch (e: Exception) {
                         Log.d(TAG, "Error: ${e.message}")
                     }
@@ -129,7 +166,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
                         stringResource(R.string.newItemWasCreated),
                         itemNameContent.value!!,
                         stringResource(R.string.initialQuantity) + initialItemCountContent.value!!,
-                        warehouseId.value!!
+                        warehouseId
                     )
                 }
 
@@ -169,8 +206,24 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
             valid = false
         }
 
+        //položka se stejným názvem již existuje
+        var existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = itemNameContent.value!!,itemBarcode = "",listOfAllWarehouseItems = localListOfAllItems)
+        if (existingWarehouseItem != null){
+            _itemNameError.value = "Položka s tímto názvem již na skladě existuje. Zadejte prosím unikátní název položky."
+            valid = false
+        }
+
+
+
         if (itemBarcodeContent.value!!.isEmpty()) {
             _itemBarcodeError.value = stringResource(R.string.type_in_name)
+            valid = false
+        }
+
+        //položka se stejným čárovým kódem již existuje
+        existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = "",itemBarcode = itemBarcodeContent.value!!,listOfAllWarehouseItems = localListOfAllItems)
+        if (existingWarehouseItem != null){
+            _itemBarcodeError.value = "Položka s tímto čárovým kódem již na skladě existuje. Zadejte prosím unikátní čárový kód."
             valid = false
         }
 
@@ -189,6 +242,9 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
             valid = false
         }
 
+
+
+
         return valid
     }
 
@@ -197,7 +253,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
         val item = WarehouseItem()
 
         item.warehouseItemID = itemDocRef.id
-        item.warehouseID = warehouseId.value!!
+        item.warehouseID = warehouseId
         item.name = itemNameContent.value!!
         item.note = itemNoteContent.value!!
         item.code = itemBarcodeContent.value!!
@@ -231,6 +287,6 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
         item.count = editedWarehouseItem.count
 
         //zapíše do původního již vytvořeného dokumentu
-        db.collection("warehouses").document(warehouseId.value!!).collection("items").document(item.warehouseItemID).set(item)
+        db.collection(Constants.WAREHOUSES_STRING).document(warehouseId).collection(Constants.ITEMS_STRING).document(item.warehouseItemID).set(item)
     }
 }

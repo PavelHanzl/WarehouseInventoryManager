@@ -9,4 +9,9 @@ object Constants {
     const val READING_STRING = "reading"
     const val CREATING_STRING = "creating"
     const val EDITING_STRING = "editing"
+
+    const val USERS_STRING = "users"
+    const val WAREHOUSES_STRING = "warehouses"
+    const val ITEMS_STRING = "items"
+    const val LOG_STRING="log"
 }
