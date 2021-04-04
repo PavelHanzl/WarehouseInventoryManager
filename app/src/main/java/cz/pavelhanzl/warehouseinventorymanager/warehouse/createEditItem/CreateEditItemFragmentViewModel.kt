@@ -202,6 +202,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
         _itemPriceError.value = ""
         _itemNoteError.value = ""
 
+        //musí být před samotnou kontrolou na prázdné pole, jinak by u prázdného pole nevyhodilo žádnou hlášku
         checkIfThereIsNoItemWithSameNameInWH()
 
         if (itemNameContent.value!!.isEmpty()) {
@@ -209,7 +210,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
             valid = false
         }
 
-
+        //musí být před samotnou kontrolou na prázdné pole, jinak by u prázdného pole nevyhodilo žádnou hlášku
         checkIfThereIsNoItemWithSameBarcodeInWH()
 
         if (itemBarcodeContent.value!!.isEmpty()) {

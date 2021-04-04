@@ -90,7 +90,7 @@ class ListOfWarehousesFragment : BaseFragment() {
     private fun setUpRecycleView() {
         val query = //nastaví recycleview query pro recycle view
             if (ownWarehouse) {// vlastní sklady
-                db.collection("warehouses").whereEqualTo("owner", auth.currentUser!!.uid)
+                db.collection("warehouses").whereEqualTo("owner", auth.currentUser!!.uid).orderBy("name")
             } else {// ostatní sklady
                 //TODO: Domyslet načítání skladů cizích
                 db.collection("warehouses").whereArrayContains("users",auth.currentUser!!.uid)
