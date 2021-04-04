@@ -121,12 +121,47 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
     }
 
     fun onAddRemoveItemButtonClicked() {
+        if (!isValid()) return
+
         when (addRemoveFragmentMode) {
             Constants.ADDING_STRING -> runAddingRemovingTransaction(itemBarcodeContent.value.toString(), itemCountContent.value!!.toDouble())
             Constants.REMOVING_STRING -> runAddingRemovingTransaction(itemBarcodeContent.value.toString(), itemCountContent.value!!.toDouble(), false)
         }
 
     }
+
+    fun isValid(): Boolean {
+        var valid = true
+        //vyčistí případné errory z předchozího ověření
+        _itemNameError.value = ""
+        _itemBarcodeError.value = ""
+        _itemCountError.value = ""
+
+        if (itemNameContent.value!!.isEmpty()) {
+            _itemNameError.value = stringResource(R.string.type_in_name)
+            valid = false
+        }
+
+        if (itemBarcodeContent.value!!.isEmpty()) {
+            _itemBarcodeError.value = stringResource(R.string.type_in_name)
+            valid = false
+        }
+
+        if (itemCountContent.value!!.isEmpty()) {
+            _itemCountError.value = stringResource(R.string.type_in_name)
+            valid = false
+        }
+
+
+        if (itemCountContent.value!!.isNotEmpty() && itemCountContent.value!!.toDouble()<=0) {
+            _itemCountError.value = stringResource(R.string.typeInValueGraterThenZero)
+            valid = false
+        }
+
+
+        return valid
+    }
+
 
    fun setDropdownsBasedOnName(itemNameString: String) {
         //ověří jestli se položka s tímto názvem nachází ve skladu a případně jí vrátí

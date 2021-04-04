@@ -127,6 +127,7 @@
     <string name="itemWasRemoved">Položka byla odstraněna!</string>
     <string name="deleteItemQuestionWarning">Odstraněním položky k ní ztratíte přístup nejen vy, ale i všichni ostatní lidé v tomto skladu. \n \n Opravdu si přejete položku odstranit?</string>
     <string name="warehouseLog">Log skladu</string>
+    <string name="typeInValueGraterThenZero">Zadejte hodnotu větší než nula!</string>
 
 
 </resources>
