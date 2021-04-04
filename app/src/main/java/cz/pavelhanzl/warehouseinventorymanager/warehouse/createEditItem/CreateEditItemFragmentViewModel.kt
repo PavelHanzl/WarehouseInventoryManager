@@ -286,6 +286,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
         item.warehouseItemID = itemDocRef.id
         item.warehouseID = warehouseId
         item.name = itemNameContent.value!!
+        item.name_lowercase = itemNameContent.value!!.toLowerCase()
         item.note = itemNoteContent.value!!
         item.code = itemBarcodeContent.value!!
         item.photoURL = profileImageURL?.toString() ?: "" //pokud uživatel zvolil fotku, tak vyplní url, jinak zapíše prázdnej string
@@ -302,6 +303,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
 
         //možné změny jsou v těchto polích
         item.name = itemNameContent.value!!
+        item.name_lowercase = itemNameContent.value!!.toLowerCase()
         item.note = itemNoteContent.value!!
         item.code = itemBarcodeContent.value!!
         item.price = itemPriceContent.value!!.toDouble()

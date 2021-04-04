@@ -8,6 +8,7 @@ data class WarehouseItem (
     var warehouseItemID: String = "",
     var warehouseID: String = "",
     var name: String = "",
+    var name_lowercase: String = "", //potřeba jelikož firestore řadí v módu case sensitive, tudíž pak řazení pro normálního smrtelníka nedává smysl, query se tedy řadí podle tohoto pole
     var note: String = "",
     var code: String = "",
     var photoURL: String = "",

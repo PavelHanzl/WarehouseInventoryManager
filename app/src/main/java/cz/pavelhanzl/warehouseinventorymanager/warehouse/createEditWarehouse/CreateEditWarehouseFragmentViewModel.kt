@@ -114,6 +114,7 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
 
         //možné změny jsou v těchto polích
         warehouse.name = warehouseNameContent.value!!
+        warehouse.name_lowercase = warehouseNameContent.value!!.toLowerCase()
         warehouse.note = warehouseNoteContent.value!!
 
         //pokud užvatel nahrál novou fotku, tak zapíše novou url, jinak nechá původní
@@ -138,6 +139,7 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
         warehouse.warehouseID = warehouseDocRef.id
         warehouse.owner = auth.currentUser!!.uid
         warehouse.name = warehouseNameContent.value!!
+        warehouse.name_lowercase = warehouseNameContent.value!!.toLowerCase()
         warehouse.note = warehouseNoteContent.value!!
         warehouse.photoURL = profileImageURL?.toString() ?: "" //pokud uživatel zvolil fotku, tak vyplní url, jinak zapíše prázdnej string
 
