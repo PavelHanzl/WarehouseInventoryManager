@@ -9,11 +9,7 @@
         android:icon="@drawable/ic_edit_item"
         android:title="@string/editItemsInfo"
         app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/mi_WhItemLog"
-        android:icon="@drawable/ic_log"
-        android:title="@string/itemLog"
-        app:showAsAction="ifRoom"/>
+
     <item
         android:id="@+id/mi_WhItemDelete"
         android:icon="@drawable/ic_people"

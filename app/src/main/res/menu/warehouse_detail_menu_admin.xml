@@ -7,22 +7,22 @@
     <item
         android:id="@+id/miOwnWarehouseEdit"
         android:icon="@drawable/ic_edit_item"
-        android:title="Upravit informace o skladu"
+        android:title="@string/editInfoAboutWarehouse"
         app:showAsAction="never"/>
     <item
         android:id="@+id/miOwnWarehousePeople"
         android:icon="@drawable/ic_people"
-        android:title="Lidé v tomto skladu"
+        android:title="@string/PeopleInThisWarehouse"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/miOwnWarehouseLog"
         android:icon="@drawable/ic_log"
-        android:title="Log skladu"
+        android:title="@string/logOfWarehouse"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/miOwnWarehouseDelete"
         android:icon="@drawable/ic_people"
-        android:title="Odstranit sklad"
+        android:title="@string/deleteWarehouse"
         app:showAsAction="never"/>
 
 

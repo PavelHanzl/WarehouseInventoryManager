@@ -131,6 +131,13 @@
     <string name="isInvitingYouToJoinHisOrHerWarehouse">Vás zve abyste se připojili k jeho skladu:</string>
     <string name="decline">Odmítnout</string>
     <string name="accept">Přijmout</string>
+    <string name="peopleInThisWarehouse">Lidé v tomto skladu</string>
+    <string name="logOfWarehouse">Log skladu</string>
+    <string name="leaveWarehouse">Opustit sklad</string>
+    <string name="editInfoAboutWarehouse">Upravit informace o skladu</string>
+    <string name="PeopleInThisWarehouse">Lidé v tomto skladu</string>
+    <string name="logOfWarehouse">Log skladu</string>
+    <string name="deleteWarehouse">Odstranit sklad</string>
 
 
 </resources>

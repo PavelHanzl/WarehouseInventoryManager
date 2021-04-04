@@ -6,17 +6,17 @@
     <item
         android:id="@+id/miOwnWarehousePeople"
         android:icon="@drawable/ic_people"
-        android:title="Lidé v tomto skladu"
+        android:title="@string/peopleInThisWarehouse"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/miOwnWarehouseLog"
         android:icon="@drawable/ic_log"
-        android:title="Log skladu"
+        android:title="@string/logOfWarehouse"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/miOwnWarehouseLeave"
         android:icon="@drawable/ic_logout"
-        android:title="Opustit sklad"
+        android:title="@string/leaveWarehouse"
         app:showAsAction="never" />
 
 

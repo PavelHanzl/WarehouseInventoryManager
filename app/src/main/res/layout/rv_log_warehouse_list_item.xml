@@ -41,6 +41,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/rv_WhItemName_warehouseLog"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rv_WhItemName_warehouseLog"
         app:layout_constraintTop_toTopOf="@+id/rv_WhItemName_warehouseLog" />
 
 
@@ -73,6 +74,7 @@
         android:textColor="@color/darkGrayColor"
         app:layout_constraintBottom_toBottomOf="@+id/rv_userName_warehouseLog"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rv_userName_warehouseLog"
         app:layout_constraintTop_toTopOf="@+id/rv_userName_warehouseLog" />
 
 
@@ -105,6 +107,7 @@
         android:textColor="@color/darkGrayColor"
         app:layout_constraintBottom_toBottomOf="@+id/rv_action_warehouseLog"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rv_action_warehouseLog"
         app:layout_constraintTop_toTopOf="@+id/rv_action_warehouseLog" />
 
 
@@ -138,6 +141,7 @@
         android:textColor="@color/darkGrayColor"
         app:layout_constraintBottom_toBottomOf="@+id/rv_numberOfItems_warehouseLog"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rv_numberOfItems_warehouseLog"
         app:layout_constraintTop_toTopOf="@+id/rv_numberOfItems_warehouseLog" />
 
 
@@ -169,6 +173,7 @@
         android:textColor="@color/darkGrayColor"
         app:layout_constraintBottom_toBottomOf="@+id/rv_dateOfAction_warehouseLog"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/rv_dateOfAction_warehouseLog"
         app:layout_constraintTop_toTopOf="@+id/rv_dateOfAction_warehouseLog" />
 
 
