@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_listOfWarehousesFragment"
             app:destination="@id/listOfWarehousesFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_invitationsFragment"
+            app:destination="@id/invitationsFragment" />
 
     </fragment>
     <fragment
@@ -165,4 +168,9 @@
             android:name="warehouseObject"
             app:argType="cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse" />
     </fragment>
+    <fragment
+        android:id="@+id/invitationsFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.invitations.InvitationsFragment"
+        android:label="fragment_invitations"
+        tools:layout="@layout/fragment_invitations" />
 </navigation>

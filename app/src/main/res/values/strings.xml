@@ -128,6 +128,9 @@
     <string name="deleteItemQuestionWarning">Odstraněním položky k ní ztratíte přístup nejen vy, ale i všichni ostatní lidé v tomto skladu. \n \n Opravdu si přejete položku odstranit?</string>
     <string name="warehouseLog">Log skladu</string>
     <string name="typeInValueGraterThenZero">Zadejte hodnotu větší než nula!</string>
+    <string name="isInvitingYouToJoinHisOrHerWarehouse">Vás zve abyste se připojili k jeho skladu:</string>
+    <string name="decline">Odmítnout</string>
+    <string name="accept">Přijmout</string>
 
 
 </resources>
