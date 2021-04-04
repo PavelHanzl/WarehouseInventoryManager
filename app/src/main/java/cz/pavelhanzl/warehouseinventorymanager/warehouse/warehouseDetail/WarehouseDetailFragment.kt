@@ -205,14 +205,20 @@ class WarehouseDetailFragment : BaseFragment() {
 
         when (item!!.itemId) {
             R.id.miOwnWarehouseEdit -> {
-                Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
-                var action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
+                val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
                 findNavController().navigate(action)
             }
 
             R.id.miOwnWarehouseDelete -> deleteOfOwnWarehouse()
 
             R.id.miOwnWarehouseLeave -> leaveSharedWarehouse()
+
+            R.id.miOwnWarehouseLog -> {
+                val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToWarehouseLogFragment(viewModel.warehouseObject.value!!)
+                findNavController().navigate(action)
+
+            }
+
 
         }
         return super.onOptionsItemSelected(item)

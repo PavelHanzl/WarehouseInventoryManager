@@ -78,7 +78,7 @@ class CreateEditItemFragment : BaseFragment() {
         }
 
 
-// Inflate the layout for this fragment
+        // Inflate the layout for this fragment
         return binding.root
     }
 

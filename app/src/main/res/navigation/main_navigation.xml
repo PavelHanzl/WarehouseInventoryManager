@@ -90,6 +90,9 @@
         <action
             android:id="@+id/action_warehouseDetailFragment_to_addRemoveItem"
             app:destination="@id/addRemoveItemFragment" />
+        <action
+            android:id="@+id/action_warehouseDetailFragment_to_warehouseLogFragment"
+            app:destination="@id/warehouseLogFragment" />
     </fragment>
     <fragment
         android:id="@+id/itemDetailFragment"
@@ -152,5 +155,14 @@
             app:argType="cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem"
             app:nullable="true"
             android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/warehouseLogFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseLog.WarehouseLogFragment"
+        android:label="@string/warehouseLog"
+        tools:layout="@layout/fragment_warehouse_log">
+        <argument
+            android:name="warehouseObject"
+            app:argType="cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse" />
     </fragment>
 </navigation>
