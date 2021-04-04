@@ -82,8 +82,8 @@ class ItemDetailFragment : BaseFragment() {
     private fun deleteWarehouseItem() {
         //zobrazí dialog s výzvou k potvrzení ke smazání skladu
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Odstranit pložku?")
-            .setMessage("Odstraněním položky k ní ztratíte přístup nejen vy, ale i všichni ostatní lidé v tomto skladu. \n \nOpravdu si přejete položku odstranit?")
+            .setTitle(getString(R.string.deleteItemQuestion))
+            .setMessage(getString(R.string.deleteItemQuestionWarning))
             .setNegativeButton(R.string.no) { dialog, which ->
                 /* zrušení dialogu*/
             }
@@ -92,7 +92,7 @@ class ItemDetailFragment : BaseFragment() {
                 viewModel.deleteWarehouseItem()
 
                 //zobrazí snackar s možností  vrácení akce smazání skladové položky
-                Snackbar.make(this.requireView(), "Položka byla odstraněna!", Snackbar.LENGTH_LONG)
+                Snackbar.make(this.requireView(), getString(R.string.itemWasRemoved), Snackbar.LENGTH_LONG)
                     .setAction(getString(R.string.restore)) {
                         viewModel.undoChangesOfWarehouseItemDocument()
                     }.show()
