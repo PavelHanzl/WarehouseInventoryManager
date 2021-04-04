@@ -1,6 +1,7 @@
 package cz.pavelhanzl.warehouseinventorymanager.warehouse.itemDetail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -22,7 +23,7 @@ class ItemDetailFragment : BaseFragment() {
         //předá argumenty do viewmodelu
         if (savedInstanceState == null) {
             viewModel = ViewModelProvider(this).get(ItemDetailFragmentViewModel::class.java)
-            viewModel.setdata(args.selectedWarehouseItemObject)
+
         }
     }
 
@@ -34,7 +35,8 @@ class ItemDetailFragment : BaseFragment() {
         binding = FragmentItemDetailBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
+        Log.d("editeditemos", "trigthis")
+        viewModel.setdata(args.selectedWarehouseItemObject)
 
 
 
@@ -62,7 +64,7 @@ class ItemDetailFragment : BaseFragment() {
 
         when (item!!.itemId) {
             R.id.mi_WhItemEdit -> {
-                Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
+               Log.d("editeditemos", viewModel.selectedWarehouseItem.value!!.code)
                 var action = ItemDetailFragmentDirections.actionItemDetailFragmentToCreateEditItemFragment(viewModel.selectedWarehouseItem.value!!.warehouseID, viewModel.selectedWarehouseItem.value!!)
                 findNavController().navigate(action)
             }

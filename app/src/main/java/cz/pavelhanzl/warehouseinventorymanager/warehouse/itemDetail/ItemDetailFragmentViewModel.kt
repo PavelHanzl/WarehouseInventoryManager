@@ -73,6 +73,9 @@ class ItemDetailFragmentViewModel: BaseViewModel() {
     }
 
     private fun setDataFromGivenWarehouseItemObject(selectedWarehouseItem: WarehouseItem) {
+        //setne novou (teoreticky upravenou z upravovací databáze) položku z databáze jako selected warehouse item
+        _selectedWarehouseItem.value = selectedWarehouseItem
+
         _itemName.value = selectedWarehouseItem.name
         _itemBarcode.value = selectedWarehouseItem.code
         _itemCount.value = selectedWarehouseItem.count.toString()
