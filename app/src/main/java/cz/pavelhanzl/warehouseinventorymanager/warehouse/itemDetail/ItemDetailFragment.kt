@@ -9,7 +9,6 @@ import androidx.navigation.fragment.navArgs
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentItemDetailBinding
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehouseDetailFragmentDirections
 
 class ItemDetailFragment : BaseFragment() {
     private val args: ItemDetailFragmentArgs by navArgs()
@@ -50,9 +49,9 @@ class ItemDetailFragment : BaseFragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
         if (args.ownWarehouse) {
-            inflater.inflate(R.menu.own_warehouse_detail_menu_admin, menu)
+            inflater.inflate(R.menu.item_detail_menu_admin, menu)
         } else {
-            inflater.inflate(R.menu.own_warehouse_detail_menu_user, menu)
+            inflater.inflate(R.menu.item_detail_menu_user, menu)
         }
 
 
@@ -62,15 +61,15 @@ class ItemDetailFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
         when (item!!.itemId) {
-            R.id.miOwnWarehouseEdit -> {
+            R.id.mi_WhItemEdit -> {
                 Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show()
-                //var action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
-                //findNavController().navigate(action)
+                var action = ItemDetailFragmentDirections.actionItemDetailFragmentToCreateEditItemFragment(viewModel.selectedWarehouseItem.value!!.warehouseID, viewModel.selectedWarehouseItem.value!!)
+                findNavController().navigate(action)
             }
 
-            //R.id.miOwnWarehouseDelete -> deleteOfOwnWarehouse()
+            R.id.mi_WhItemDelete -> true //deleteOfOwnWarehouse()
 
-            //R.id.miOwnWarehouseLeave -> leaveSharedWarehouse()
+            R.id.mi_WhItemLog -> true //leaveSharedWarehouse()
 
         }
         return super.onOptionsItemSelected(item)

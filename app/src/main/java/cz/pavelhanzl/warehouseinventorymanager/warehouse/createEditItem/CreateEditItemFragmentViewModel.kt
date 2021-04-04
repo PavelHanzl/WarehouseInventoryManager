@@ -241,28 +241,43 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
         return valid
     }
 
-    fun checkIfThereIsNoItemWithSameBarcodeInWH(barcode:String = itemBarcodeContent.value!!) {
+    fun checkIfThereIsNoItemWithSameBarcodeInWH(barcode: String = itemBarcodeContent.value!!) {
         //todo toto spustit jen v případě že je fragment v módu vytváření, u editace by tato podmínka nedávala smysl
-        Log.d("resul","Barcode:" + barcode)
-        //položka se stejným čárovým kódem již existuje
-        var existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = barcode, listOfAllWarehouseItems = localListOfAllItems)
-        if (existingWarehouseItem != null) {
-            _itemBarcodeError.value = stringResource(R.string.itemWithThisBarcodeAreadyExistsPart1) + existingWarehouseItem.name + stringResource(R.string.itemWithThisBarcodeAreadyExistsPart2)
-            valid = false
-        } else {
-            _itemBarcodeError.value =""
-        }
+        Log.d("resul", "Barcode:" + barcode)
+
+            //položka se stejným čárovým kódem již existuje
+            val existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = barcode, listOfAllWarehouseItems = localListOfAllItems)
+            if (existingWarehouseItem != null) {
+                _itemBarcodeError.value = stringResource(R.string.itemWithThisBarcodeAreadyExistsPart1) + existingWarehouseItem.name + stringResource(R.string.itemWithThisBarcodeAreadyExistsPart2)
+                valid = false
+            } else {
+                _itemBarcodeError.value = ""
+            }
+
+        //todo prazdnej barcode nehodi chybu
+            //pokud zadaný barcode odpovídá barcodu upravované položky, tak je to validní, jelikož chceme upravit položku a teoreticky zachovat barcode
+            if(existingWarehouseItem != null && existingWarehouseItem!!.code == editedWarehouseItem.code){
+                _itemBarcodeError.value = ""
+                valid=true
+            }
+
     }
 
-    fun checkIfThereIsNoItemWithSameNameInWH(name:String = itemNameContent.value!!){
+    fun checkIfThereIsNoItemWithSameNameInWH(name: String = itemNameContent.value!!) {
         //todo toto spustit jen v případě že je fragment v módu vytváření, u editace by tato podmínka nedávala smysl
         //položka se stejným názvem již existuje
-        var existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = name, itemBarcode = "", listOfAllWarehouseItems = localListOfAllItems)
+        val existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = name, itemBarcode = "", listOfAllWarehouseItems = localListOfAllItems)
         if (existingWarehouseItem != null) {
             _itemNameError.value = stringResource(R.string.itemWithZhisNameAlreadyExists)
             valid = false
         } else {
             _itemNameError.value = ""
+        }
+
+        //pokud zadaný název odpovídá názvu upravované položky, tak je to validní, jelikož chceme upravit položku a teoreticky zachovat její název
+        if(existingWarehouseItem != null && existingWarehouseItem!!.name == editedWarehouseItem.name){
+            _itemNameError.value = ""
+            valid=true
         }
     }
 

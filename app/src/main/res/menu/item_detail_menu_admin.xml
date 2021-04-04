@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+
+    <item
+        android:id="@+id/mi_WhItemEdit"
+        android:icon="@drawable/ic_edit_item"
+        android:title="@string/editItemsInfo"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/mi_WhItemLog"
+        android:icon="@drawable/ic_log"
+        android:title="@string/itemLog"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/mi_WhItemDelete"
+        android:icon="@drawable/ic_people"
+        android:title="@string/deleteItem"
+        app:showAsAction="never"/>
+
+
+</menu>

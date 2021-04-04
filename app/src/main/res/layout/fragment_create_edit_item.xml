@@ -224,7 +224,7 @@
         android:backgroundTint="@color/secondaryColor"
         android:enabled="@{viewmodel.createEditButtonEnabled}"
         android:onClick="@{()-> viewmodel.onCreateEditItemButtonClicked()}"
-        android:text="@{viewmodel.createEditItemFragmentMode == Constants.CREATING_STRING ? @string/create : @string/edit}"
+        android:text="@{viewmodel.editMode == true ?  @string/edit : @string/create}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline" />

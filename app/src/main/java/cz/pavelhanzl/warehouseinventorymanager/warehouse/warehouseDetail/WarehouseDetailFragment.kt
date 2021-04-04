@@ -192,9 +192,9 @@ class WarehouseDetailFragment : BaseFragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
         if (args.ownWarehouse) {
-            inflater.inflate(R.menu.own_warehouse_detail_menu_admin, menu)
+            inflater.inflate(R.menu.warehouse_detail_menu_admin, menu)
         } else {
-            inflater.inflate(R.menu.own_warehouse_detail_menu_user, menu)
+            inflater.inflate(R.menu.warehouse_detail_menu_user, menu)
         }
 
 

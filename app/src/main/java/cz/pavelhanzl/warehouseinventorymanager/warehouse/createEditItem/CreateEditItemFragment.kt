@@ -141,13 +141,14 @@ class CreateEditItemFragment : BaseFragment() {
         viewModel.itemPriceContent.postValue(args.warehouseItemObject!!.price.toString())
         viewModel.initialItemCountContent.postValue(args.warehouseItemObject!!.count.toString())
         viewModel.itemNoteContent.postValue(args.warehouseItemObject!!.note)
+        viewModel.itemPhotoUrl.postValue(args.warehouseItemObject!!.photoURL)
 
         //nastaví odpovídající title v actionbaru "Ostatní sklady"
         (activity as MainActivity).supportActionBar!!.title = getString(R.string.editItem)
 
-        //změní text na vytvářejícím tllačítku na "upravit sklad"
-        binding.btnCreateEditItemCreateEditItemFragment.text = getString(R.string.edit_warehouse)
-
+        //zamezí uživateli měnit počet, k tomu by měl využít standartní funkčnost aplikace, aby došlo k vytvoření logu + nastaví odpovídající hint
+        binding.tfInitialItemCountCreateEditItemFragment.hint = getString(R.string.numberOfPcsInWarehouse)
+        binding.tfInitialItemCountContentCreateEditItemFragment.isEnabled = false
 
 
         Glide.with(requireContext())
