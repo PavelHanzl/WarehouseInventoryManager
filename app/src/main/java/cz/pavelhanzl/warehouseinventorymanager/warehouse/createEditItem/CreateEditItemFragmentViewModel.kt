@@ -202,23 +202,22 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
         _itemPriceError.value = ""
         _itemNoteError.value = ""
 
+        checkIfThereIsNoItemWithSameNameInWH()
 
         if (itemNameContent.value!!.isEmpty()) {
             _itemNameError.value = stringResource(R.string.type_in_name)
             valid = false
         }
 
-        checkIfThereIsNoItemWithSameNameInWH()
 
-
-
+        checkIfThereIsNoItemWithSameBarcodeInWH()
 
         if (itemBarcodeContent.value!!.isEmpty()) {
             _itemBarcodeError.value = stringResource(R.string.type_in_name)
             valid = false
         }
 
-        checkIfThereIsNoItemWithSameBarcodeInWH()
+
 
         if (initialItemCountContent.value!!.isEmpty() || initialItemCountContent.value!!.toDouble() < 0.0) {
             _initialItemCountError.value = stringResource(R.string.typeInValueGraterOrEqualToZero)
@@ -247,19 +246,18 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
 
             //položka se stejným čárovým kódem již existuje
             val existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = barcode, listOfAllWarehouseItems = localListOfAllItems)
-            if (existingWarehouseItem != null) {
+            if (existingWarehouseItem !=  null && existingWarehouseItem!!.code != editedWarehouseItem.code) {
                 _itemBarcodeError.value = stringResource(R.string.itemWithThisBarcodeAreadyExistsPart1) + existingWarehouseItem.name + stringResource(R.string.itemWithThisBarcodeAreadyExistsPart2)
                 valid = false
             } else {
-                _itemBarcodeError.value = ""
+               _itemBarcodeError.value = ""
             }
 
-        //todo prazdnej barcode nehodi chybu
+   /*     //todo prazdnej barcode nehodi chybu
             //pokud zadaný barcode odpovídá barcodu upravované položky, tak je to validní, jelikož chceme upravit položku a teoreticky zachovat barcode
             if(existingWarehouseItem != null && existingWarehouseItem!!.code == editedWarehouseItem.code){
                 _itemBarcodeError.value = ""
-                valid=true
-            }
+            }*/
 
     }
 
@@ -267,18 +265,17 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
         //todo toto spustit jen v případě že je fragment v módu vytváření, u editace by tato podmínka nedávala smysl
         //položka se stejným názvem již existuje
         val existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = name, itemBarcode = "", listOfAllWarehouseItems = localListOfAllItems)
-        if (existingWarehouseItem != null) {
+        if (existingWarehouseItem != null && existingWarehouseItem!!.name != editedWarehouseItem.name) {
             _itemNameError.value = stringResource(R.string.itemWithZhisNameAlreadyExists)
             valid = false
         } else {
             _itemNameError.value = ""
         }
 
-        //pokud zadaný název odpovídá názvu upravované položky, tak je to validní, jelikož chceme upravit položku a teoreticky zachovat její název
+   /*     //pokud zadaný název odpovídá názvu upravované položky, tak je to validní, jelikož chceme upravit položku a teoreticky zachovat její název
         if(existingWarehouseItem != null && existingWarehouseItem!!.name == editedWarehouseItem.name){
             _itemNameError.value = ""
-            valid=true
-        }
+        }*/
     }
 
     private suspend fun createItemAndSaveToDb(itemDocRef: DocumentReference, profileImageURL: Uri?) {
