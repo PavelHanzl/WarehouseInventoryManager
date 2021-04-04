@@ -14,7 +14,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import cz.pavelhanzl.warehouseinventorymanager.R
 
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
-import kotlinx.android.synthetic.main.rv_own_warehousesdetail_list_item.view.*
+import kotlinx.android.synthetic.main.rv_warehouse_item_detail_list_item.view.*
 
 class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>, var ownWarehouse: Boolean) :
     FirestoreRecyclerAdapter<WarehouseItem, WarehouseDetailAdapter.WarehouseItemViewHolder>(options) {
@@ -45,7 +45,7 @@ class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>, v
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WarehouseDetailAdapter.WarehouseItemViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.rv_own_warehousesdetail_list_item,
+            R.layout.rv_warehouse_item_detail_list_item,
             parent,
             false
         )

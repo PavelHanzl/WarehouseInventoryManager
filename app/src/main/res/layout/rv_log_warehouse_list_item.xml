@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    >
+
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rv_WhItemName_warehouseLog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginTop="16dp"
+        android:singleLine="true"
+        android:text="Položka"
+        android:textColor="@color/lightGrayColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rv_WhItemNameValue_warehouseLog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:minWidth="70dp"
+        android:singleLine="true"
+        android:text="Položka s názvem"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/primaryColor"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_WhItemName_warehouseLog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rv_WhItemName_warehouseLog" />
+
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rv_userName_warehouseLog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginTop="16dp"
+        android:singleLine="true"
+        android:text="Uživatel"
+        android:textColor="@color/lightGrayColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_WhItemName_warehouseLog" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rv_userNameValue_warehouseLog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:minWidth="70dp"
+        android:singleLine="true"
+        android:text="Jan Novák"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/darkGrayColor"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_userName_warehouseLog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rv_userName_warehouseLog" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rv_action_warehouseLog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginTop="16dp"
+        android:singleLine="true"
+        android:text="Akce"
+        android:textColor="@color/lightGrayColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_userName_warehouseLog" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rv_actionValue_warehouseLog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:minWidth="70dp"
+        android:singleLine="true"
+        android:text="Naskladnění"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/darkGrayColor"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_action_warehouseLog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rv_action_warehouseLog" />
+
+
+
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rv_numberOfItems_warehouseLog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginTop="16dp"
+        android:singleLine="true"
+        android:text="Počet kusů"
+        android:textColor="@color/lightGrayColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_action_warehouseLog" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rv_numberOfItemsValue_warehouseLog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="1000 Ks"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/darkGrayColor"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_numberOfItems_warehouseLog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rv_numberOfItems_warehouseLog" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rv_dateOfAction_warehouseLog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_marginTop="16dp"
+        android:singleLine="true"
+        android:text="Datum"
+        android:textColor="@color/lightGrayColor"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_numberOfItems_warehouseLog" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/rv_dateOfActionValue_warehouseLog"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:minWidth="70dp"
+        android:singleLine="true"
+        android:text="24. 12. 2021 18:39:46"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/darkGrayColor"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_dateOfAction_warehouseLog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rv_dateOfAction_warehouseLog" />
+
+
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lightGrayColor"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/rv_dateOfAction_warehouseLog" />
+</androidx.constraintlayout.widget.ConstraintLayout>

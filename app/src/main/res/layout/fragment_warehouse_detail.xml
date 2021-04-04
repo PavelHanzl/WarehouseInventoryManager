@@ -21,7 +21,7 @@
             android:id="@+id/rv_ownWarehouseDetailList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/rv_own_warehousesdetail_list_item"/>
+            tools:listitem="@layout/rv_warehouse_item_detail_list_item"/>
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

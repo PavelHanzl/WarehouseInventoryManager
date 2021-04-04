@@ -11,6 +11,7 @@
         android:id="@+id/rv_ownWarehousesList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:listitem="@layout/rv_list_of_warehouses_list_item"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
