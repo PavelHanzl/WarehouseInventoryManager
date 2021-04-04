@@ -4,11 +4,19 @@ import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.DocumentReference
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ItemDetailFragmentViewModel: BaseViewModel() {
     val TAG = "ItemDetailFragmentVM"
@@ -41,6 +49,9 @@ class ItemDetailFragmentViewModel: BaseViewModel() {
 
     var _itemProfilePhotoUrl = MutableLiveData<String>("")
     val itemProfilePhotoUrl: LiveData<String> get() = _itemProfilePhotoUrl
+
+    lateinit var warehouseItemInDbSnapshot: Map<String, Any>
+    lateinit var warehouseItemInDbDocRef: DocumentReference
 
     fun setdata(selectedWarehouseItem: WarehouseItem){
         this._selectedWarehouseItem.value = selectedWarehouseItem
@@ -87,6 +98,28 @@ class ItemDetailFragmentViewModel: BaseViewModel() {
             _itemNote.value = stringResource(R.string.itemHasAnyNote)
         }
         _itemProfilePhotoUrl.value=selectedWarehouseItem.photoURL
+    }
+
+
+
+    //odstraní skladovou položku z databáze
+    fun deleteWarehouseItem() {
+        //běží v globalscope, aby bylo možné skladovou položku obnovit ve funkci delete WhUndo i po zničení viewmodelu
+        GlobalScope.launch(Dispatchers.IO) {
+            makeWarehouseItemSnapshot()
+            warehouseItemInDbDocRef.delete()
+        }
+    }
+
+    fun undoChangesOfWarehouseItemDocument() {
+        GlobalScope.launch(Dispatchers.IO) {
+            warehouseItemInDbDocRef.set(warehouseItemInDbSnapshot)
+        }
+    }
+
+    suspend fun makeWarehouseItemSnapshot() {
+        warehouseItemInDbDocRef = db.collection(Constants.WAREHOUSES_STRING).document(selectedWarehouseItem.value!!.warehouseID).collection(Constants.ITEMS_STRING).document(selectedWarehouseItem.value!!.warehouseItemID)
+        warehouseItemInDbSnapshot = warehouseItemInDbDocRef.get().await().data!!
     }
 
 
