@@ -171,6 +171,6 @@
     <fragment
         android:id="@+id/invitationsFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.invitations.InvitationsFragment"
-        android:label="fragment_invitations"
+        android:label="@string/warehouseInvitations"
         tools:layout="@layout/fragment_invitations" />
 </navigation>

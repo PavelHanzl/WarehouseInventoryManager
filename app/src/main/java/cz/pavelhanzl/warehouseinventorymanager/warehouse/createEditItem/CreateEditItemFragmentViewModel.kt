@@ -220,7 +220,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
 
 
 
-        if (initialItemCountContent.value!!.isEmpty() || initialItemCountContent.value!!.toDouble() < 0.0) {
+        if (initialItemCountContent.value!!.isEmpty() || (initialItemCountContent.value!!.toDouble() < 0.0 && !editMode)) { //pokud je skladová položka v mínusu, tak do tohoto stavu standatní operací "vyskladnění" a je zaznamenána v logu, v editmodu tedy chceme pustit přes validaci záporné množství, ale nedovolujeme to při vytváření
             _initialItemCountError.value = stringResource(R.string.typeInValueGraterOrEqualToZero)
             valid = false
         }

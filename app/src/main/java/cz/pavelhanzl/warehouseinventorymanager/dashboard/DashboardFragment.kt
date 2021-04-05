@@ -1,6 +1,7 @@
 package cz.pavelhanzl.warehouseinventorymanager.dashboard
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,12 @@ class DashboardFragment : Fragment() {
 
         llButtonSharedWarehouse.setOnClickListener {
             val action = DashboardFragmentDirections.actionDashboardFragmentToListOfWarehousesFragment(false)
+            Navigation.findNavController(view).navigate(action)
+        }
+
+        llButtonInvitationsWarehouse.setOnClickListener {
+            Log.d("invi","invi pressed")
+            val action = DashboardFragmentDirections.actionDashboardFragmentToInvitationsFragment()
             Navigation.findNavController(view).navigate(action)
         }
 

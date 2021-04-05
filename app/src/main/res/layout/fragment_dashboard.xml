@@ -87,7 +87,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/llButtonInvitationsWarehouse"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginStart="20dp"
@@ -98,6 +97,7 @@
             android:orientation="horizontal">
 
             <RelativeLayout
+                android:id="@+id/llButtonInvitationsWarehouse"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="0.5"

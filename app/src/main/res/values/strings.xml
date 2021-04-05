@@ -128,16 +128,16 @@
     <string name="deleteItemQuestionWarning">Odstraněním položky k ní ztratíte přístup nejen vy, ale i všichni ostatní lidé v tomto skladu. \n \n Opravdu si přejete položku odstranit?</string>
     <string name="warehouseLog">Log skladu</string>
     <string name="typeInValueGraterThenZero">Zadejte hodnotu větší než nula!</string>
-    <string name="isInvitingYouToJoinHisOrHerWarehouse">Vás zve abyste se připojili k jeho skladu:</string>
+    <string name="isInvitingYouToJoinWarehouse">Vás zve abyste se připojili ke skladu:</string>
     <string name="decline">Odmítnout</string>
     <string name="accept">Přijmout</string>
     <string name="peopleInThisWarehouse">Lidé v tomto skladu</string>
-    <string name="logOfWarehouse">Log skladu</string>
     <string name="leaveWarehouse">Opustit sklad</string>
     <string name="editInfoAboutWarehouse">Upravit informace o skladu</string>
     <string name="PeopleInThisWarehouse">Lidé v tomto skladu</string>
     <string name="logOfWarehouse">Log skladu</string>
     <string name="deleteWarehouse">Odstranit sklad</string>
+    <string name="warehouseInvitations">Pozvánky do skladů</string>
 
 
 </resources>

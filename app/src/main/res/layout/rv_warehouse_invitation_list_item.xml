@@ -33,7 +33,6 @@
         android:maxLines="1"
         android:singleLine="true"
         android:text="Jméno Příjmení"
-        android:textAlignment="viewEnd"
         android:textColor="@color/darkGrayColor"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/userProfileImage_warehouseInvitationFragment"
@@ -51,7 +50,7 @@
         android:maxLines="1"
         android:minWidth="70dp"
         android:layout_marginTop="8dp"
-        android:text="@string/isInvitingYouToJoinHisOrHerWarehouse"
+        android:text="@string/isInvitingYouToJoinWarehouse"
         android:textColor="@color/midGrayColor"
         app:layout_constraintStart_toStartOf="@+id/rv_userName_warehouseInvitationFragment"
         app:layout_constraintTop_toBottomOf="@+id/rv_userName_warehouseInvitationFragment" />

@@ -73,7 +73,7 @@ class ItemDetailFragment : BaseFragment() {
 
             R.id.mi_WhItemDelete -> deleteWarehouseItem()
 
-            R.id.mi_WhItemLog -> true //leaveSharedWarehouse()
+            //R.id.mi_WhItemLog -> true //leaveSharedWarehouse()
 
         }
         return super.onOptionsItemSelected(item)

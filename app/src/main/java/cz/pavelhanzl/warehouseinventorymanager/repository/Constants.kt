@@ -14,4 +14,5 @@ object Constants {
     const val WAREHOUSES_STRING = "warehouses"
     const val ITEMS_STRING = "items"
     const val LOG_STRING="log"
+    const val INVITATIONS_STRING="invitations"
 }

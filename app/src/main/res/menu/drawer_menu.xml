@@ -26,7 +26,7 @@
                 android:title="@string/drawerMenu_sharedWarehouses"
                 />
             <item
-                android:id="@+id/warehouseInvitationFragment"
+                android:id="@+id/invitationsFragment"
                 android:icon="@drawable/ic_warehousenotification"
                 android:title="@string/drawerMenu_warehouseInvitations" />
             <item
