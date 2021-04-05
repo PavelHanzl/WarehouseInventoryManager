@@ -138,6 +138,9 @@
     <string name="logOfWarehouse">Log skladu</string>
     <string name="deleteWarehouse">Odstranit sklad</string>
     <string name="warehouseInvitations">Pozvánky do skladů</string>
+    <string name="nameSurname">Jméno příjmení</string>
+    <string name="owner">Vlastník</string>
+    <string name="OtherPeopleInWarehouse">Ostatní lidé ve skladu</string>
 
 
 </resources>

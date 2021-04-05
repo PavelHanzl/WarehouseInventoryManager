@@ -96,6 +96,9 @@
         <action
             android:id="@+id/action_warehouseDetailFragment_to_warehouseLogFragment"
             app:destination="@id/warehouseLogFragment" />
+        <action
+            android:id="@+id/action_warehouseDetailFragment_to_peopleInWarehouseFragment"
+            app:destination="@id/peopleInWarehouseFragment" />
     </fragment>
     <fragment
         android:id="@+id/itemDetailFragment"
@@ -173,4 +176,16 @@
         android:name="cz.pavelhanzl.warehouseinventorymanager.invitations.InvitationsFragment"
         android:label="@string/warehouseInvitations"
         tools:layout="@layout/fragment_invitations" />
+    <fragment
+        android:id="@+id/peopleInWarehouseFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.peopleInWarehouse.peopleInWarehouseFragment"
+        android:label="@string/peopleInThisWarehouse"
+        tools:layout="@layout/fragment_people_in_warehouse" >
+        <argument
+            android:name="warehouseObject"
+            app:argType="cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse" />
+        <argument
+            android:name="ownWarehouse"
+            app:argType="boolean" />
+    </fragment>
 </navigation>

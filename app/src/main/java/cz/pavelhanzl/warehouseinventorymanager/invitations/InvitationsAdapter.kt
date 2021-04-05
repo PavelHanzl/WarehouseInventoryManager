@@ -67,6 +67,8 @@ class InvitationsAdapter(options: FirestoreRecyclerOptions<Invitation>) : Firest
 
             itemView.btn_declineInvitation_warehouseInvitationFragment.setOnClickListener{
                 Log.d("invi", "decline warehouse:" + warehouseId + " ivni:" + invitationId )
+
+                //smaže tuto pozvánku
                 db.collection(Constants.INVITATIONS_STRING).document(invitationId).delete()
             }
 
