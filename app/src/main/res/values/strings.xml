@@ -141,6 +141,9 @@
     <string name="nameSurname">Jméno příjmení</string>
     <string name="owner">Vlastník</string>
     <string name="OtherPeopleInWarehouse">Ostatní lidé ve skladu</string>
+    <string name="inviteUserIntoWarehouse">Pozvat uživatele do skladu</string>
+    <string name="whoToInvite">Koho chcete pozvat?</string>
+    <string name="enterEmailOfTheUser">Zadejte e-mail uživatele</string>
 
 
 </resources>

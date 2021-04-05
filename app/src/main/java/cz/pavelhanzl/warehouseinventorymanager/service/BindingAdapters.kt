@@ -37,6 +37,17 @@ object BindingAdapters {
             .into(view)
     }
 
+    @JvmStatic
+    @BindingAdapter("userProfileImageUrl")
+    fun loadUserProfileImage(view: CircleImageView, url: String?) {
+
+        Glide.with(view.context)
+            .load(url)
+            .placeholder(R.drawable.avatar_profileavatar)
+            .error(R.drawable.avatar_profileavatar)
+            .into(view)
+    }
+
 
 
 }

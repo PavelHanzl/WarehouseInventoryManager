@@ -178,7 +178,7 @@
         tools:layout="@layout/fragment_invitations" />
     <fragment
         android:id="@+id/peopleInWarehouseFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.peopleInWarehouse.peopleInWarehouseFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.peopleInWarehouse.PeopleInWarehouseFragment"
         android:label="@string/peopleInThisWarehouse"
         tools:layout="@layout/fragment_people_in_warehouse" >
         <argument
@@ -187,5 +187,13 @@
         <argument
             android:name="ownWarehouse"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_peopleInWarehouseFragment_to_inviteUserFragment"
+            app:destination="@id/inviteUserFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/inviteUserFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.peopleInWarehouse.InviteUserFragment"
+        android:label="@string/inviteUserIntoWarehouse"
+        tools:layout="@layout/fragment_invite_user" />
 </navigation>

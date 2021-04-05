@@ -45,12 +45,12 @@ class WarehouseLogFragment : BaseFragment() {
     ): View? {
         // Inflate the layout for this fragment
 
+
+
         //binduje a přiřazuje viewmodel
         binding = FragmentWarehouseLogBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
-
 
 
 

@@ -219,6 +219,11 @@ class WarehouseDetailFragment : BaseFragment() {
 
             }
 
+            R.id.miOwnWarehousePeople -> {
+                val action = WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToPeopleInWarehouseFragment(viewModel.warehouseObject.value!!, args.ownWarehouse)
+                findNavController().navigate(action)
+            }
+
 
         }
         return super.onOptionsItemSelected(item)
