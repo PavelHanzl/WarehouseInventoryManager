@@ -144,6 +144,8 @@
     <string name="inviteUserIntoWarehouse">Pozvat uživatele do skladu</string>
     <string name="whoToInvite">Koho chcete pozvat?</string>
     <string name="enterEmailOfTheUser">Zadejte e-mail uživatele</string>
+    <string name="userWithThisEmailDoesntExists">Uživatele s tímto emailem neevidujeme v naší databázi.</string>
+    <string name="userIsAlreadyMemberOfThisWh">Uživatel s tímto emailem je již členem tohoto skladu.</string>
 
 
 </resources>

@@ -7,6 +7,6 @@ data class WarehouseLogItem(
         var itemName: String = "",
         var itemCount: String = "",
         var date: String = getDateTime(),
-        var userName: String = FirebaseAuth.getInstance().currentUser!!.displayName!!
+        var userName: String = FirebaseAuth.getInstance().currentUser!!.email!!
 )
 

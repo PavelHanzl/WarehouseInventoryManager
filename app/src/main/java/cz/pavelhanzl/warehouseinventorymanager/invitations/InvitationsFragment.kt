@@ -54,7 +54,7 @@ class InvitationsFragment : BaseFragment() {
     private fun setUpRecycleView() {
 
         //nastaví recycleview query pro recycle view
-        val query = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("to", auth.currentUser!!.uid) //.orderBy("date", Query.Direction.DESCENDING)
+        val query = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("to", auth.currentUser!!.uid).orderBy("date", Query.Direction.DESCENDING)
 
         val options = FirestoreRecyclerOptions.Builder<Invitation>().setQuery(query, Invitation::class.java).setLifecycleOwner(this).build()
         val invitationsAdapter = InvitationsAdapter(options)

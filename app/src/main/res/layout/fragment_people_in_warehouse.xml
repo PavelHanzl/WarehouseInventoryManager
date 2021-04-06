@@ -17,6 +17,18 @@
     android:layout_height="match_parent"
     tools:context=".warehouse.peopleInWarehouse.PeopleInWarehouseFragment">
 
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_sucessErrorAnim_peopleInWarehouseFragment"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/fab_addUserToThisWh_peopleInWarehouseFragment"
+        app:layout_constraintEnd_toEndOf="@+id/fab_addUserToThisWh_peopleInWarehouseFragment"
+        app:layout_constraintStart_toStartOf="@+id/fab_addUserToThisWh_peopleInWarehouseFragment"
+        app:lottie_fileName="success.json" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/ownerLable_peopleInWarehouseFragment"
         android:layout_width="wrap_content"
