@@ -11,38 +11,45 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentPeopleInWarehouseBinding
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentWarehouseLogBinding
-import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
-import cz.pavelhanzl.warehouseinventorymanager.repository.vibratePhoneError
-import cz.pavelhanzl.warehouseinventorymanager.repository.vibratePhoneSuccess
+import cz.pavelhanzl.warehouseinventorymanager.invitations.InvitationsAdapter
+import cz.pavelhanzl.warehouseinventorymanager.repository.*
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehouseDetailFragmentDirections
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehousesDetailFragmentViewModel
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseLog.WarehouseLogFragmentArgs
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseLog.WarehouseLogFragmentViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class PeopleInWarehouseFragment : BaseFragment() {
 
     private val args: PeopleInWarehouseFragmentArgs by navArgs()
     private lateinit var binding: FragmentPeopleInWarehouseBinding
     private val viewModel: PeopleInWarehouseFragmentViewModel by activityViewModels()
-
+    private lateinit var usersInWarehouse: ListenerRegistration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //předá argumenty do viewmodelu
         if (savedInstanceState == null) {
-          viewModel.setData(args.warehouseObject)
+            viewModel.setData(args.warehouseObject)
         }
 
 
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,12 +62,13 @@ class PeopleInWarehouseFragment : BaseFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
 
-
         binding.fabAddUserToThisWhPeopleInWarehouseFragment.setOnClickListener {
-            val action =  PeopleInWarehouseFragmentDirections.actionPeopleInWarehouseFragmentToInviteUserFragment()
+            val action = PeopleInWarehouseFragmentDirections.actionPeopleInWarehouseFragmentToInviteUserFragment()
             findNavController().navigate(action)
         }
 
+
+        setUpRecycleView()
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -71,18 +79,16 @@ class PeopleInWarehouseFragment : BaseFragment() {
             .onEach {
                 when (it) {
                     PeopleInWarehouseFragmentViewModel.Event.NavigateBack -> {
-                        findNavController().navigateUp()
                         hideKeyboard(activity as MainActivity)
+                        findNavController().navigateUp()
                     }
                     PeopleInWarehouseFragmentViewModel.Event.PlaySuccessAnimation -> {
                         playSuccessErrorAnimation(true)
                     }
 
-
                 }
             }.observeInLifecycle(viewLifecycleOwner)
     }
-
 
     private fun playSuccessErrorAnimation(success: Boolean) {
 
@@ -98,11 +104,9 @@ class PeopleInWarehouseFragment : BaseFragment() {
             vibratePhoneError(requireContext())
         }
 
-
         //zobrazí a přehraje animaci
         binding.lottieSucessErrorAnimPeopleInWarehouseFragment.visibility = View.VISIBLE
         binding.lottieSucessErrorAnimPeopleInWarehouseFragment.playAnimation()
-
 
         //listenery
         binding.lottieSucessErrorAnimPeopleInWarehouseFragment.addAnimatorListener(object : Animator.AnimatorListener {
@@ -132,5 +136,43 @@ class PeopleInWarehouseFragment : BaseFragment() {
 
     }
 
+    private fun setUpRecycleView() {
+
+        usersInWarehouse = db.collection(Constants.WAREHOUSES_STRING).document(args.warehouseObject.warehouseID).addSnapshotListener { snapshot, e ->
+
+            if (e != null) {
+                Log.w("Data pro adapteros", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                Log.d("Data pro adapteros", "Current data: ${snapshot.data}")
+
+                //Nastaví live data na zvoleném skladě
+                viewModel.warehouse=snapshot.toObject(Warehouse::class.java)!!
+
+                //vytvoí adaptér na základě aktuálních dat
+                val popleInWhAdapter = PeopleInWarehouseAdapter(viewModel.warehouse.users, viewModel.warehouse)
+
+                //seststaví recycleview
+                binding.rvPeopleListPeopleInWarehouseFragment.apply {
+                    layoutManager = LinearLayoutManager(activity)
+                    adapter = popleInWhAdapter
+                }
+
+            } else {
+                Log.d("Data pro adapteros", "Current data: null")
+            }
+
+        }
+
+
+    }
+
+    override fun onDestroy() {
+        Log.d("Data pro adapteros", "Odpojuji listener")
+        usersInWarehouse.remove()
+        super.onDestroy()
+    }
 
 }
