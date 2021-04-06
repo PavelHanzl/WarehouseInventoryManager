@@ -172,6 +172,7 @@ class PeopleInWarehouseFragment : BaseFragment() {
     override fun onDestroy() {
         Log.d("Data pro adapteros", "Odpojuji listener")
         usersInWarehouse.remove()
+        hideKeyboard(requireActivity())
         super.onDestroy()
     }
 

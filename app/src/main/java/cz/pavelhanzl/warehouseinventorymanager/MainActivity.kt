@@ -121,9 +121,6 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         hideKeyboard(this)
 
-
-
-
         val navController = findNavController(R.id.fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }

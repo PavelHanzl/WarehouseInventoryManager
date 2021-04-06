@@ -14,6 +14,7 @@ import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentWarehouseLogB
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.Invitation
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseLogItem
+import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseLog.WarehouseLogAdapter
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseLog.WarehouseLogFragmentViewModel
@@ -65,5 +66,9 @@ class InvitationsFragment : BaseFragment() {
         }
     }
 
+    override fun onDestroy() {
+        hideKeyboard(requireActivity())
+        super.onDestroy()
+    }
    
 }
