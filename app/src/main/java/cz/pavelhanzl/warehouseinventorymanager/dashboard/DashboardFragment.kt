@@ -6,48 +6,68 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import cz.pavelhanzl.warehouseinventorymanager.dashboard.DashboardFragmentDirections
 import cz.pavelhanzl.warehouseinventorymanager.R
+import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateEditWarehouseBinding
+import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentDashboardBinding
+import cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditWarehouse.CreateEditWarehouseFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 class DashboardFragment : Fragment() {
+    private lateinit var binding: FragmentDashboardBinding
+    lateinit var viewModel: DashboardFragmentViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        //binduje a přiřazuje viewmodel
+        viewModel = ViewModelProvider(this).get(DashboardFragmentViewModel::class.java)
+        binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        binding.viewmodel = viewModel
+        binding.fragmentClass = this
+        binding.lifecycleOwner = viewLifecycleOwner
+
+
+
+        viewModel.registrateBadgeListeners()
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false)
+        return binding.root
 
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        llButtonOwnWarehouse.setOnClickListener {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToListOfWarehousesFragment(true)
-            Navigation.findNavController(view).navigate(action)
-        }
-
-        llButtonSharedWarehouse.setOnClickListener {
-            val action = DashboardFragmentDirections.actionDashboardFragmentToListOfWarehousesFragment(false)
-            Navigation.findNavController(view).navigate(action)
-        }
-
-        llButtonInvitationsWarehouse.setOnClickListener {
-            Log.d("invi","invi pressed")
-            val action = DashboardFragmentDirections.actionDashboardFragmentToInvitationsFragment()
-            Navigation.findNavController(view).navigate(action)
-        }
-
-        llButtonSettings.setOnClickListener {
-            val action = DashboardFragmentDirections.navigateDashboardToSettings(5)
-            Navigation.findNavController(view).navigate(action)
-
-        }
-
+    override fun onDestroyView() {
+        viewModel.unregistrateBadgeListeners()
+        super.onDestroyView()
     }
+
+    fun navigateToOwnWarehouses(){
+        val action = DashboardFragmentDirections.actionDashboardFragmentToListOfWarehousesFragment(true)
+        findNavController().navigate(action)
+    }
+
+    fun navigateToSharedWarehouses(){
+        val action = DashboardFragmentDirections.actionDashboardFragmentToListOfWarehousesFragment(false)
+        findNavController().navigate(action)
+    }
+
+    fun navigateToInvitations(){
+        val action = DashboardFragmentDirections.actionDashboardFragmentToInvitationsFragment()
+        findNavController().navigate(action)
+    }
+
+    fun navigateToSettings(){
+        val action = DashboardFragmentDirections.navigateDashboardToSettings(5)
+        findNavController().navigate(action)
+    }
+
+
+
 
 }

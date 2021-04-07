@@ -1,12 +1,14 @@
 package cz.pavelhanzl.warehouseinventorymanager.invitations
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentInvitationsBinding
@@ -23,6 +25,7 @@ class InvitationsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentInvitationsBinding
     lateinit var viewModel: InvitationsFragmentViewModel
+    lateinit var queryListener: ListenerRegistration
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +62,21 @@ class InvitationsFragment : BaseFragment() {
         val options = FirestoreRecyclerOptions.Builder<Invitation>().setQuery(query, Invitation::class.java).setLifecycleOwner(this).build()
         val invitationsAdapter = InvitationsAdapter(options)
 
+        queryListener = query.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                Log.w("Invitation Listener", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot!!.documents.isEmpty()) {
+                binding.noinvitationsAnim.visibility = View.VISIBLE
+            } else {
+                binding.noinvitationsAnim.visibility = View.GONE
+            }
+
+
+
+        }
 
         binding.rvInvitationsListInvitationsFragment.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -67,6 +85,7 @@ class InvitationsFragment : BaseFragment() {
     }
 
     override fun onDestroy() {
+        queryListener.remove()
         hideKeyboard(requireActivity())
         super.onDestroy()
     }

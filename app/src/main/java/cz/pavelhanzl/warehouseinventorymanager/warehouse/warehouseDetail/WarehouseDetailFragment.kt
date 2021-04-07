@@ -14,9 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.ListenerRegistration
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentWarehouseDetailBinding
+import cz.pavelhanzl.warehouseinventorymanager.generated.callback.OnClickListener
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
@@ -37,6 +39,7 @@ class WarehouseDetailFragment : BaseFragment() {
 
     private var addItemClicked = false
     private var removeItemClicked = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -281,6 +284,17 @@ class WarehouseDetailFragment : BaseFragment() {
         //nastaví recycleview
         val query = db.collection("warehouses").document(args.warehouseID).collection("items").orderBy("name_lowercase")
         val options = FirestoreRecyclerOptions.Builder<WarehouseItem>().setQuery(query, WarehouseItem::class.java).setLifecycleOwner(this).build()
+
+
+        query.get().addOnCompleteListener {
+            if(it.result!!.documents.isEmpty()){
+                binding.noitemAnim.visibility = View.VISIBLE
+            }else{
+                binding.noitemAnim.visibility = View.GONE
+            }
+        }
+
+
         val ownWarehouseDetailAdapter = WarehouseDetailAdapter(options,args.ownWarehouse)
 
         rv_ownWarehouseDetailList.apply {
@@ -288,5 +302,6 @@ class WarehouseDetailFragment : BaseFragment() {
             adapter = ownWarehouseDetailAdapter
         }
     }
+
 
 }

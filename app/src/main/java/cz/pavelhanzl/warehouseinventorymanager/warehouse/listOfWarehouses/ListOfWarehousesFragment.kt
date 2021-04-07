@@ -1,6 +1,8 @@
 package cz.pavelhanzl.warehouseinventorymanager.warehouse.listOfWarehouses
 
+import android.app.DownloadManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -10,8 +12,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.firestore.ListenerRegistration
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
+import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentDashboardBinding
+import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentListOfWarehousesBinding
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,6 +26,8 @@ class ListOfWarehousesFragment : BaseFragment() {
     val args: ListOfWarehousesFragmentArgs by navArgs()
     lateinit var navigationView: NavigationView
     var ownWarehouse: Boolean = false
+    private lateinit var binding: FragmentListOfWarehousesBinding
+    //private lateinit var queryListener: ListenerRegistration
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -35,7 +42,15 @@ class ListOfWarehousesFragment : BaseFragment() {
     ): View? {
         // Inflate the layout for this fragment
         setHasOptionsMenu(true)
-        return inflater.inflate(R.layout.fragment_list_of_warehouses, container, false)
+
+
+        binding = FragmentListOfWarehousesBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+
+
+
+
+        return binding.root
 
     }
 
@@ -95,18 +110,15 @@ class ListOfWarehousesFragment : BaseFragment() {
                 //TODO: Domyslet načítání skladů cizích
                 db.collection("warehouses").whereArrayContains("users",auth.currentUser!!.uid)
 
-                    /* db.collection("warehouses").whereIn(FieldPath.documentId(), listOf(
-                    "C8Py9nDTVudEpfU19zCg",
-                    "F7eDAwyPZNC4MYvxe2fO",
-                    "AkQ6Bhygfbeb8JesnIIJ",
-                    "GXo3yE1voxPdvBl2Zemn",
-                    "JrEC3hx2BsaF5aecBiVZ",
-                    "Mc8aUoi9w0qEnU4bhC4k",
-                    "NbeMJV8U5hG1UFMg3nxD",
-                    "OCJsVeOPwpa6cEoz710x",
-                    "OM2KSPISM5lYHT2ob6DU"))*/
-
             }
+
+        query.get().addOnCompleteListener {
+            if(it.result!!.documents.isEmpty()){
+                binding.nowarehouseAnim.visibility = View.VISIBLE
+            }else{
+                binding.nowarehouseAnim.visibility = View.GONE
+            }
+        }
 
         val options = FirestoreRecyclerOptions.Builder<Warehouse>().setQuery(query, Warehouse::class.java).setLifecycleOwner(this).build()
         val ownWarehousesAdapter = ListOfWarehousesAdapter(options, ownWarehouse)
@@ -118,6 +130,11 @@ class ListOfWarehousesFragment : BaseFragment() {
         }
 
 
+    }
+
+    override fun onDestroyView() {
+
+        super.onDestroyView()
     }
 
 

@@ -146,6 +146,9 @@
     <string name="enterEmailOfTheUser">Zadejte e-mail uživatele</string>
     <string name="userWithThisEmailDoesntExists">Uživatele s tímto emailem neevidujeme v naší databázi.</string>
     <string name="userIsAlreadyMemberOfThisWh">Uživatel s tímto emailem je již členem tohoto skladu.</string>
+    <string name="notifications">Notifikace</string>
+    <string name="help">Nápověda</string>
+    <string name="settings">Nastavení</string>
 
 
 </resources>

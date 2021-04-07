@@ -149,7 +149,18 @@ class PeopleInWarehouseFragment : BaseFragment() {
                 Log.d("Data pro adapteros", "Current data: ${snapshot.data}")
 
                 //Nastaví live data na zvoleném skladě
-                viewModel.warehouse=snapshot.toObject(Warehouse::class.java)!!
+                viewModel.warehouse = snapshot.toObject(Warehouse::class.java)!!
+
+                if (viewModel.warehouse.users.isEmpty()) {
+                    Log.d("Data pro adapteros", "Skryvam")
+                    //skryje lottie s informací že zde není jiný user než owner
+                    binding.nousersAnim.visibility = View.VISIBLE
+                } else {
+                    Log.d("Data pro adapteros", "Zobrazuji")
+                    //zobrazí lottie s informací že zde není jiný user než owner
+                    binding.nousersAnim.visibility = View.GONE
+                }
+
 
                 //vytvoí adaptér na základě aktuálních dat
                 val popleInWhAdapter = PeopleInWarehouseAdapter(viewModel.warehouse.users, viewModel.warehouse)
@@ -161,6 +172,8 @@ class PeopleInWarehouseFragment : BaseFragment() {
                 }
 
             } else {
+                //zobrazí lottie s informací že zde není jiný user než owner
+                binding.nousersAnim.visibility = View.VISIBLE
                 Log.d("Data pro adapteros", "Current data: null")
             }
 
