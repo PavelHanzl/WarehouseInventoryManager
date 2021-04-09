@@ -16,14 +16,17 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentChangeNameBinding
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.menu_header.*
 import kotlinx.android.synthetic.main.menu_header.view.*
+import kotlinx.android.synthetic.main.rv_warehouse_people_list_item.view.*
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
@@ -32,8 +35,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    private val db = FirebaseFirestore.getInstance()
-    private val mAuth = FirebaseAuth.getInstance()
 
     lateinit var mainActivityViewModel: MainActivityViewModel
 
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         setUpDrawerMenu()
         setUpActionBarBasedOnNavigation()
@@ -71,8 +73,12 @@ class MainActivity : AppCompatActivity() {
             headerView.drawerHeaderEmail.text = name
         })
 
-        mainActivityViewModel.profilePhoto.observe(this, Observer { profilePhoto ->
-            profileImage.setImageBitmap(profilePhoto)
+        mainActivityViewModel.profilePhotoUrl.observe(this, Observer { profilePhotoURL ->
+            Glide.with(applicationContext)
+                .load(profilePhotoURL)
+                .placeholder(R.drawable.avatar_profileavatar)
+                .error(R.drawable.avatar_profileavatar)
+                .into(profileImage)
         })
 
     }
@@ -92,12 +98,6 @@ class MainActivity : AppCompatActivity() {
     //Nastaví jednotlivé tlačítka v Drawer Menu, která nejsou součástí navigation component např. logout button
     private fun setIndividualMenuItems() {
 
-     /*   val menuItemSharedWarehouses = drawerNavigationView.menu.findItem(R.id.menu_item_sharedWarehouseFragment)
-        menuItemSharedWarehouses.setOnMenuItemClickListener {
-            drawerLayout.close()
-            navController.navigate(R.id.action_global_ownWarehouseFragment)
-            true
-        }*/
 
         //Logout menu item
         val menuItemLogout = drawerNavigationView.menu.findItem(R.id.menuItem_logout)

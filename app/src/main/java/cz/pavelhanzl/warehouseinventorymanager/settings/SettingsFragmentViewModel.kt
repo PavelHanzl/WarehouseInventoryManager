@@ -1,11 +1,13 @@
 package cz.pavelhanzl.warehouseinventorymanager.settings
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageException
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
@@ -25,6 +27,9 @@ class SettingsFragmentViewModel : BaseViewModel() {
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
 
+    var userProfilePhoto = MutableLiveData<ByteArray>()
+    var _profilePhotoUrl= MutableLiveData<String>("")
+    val profilePhotoUrl: LiveData<String> get() = _profilePhotoUrl
 
     var userNewNameContent = MutableLiveData<String>("")
     var _userNewNameError = MutableLiveData<String>("")
@@ -52,6 +57,7 @@ class SettingsFragmentViewModel : BaseViewModel() {
 
     sealed class Event {
         object NavigateBack : Event()
+        object NoPhotoSelected: Event()
         //data class CreateEdit(val debtID: String?) : Event()
     }
 
@@ -59,6 +65,12 @@ class SettingsFragmentViewModel : BaseViewModel() {
     val eventsFlow = eventChannel.receiveAsFlow()
 
     fun wipeData() {
+
+        _loading.value = false
+        _profilePhotoUrl.value = ""
+        userProfilePhoto.value = byteArrayOf()
+
+
         userNewNameContent.value = ""
         _userNewNameError.value = ""
 
@@ -245,7 +257,11 @@ class SettingsFragmentViewModel : BaseViewModel() {
 
 
     /////////////////////////////////////////////////////začátek změna jména//////////////////////////////////////////////////
-fun changeName(){
+
+
+
+
+    fun changeName(){
         if(!userNewNameContent.value.isNullOrEmpty()) {
             _userNewNameError.value = ""
             GlobalScope.launch(IO) {
@@ -262,5 +278,52 @@ fun changeName(){
 
 }
     /////////////////////////////////////////////////////konec změna jména/////////////////////////////////////////////////
+
+    /////////////////////////////////////////////////////začátek změna fotky//////////////////////////////////////////////////
+
+
+    fun getUsersPhoto(){
+        GlobalScope.launch(IO) {
+            try {
+                _loading.postValue(true)
+                _profilePhotoUrl.postValue(storage.child("images/users/" + auth.currentUser?.uid + "/profile.jpg").downloadUrl.await().toString())
+                Log.d("Storage", "imageUrl: " + profilePhotoUrl)
+                _loading.postValue(false)
+            } catch (e: StorageException) {
+                Log.d("Storage", "image null" + e.message)
+                _loading.postValue(false)
+            }
+
+        }
+    }
+
+    fun changePhoto(){
+        if(userProfilePhoto.value!!.isNotEmpty()){
+        GlobalScope.launch(IO) {
+            _loading.postValue(true)
+            try {
+                //ukladam do storage
+                storage.child("/images/users/${auth.currentUser?.uid}/profile.jpg").putBytes(userProfilePhoto.value!!).await()
+
+                //ziskavam url prave ulozeneho obrazku
+                val newPhotoUrl = storage.child("/images/users/${auth.currentUser?.uid}/profile.jpg").downloadUrl.await()
+
+                //zapisuji url obrazku k objektu usera v DB
+                db.collection(Constants.USERS_STRING).document(auth.currentUser!!.uid).update("photoURL", newPhotoUrl.toString())
+                _loading.postValue(false)
+
+                eventChannel.send(Event.NavigateBack) //zavirame fragment
+            } catch (e: Exception) {
+                Log.d("Storage", "Error: " + e.message)
+                _loading.postValue(false)
+            }
+        }}else{
+            GlobalScope.launch(Main) { eventChannel.send(Event.NoPhotoSelected) }
+            Log.d("Pole", "prazdne pole, nic nedelam")
+        }
+
+    }
+
+    /////////////////////////////////////////////////////konec změna fotky/////////////////////////////////////////////////
 
 }

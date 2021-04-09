@@ -121,7 +121,7 @@ class CreateEditWarehouseFragment : Fragment() {
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
             Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(requireContext(), getString(R.string.Canceled), Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),  getString(R.string.operationCanceled), Toast.LENGTH_SHORT).show()
         }
 
     }

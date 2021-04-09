@@ -78,7 +78,6 @@ class PeopleInWarehouseAdapter (var users: List<String>, var warehouse: Warehous
                     } else {
                         Log.w("Users", "Current data null")
                     }
-                    Log.d("Users", "Size: " + snapshot!!.data!!.size)
                 }
             }
 

@@ -126,7 +126,7 @@ class CreateEditItemFragment : BaseFragment() {
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
             Toast.makeText(requireContext(), ImagePicker.getError(data), Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(requireContext(), "Task Cancelled", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),  getString(R.string.operationCanceled), Toast.LENGTH_SHORT).show()
         }
     }
 

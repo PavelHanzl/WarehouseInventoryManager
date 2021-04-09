@@ -171,6 +171,10 @@
     <string name="fillInTheseFieldsToChangeName">Pro změnu jména vyplňte prosím toto pole:</string>
     <string name="emailWasChanged">E-mail byl změněn.</string>
     <string name="nameWasChanged">Jméno bylo změněno</string>
+    <string name="changePhoto">Změnit fotku</string>
+    <string name="operationCanceled">Operace zrušena</string>
+    <string name="photoWasChanged">Fotka byla změněna.</string>
+    <string name="NoPhotoSelected">Nezvolili jste novou fotku. Není co měnit.</string>
 
 
 </resources>

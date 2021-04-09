@@ -26,8 +26,9 @@ class MainActivityViewModel : BaseViewModel() {
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> get() = _name
 
-    private val _profilePhoto = MutableLiveData<Bitmap>()
-    val profilePhoto: LiveData<Bitmap> get() = _profilePhoto
+    private val _profilePhotoUrl = MutableLiveData<String>()
+    val profilePhotoUrl: LiveData<String> get() = _profilePhotoUrl
+
 
     init {
         getUserName()
@@ -46,6 +47,8 @@ class MainActivityViewModel : BaseViewModel() {
                 if (snapshot != null && snapshot.exists()) {
                     Log.d("Header", "Current data: ${snapshot.data}")
                     _name.value = snapshot.toObject<User>()!!.name
+                    _profilePhotoUrl.postValue(snapshot.toObject<User>()!!.photoURL)// trigne observer na fotku v drawer menu
+
                 } else {
                     Log.d("Header", "Current data: null")
                 }
@@ -57,17 +60,19 @@ class MainActivityViewModel : BaseViewModel() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 var imageRef = storage.child("images/users/" + auth.currentUser!!.uid + "/profile.jpg")
-                var byteArray = imageRef.getBytes(5L * 1024 * 1024).await()
-                var bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+
+                _profilePhotoUrl.postValue( imageRef.downloadUrl.await().toString())
 
                 imageRef.downloadUrl.addOnSuccessListener {
                     Log.d("ImageRef Download URL", "URL: $it")
                 }
 
-                _profilePhoto.postValue(bmp)
             } catch (e: StorageException) {
-                Log.d("Header", "Obrázek nejde načíst! Udělej s tim něco! + ${e.message}")
+                Log.d("Header", "Drawer image error + ${e.message}")
             }
         }
+
+
     }
+
 }
