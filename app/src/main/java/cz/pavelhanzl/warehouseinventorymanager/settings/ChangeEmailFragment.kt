@@ -49,7 +49,7 @@ class ChangeEmailFragment : BottomSheetDialogFragment() {
                 when (it) {
                     SettingsFragmentViewModel.Event.NavigateBack -> {
                         findNavController().navigateUp()
-                        Toast.makeText(context, "E-mail byl změněn.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, getString(R.string.emailWasChanged), Toast.LENGTH_LONG).show()
                         hideKeyboard(activity as MainActivity)
                     }
                 }

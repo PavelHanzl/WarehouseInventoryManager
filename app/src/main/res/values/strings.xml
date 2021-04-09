@@ -167,6 +167,10 @@
     <string name="ThisIsNotEmailAccountConnectedToThisUserAccount">Toto není e-mail přidružený k tomuto účtu</string>
     <string name="passwordsDoNotMatch">Hesla se neshodují</string>
     <string name="thisFieldCanNotBeEmpty">Toto pole nemůže být prázdné.</string>
+    <string name="EnterNewName">Zadejte nové jméno</string>
+    <string name="fillInTheseFieldsToChangeName">Pro změnu jména vyplňte prosím toto pole:</string>
+    <string name="emailWasChanged">E-mail byl změněn.</string>
+    <string name="nameWasChanged">Jméno bylo změněno</string>
 
 
 </resources>

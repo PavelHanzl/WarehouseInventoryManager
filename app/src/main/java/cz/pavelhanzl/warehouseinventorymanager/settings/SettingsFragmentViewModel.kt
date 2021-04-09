@@ -11,11 +11,13 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class SettingsFragmentViewModel : BaseViewModel() {
 
@@ -24,9 +26,9 @@ class SettingsFragmentViewModel : BaseViewModel() {
     val loading: LiveData<Boolean> get() = _loading
 
 
-    var userCurrentNameContent = MutableLiveData<String>("")
-    var _userCurrentNameError = MutableLiveData<String>("")
-    val userCurrentNameError: LiveData<String> get() = _userCurrentNameError
+    var userNewNameContent = MutableLiveData<String>("")
+    var _userNewNameError = MutableLiveData<String>("")
+    val userNewNameError: LiveData<String> get() = _userNewNameError
 
     var userCurrentEmailContent = MutableLiveData<String>("")
     var _userCurrentEmailError = MutableLiveData<String>("")
@@ -57,8 +59,8 @@ class SettingsFragmentViewModel : BaseViewModel() {
     val eventsFlow = eventChannel.receiveAsFlow()
 
     fun wipeData() {
-        userCurrentNameContent.value = ""
-        _userCurrentNameError.value = ""
+        userNewNameContent.value = ""
+        _userNewNameError.value = ""
 
         userCurrentEmailContent.value = ""
         _userCurrentEmailError.value = ""
@@ -237,4 +239,28 @@ class SettingsFragmentViewModel : BaseViewModel() {
     }
 
     /////////////////////////////////////////////////////konec změna hesla//////////////////////////////////////////////////
+
+
+
+
+
+    /////////////////////////////////////////////////////začátek změna jména//////////////////////////////////////////////////
+fun changeName(){
+        if(!userNewNameContent.value.isNullOrEmpty()) {
+            _userNewNameError.value = ""
+            GlobalScope.launch(IO) {
+                _loading.postValue(true)
+                db.collection(Constants.USERS_STRING).document(auth.currentUser.uid).update("name", userNewNameContent.value).await()
+                _loading.postValue(false)
+                eventChannel.send(Event.NavigateBack)
+            }
+        } else {
+            _userNewNameError.value = stringResource(R.string.thisFieldCanNotBeEmpty)
+            _loading.postValue(false)
+        }
+
+
+}
+    /////////////////////////////////////////////////////konec změna jména/////////////////////////////////////////////////
+
 }

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View"/>
         <variable
             name="viewmodel"
             type="cz.pavelhanzl.warehouseinventorymanager.settings.SettingsFragmentViewModel" />
@@ -16,6 +16,66 @@
     android:layout_height="match_parent"
     tools:context=".settings.ChangeNameFragment">
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/linearProgressIndicator2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="@{viewmodel.loading ? View.VISIBLE : View.GONE}"
+        app:hideAnimationBehavior="inward"
+        app:layout_constraintTop_toTopOf="parent"
+        app:showAnimationBehavior="outward" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_info_FragmentChangeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="@string/fillInTheseFieldsToChangeName"
+        android:textColor="@color/midGrayColor"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_userNewName_FragmentChangeName"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/EnterNewName"
+        app:errorEnabled="true"
+        app:errorText="@{viewmodel.userNewNameError}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_info_FragmentChangeName">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/til_userNewNameContent_FragmentChangeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:text="@={viewmodel.userNewNameContent}" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_changeName_FragmentChangeName"
+        android:layout_width="379dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/secondaryColor"
+        android:onClick="@{()-> viewmodel.changeName()}"
+        android:text="@string/changeName"
+        app:layout_constraintEnd_toEndOf="@+id/til_userNewName_FragmentChangeName"
+        app:layout_constraintStart_toStartOf="@+id/til_userNewName_FragmentChangeName"
+        app:layout_constraintTop_toBottomOf="@+id/til_userNewName_FragmentChangeName" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

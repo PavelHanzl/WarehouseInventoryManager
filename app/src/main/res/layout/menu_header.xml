@@ -40,7 +40,7 @@
                 android:text="mail@domain.com"
                 android:textStyle="bold"
 
-                android:layout_gravity="end" />
+               />
 
         </LinearLayout>
 
