@@ -159,6 +159,14 @@
     <string name="enterCurrentPassword">Zadejte současné heslo</string>
     <string name="enterNewPassword">Zadejte nové heslo</string>
     <string name="enterNewPasswordAgain">Znovu zadejte nové heslo</string>
+    <string name="passwordWasChanged">Heslo bylo změněno.</string>
+    <string name="enterNewEmail">Zadejte nový e-mail</string>
+    <string name="fillInTheseFieldsToChangeEmail">Pro změnu e-mailu vyplňte prosím tato pole:</string>
+    <string name="passwordCanNotBeEmpty">Heslo nemůže být prázdné</string>
+    <string name="EnteredPasswordIsNotRight">Zadané heslo není správné</string>
+    <string name="ThisIsNotEmailAccountConnectedToThisUserAccount">Toto není e-mail přidružený k tomuto účtu</string>
+    <string name="passwordsDoNotMatch">Hesla se neshodují</string>
+    <string name="thisFieldCanNotBeEmpty">Toto pole nemůže být prázdné.</string>
 
 
 </resources>

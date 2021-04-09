@@ -19,6 +19,11 @@ import kotlinx.coroutines.launch
 
 class SettingsFragmentViewModel : BaseViewModel() {
 
+
+    private val _loading = MutableLiveData<Boolean>(false)
+    val loading: LiveData<Boolean> get() = _loading
+
+
     var userCurrentNameContent = MutableLiveData<String>("")
     var _userCurrentNameError = MutableLiveData<String>("")
     val userCurrentNameError: LiveData<String> get() = _userCurrentNameError
@@ -43,7 +48,6 @@ class SettingsFragmentViewModel : BaseViewModel() {
     var _userNewPassword2Error = MutableLiveData<String>("")
     val userNewPassword2Error: LiveData<String> get() = _userNewPassword2Error
 
-
     sealed class Event {
         object NavigateBack : Event()
         //data class CreateEdit(val debtID: String?) : Event()
@@ -52,35 +56,61 @@ class SettingsFragmentViewModel : BaseViewModel() {
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
+    fun wipeData() {
+        userCurrentNameContent.value = ""
+        _userCurrentNameError.value = ""
+
+        userCurrentEmailContent.value = ""
+        _userCurrentEmailError.value = ""
+
+        userNewEmailContent.value = ""
+        _userNewEmailError.value = ""
+
+        userCurrentPasswordContent.value = ""
+        _userCurrentPasswordError.value = ""
+
+        userNewPassword1Content.value = ""
+        _userNewPassword1Error.value = ""
+
+        userNewPassword2Content.value = ""
+        _userNewPassword2Error.value = ""
+
+    }
+
+    /////////////////////////////////////////////////////začátek změna hesla//////////////////////////////////////////////////
     fun changePassword() {
+        _loading.value = true
         GlobalScope.launch(Main) {
-            if (validatePasswords()) {
+            if (validateForChangePasswords()) {
                 Log.d("CAJ", "Jsme ready menit hesla")
                 auth.currentUser.updatePassword(userNewPassword1Content.value).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        GlobalScope.launch(Main) { eventChannel.send(Event.NavigateBack)}
+                        GlobalScope.launch(Main) { eventChannel.send(Event.NavigateBack) }
                         Log.d("CAJ", "Heslo zmeneno")
+                        _loading.value = false
                     } else {
                         Log.d("CAJ", "NEco se posralo")
+                        _loading.value = false
                     }
                 }
             } else {
                 //eventChannel.send(Event.HideLoading)
                 Log.d("CAJ", "Nejsme ready menit hesla")
+                _loading.value = false
             }
 
         }
     }
 
-    suspend fun validatePasswords(): Boolean {
+    suspend fun validateForChangePasswords(): Boolean {
         if (userCurrentPasswordContent.value == "") {
-            _userCurrentPasswordError.postValue("Heslo nemůže být prázdné")
+            _userCurrentPasswordError.postValue(stringResource(R.string.passwordCanNotBeEmpty))
             return false
         } else {
             _userCurrentPasswordError.postValue("")
         }
 
-        val currentPasswordEmailResult = validateCurrentEmail()
+        val currentEmailValidResult = validateCurrentEmail()
         val currentPasswordValidResult = validateCurrentPassword()
         val samePasswordValidResult = validateNewPasswordSame()
         val newPasswordLength = validatePasswordLenght()
@@ -88,27 +118,37 @@ class SettingsFragmentViewModel : BaseViewModel() {
         if (currentPasswordValidResult) {
             _userCurrentPasswordError.postValue("")
         } else {
-            _userCurrentPasswordError.postValue("Zadané heslo není správné")
+            _userCurrentPasswordError.postValue(stringResource(R.string.EnteredPasswordIsNotRight))
         }
 
-        return currentPasswordValidResult && samePasswordValidResult && newPasswordLength && currentPasswordEmailResult
+        return currentPasswordValidResult && samePasswordValidResult && newPasswordLength && currentEmailValidResult
     }
 
     private fun validateCurrentEmail(): Boolean {
-
-        return if (auth.currentUser?.email == userCurrentEmailContent.value) {
+        var result: Boolean
+        if (auth.currentUser?.email == userCurrentEmailContent.value) {
             _userCurrentEmailError.postValue("")
-            true
+            result = true
         } else {
-            _userCurrentEmailError.postValue("Toto není e-mail přidružený k tomuto účtu")
-            false
+            _userCurrentEmailError.postValue(stringResource(R.string.ThisIsNotEmailAccountConnectedToThisUserAccount))
+            result = false
         }
+
+        if (userCurrentEmailContent.value == "") {
+            _userCurrentEmailError.postValue(stringResource(R.string.thisFieldCanNotBeEmpty))
+            result = false
+        }
+
+
+        return result
+
     }
 
     suspend private fun validateCurrentPassword(): Boolean {
         val result = CompletableDeferred<Boolean>()
-        val credential = EmailAuthProvider.getCredential(auth.currentUser.email, userCurrentPasswordContent.value)
-        auth.currentUser.reauthenticate(credential).addOnCompleteListener { task ->
+        val credential = EmailAuthProvider.getCredential(auth.currentUser?.email!!, userCurrentPasswordContent.value!!)
+
+        auth.currentUser?.reauthenticate(credential)!!.addOnCompleteListener { task ->
             result.complete(task.isSuccessful)
         }
         return result.await()
@@ -119,7 +159,7 @@ class SettingsFragmentViewModel : BaseViewModel() {
             _userNewPassword2Error.value = ""
             true
         } else {
-            _userNewPassword2Error.value = "Hesla se neshodují"
+            _userNewPassword2Error.value = stringResource(R.string.passwordsDoNotMatch)
             false
         }
     }
@@ -135,5 +175,66 @@ class SettingsFragmentViewModel : BaseViewModel() {
         }
     }
 
+    /////////////////////////////////////////////////////konec změna hesla//////////////////////////////////////////////////
 
+    /////////////////////////////////////////////////////začátek změna emailu//////////////////////////////////////////////////
+
+    fun changeEmail() {
+        _loading.value = true
+        GlobalScope.launch(Main) {
+            if (validateForChangeEmail()) {
+                Log.d("CAJ", "Jsme ready menit emaily")
+                auth.currentUser.updateEmail(userNewEmailContent.value).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        GlobalScope.launch(Main) { eventChannel.send(Event.NavigateBack) }
+                        Log.d("CAJ", "email zmenen")
+                        _loading.value = false
+                    } else {
+                        Log.d("CAJ", "NEco se posralo")
+                        _loading.value = false
+                    }
+                }
+
+            } else {
+                _loading.value = false
+                Log.d("CAJ", "Nejsme ready menit maily")
+            }
+
+        }
+    }
+
+    suspend fun validateForChangeEmail(): Boolean {
+
+        val currentEmailValidResult = validateCurrentEmail()
+        val newEmailValidResult = validateNewEmail()
+
+        if (userCurrentPasswordContent.value == "") {
+            _userCurrentPasswordError.postValue(stringResource(R.string.passwordCanNotBeEmpty))
+            return false
+        } else {
+            _userCurrentPasswordError.postValue("")
+        }
+
+        val currentPasswordValidResult = validateCurrentPassword()
+
+        if (currentPasswordValidResult) {
+            _userCurrentPasswordError.postValue("")
+        } else {
+            _userCurrentPasswordError.postValue(stringResource(R.string.EnteredPasswordIsNotRight))
+        }
+
+        return currentEmailValidResult && currentPasswordValidResult && newEmailValidResult
+    }
+
+    private fun validateNewEmail(): Boolean {
+        return if (!android.util.Patterns.EMAIL_ADDRESS.matcher(userNewEmailContent.value!!).matches() || userNewEmailContent.value == "") {
+            _userNewEmailError.value = stringResource(R.string.mail_is_not_in_form)
+            false
+        } else {
+            _userNewEmailError.value = ""
+            true
+        }
+    }
+
+    /////////////////////////////////////////////////////konec změna hesla//////////////////////////////////////////////////
 }

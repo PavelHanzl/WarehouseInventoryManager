@@ -31,6 +31,7 @@ class ChangePasswordFragment : BottomSheetDialogFragment() {
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        viewModel.wipeData()
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -43,7 +44,7 @@ class ChangePasswordFragment : BottomSheetDialogFragment() {
                 when (it) {
                     SettingsFragmentViewModel.Event.NavigateBack -> {
                         findNavController().navigateUp()
-                        Toast.makeText(context, "Heslo bylo změněno.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, getString(R.string.passwordWasChanged), Toast.LENGTH_LONG).show()
                         hideKeyboard(activity as MainActivity)
                     }
                 }

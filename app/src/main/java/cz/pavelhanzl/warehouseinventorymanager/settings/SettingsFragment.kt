@@ -52,14 +52,19 @@ class SettingsFragment : BaseFragment() {
     }
 
     fun navigateToChangeProfilePhoto(){
-
+        val action = SettingsFragmentDirections.actionSettingsFragmentToChangePhotoFragment()
+        findNavController().navigate(action)
     }
 
     fun navigateToChangeName(){
+        val action = SettingsFragmentDirections.actionSettingsFragmentToChangeNameFragment()
+        findNavController().navigate(action)
 
     }
 
     fun navigateToChangeEmail(){
+        val action = SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment()
+        findNavController().navigate(action)
 
     }
 
