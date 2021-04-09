@@ -61,7 +61,7 @@
     <string name="type_in_name">Toto pole nemůže být prázdné!</string>
     <string name="note_to_long">Přesahuje povolený počet znaků!</string>
     <string name="mail_is_not_in_form">E-mail je ve špatém tvaru!</string>
-    <string name="passwor_must_have">"Heslo musí být alspoň "</string>
+    <string name="password_must_have">"Heslo musí být alspoň "</string>
     <string name="number_of_characters">" znaků dlouhé!"</string>
     <string name="password_not_same">Hesla musí být stejná!</string>
     <string name="nameLable">Celé jméno</string>
@@ -149,6 +149,16 @@
     <string name="notifications">Notifikace</string>
     <string name="help">Nápověda</string>
     <string name="settings">Nastavení</string>
+    <string name="sharedWarehouses">Ostatní sklady</string>
+    <string name="changePassword">Změnit heslo</string>
+    <string name="changeEmail">Změnit e-mail</string>
+    <string name="changeName">Změnit jméno</string>
+    <string name="changeProfileImage">Změnit profilovou fotku</string>
+    <string name="fillInTheseFieldsToChangePassword">Pro změnu hesla vyplňte prosím tato pole:</string>
+    <string name="enterCurrentEmail">Zadejte současný e-mail</string>
+    <string name="enterCurrentPassword">Zadejte současné heslo</string>
+    <string name="enterNewPassword">Zadejte nové heslo</string>
+    <string name="enterNewPasswordAgain">Znovu zadejte nové heslo</string>
 
 
 </resources>

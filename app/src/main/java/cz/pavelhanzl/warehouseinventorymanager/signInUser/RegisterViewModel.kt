@@ -110,7 +110,7 @@ class RegisterViewModel : BaseViewModel() {
     private fun validatePasswordLength(): Boolean {
         return if (!(password1Content.value?.length!! >= passwordLength)) {
             _passwordErrorLength.value =
-                stringResource(R.string.passwor_must_have) + passwordLength + stringResource(R.string.number_of_characters)
+                stringResource(R.string.password_must_have) + passwordLength + stringResource(R.string.number_of_characters)
             false
         } else {
             _passwordErrorLength.value = ""

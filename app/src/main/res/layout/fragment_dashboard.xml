@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="10dp"
-                    android:text="Mé sklady"
+                    android:text="@string/ownWarehouses"
                     android:textColor="@color/darkGrayColor"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
                     android:layout_marginTop="10dp"
-                    android:text="Ostatní sklady"
+                    android:text="@string/sharedWarehouses"
                     android:textColor="@color/darkGrayColor"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -201,7 +201,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
-                    android:text="Pozvánky do skladů"
+                    android:text="@string/warehouseInvitations"
                     android:textColor="@color/darkGrayColor"
                     android:textSize="15sp"
                     android:textStyle="bold"

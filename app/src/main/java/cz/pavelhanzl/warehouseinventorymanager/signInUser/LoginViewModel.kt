@@ -67,7 +67,7 @@ class LoginViewModel : BaseViewModel() {
  private fun validatePasswordLength(): Boolean {
   return if (!(passwordContent.value?.length!! >= passwordLength)) {
    _passwordError.value =
-    stringResource(R.string.passwor_must_have) + passwordLength + stringResource(R.string.number_of_characters)
+    stringResource(R.string.password_must_have) + passwordLength + stringResource(R.string.number_of_characters)
    false
   } else {
    _passwordError.value = ""
@@ -99,8 +99,9 @@ class LoginViewModel : BaseViewModel() {
  }
 
 fun saveUserProfilePhotoFromGoogleAuth(): UploadTask {
-  var userImageURL = auth.currentUser!!.photoUrl.toString()
+  val userImageURL = auth.currentUser!!.photoUrl.toString()
   var photoRef = storage.child("images/users/" + auth.currentUser!!.uid + "/profile.jpg")
+
   val picture = Picasso.get().load(userImageURL).get()
   val baos = ByteArrayOutputStream()
   picture.compress(Bitmap.CompressFormat.JPEG, 100, baos)

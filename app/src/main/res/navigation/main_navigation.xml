@@ -38,14 +38,18 @@
             app:argType="integer"
             android:defaultValue="2" />
         <action
-            android:id="@+id/action_settingsFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
+            android:id="@+id/action_settingsFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_changeEmailFragment"
+            app:destination="@id/changeEmailFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_changePhotoFragment"
+            app:destination="@id/changePhotoFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_changeNameFragment"
+            app:destination="@id/changeNameFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/aboutFragment"
-        android:name="cz.pavelhanzl.warehouseinventorymanager.About"
-        android:label="fragment_about"
-        tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/listOfWarehousesFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.listOfWarehouses.ListOfWarehousesFragment"
@@ -196,4 +200,24 @@
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.peopleInWarehouse.InviteUserFragment"
         android:label="@string/inviteUserIntoWarehouse"
         tools:layout="@layout/fragment_invite_user" />
+    <dialog
+        android:id="@+id/changePasswordFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.settings.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" />
+    <dialog
+        android:id="@+id/changeEmailFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.settings.ChangeEmailFragment"
+        android:label="fragment_change_email"
+        tools:layout="@layout/fragment_change_email" />
+    <dialog
+        android:id="@+id/changePhotoFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.settings.ChangePhotoFragment"
+        android:label="fragment_change_photo"
+        tools:layout="@layout/fragment_change_photo" />
+    <dialog
+        android:id="@+id/changeNameFragment"
+        android:name="cz.pavelhanzl.warehouseinventorymanager.settings.ChangeNameFragment"
+        android:label="fragment_change_name"
+        tools:layout="@layout/fragment_change_name" />
 </navigation>
