@@ -1,38 +1,33 @@
 package cz.pavelhanzl.warehouseinventorymanager.dashboard
 
-import android.media.MediaSession2Service
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Query
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
-import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.peopleInWarehouse.PeopleInWarehouseAdapter
 
-class DashboardFragmentViewModel:BaseViewModel() {
+class DashboardFragmentViewModel : BaseViewModel() {
 
-    var _notificationNumber = MutableLiveData<String>("")
-    val notificationNumber: LiveData<String> get() = _notificationNumber
+    var _invitationSendNumber = MutableLiveData<String>("")
+    val invitationSendNumber: LiveData<String> get() = _invitationSendNumber
 
-    var _invitationNumber = MutableLiveData<String>("")
-    val invitationNumber: LiveData<String> get() = _invitationNumber
+    var _invitationRecievedNumber = MutableLiveData<String>("")
+    val invitationRecievedNumber: LiveData<String> get() = _invitationRecievedNumber
 
-    private val _notificationBadgeVisible = MutableLiveData<Boolean>(false)
-    val notificationBadgeVisible: LiveData<Boolean> get() = _notificationBadgeVisible
+    private val _invitationSendBadgeVisible = MutableLiveData<Boolean>(false)
+    val invitationSendBadgeVisible: LiveData<Boolean> get() = _invitationSendBadgeVisible
 
-    private val _invitationBadgeVisible = MutableLiveData<Boolean>(false)
-    val invitationBadgeVisible: LiveData<Boolean> get() = _invitationBadgeVisible
+    private val _invitationRecievedBadgeVisible = MutableLiveData<Boolean>(false)
+    val invitationRecievedBadgeVisible: LiveData<Boolean> get() = _invitationRecievedBadgeVisible
 
-    lateinit var invitationListener: ListenerRegistration
-    lateinit var notificationListener: ListenerRegistration
+    lateinit var invitationRecievedListener: ListenerRegistration
+    lateinit var invitationSendListener: ListenerRegistration
 
-    fun registrateBadgeListeners(){
+    fun registrateBadgeListeners() {
         Log.d("badgers", "registruju badgery")
 
-        invitationListener = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("to", auth.currentUser!!.uid).addSnapshotListener { snapshot, e ->
+        invitationRecievedListener = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("to", auth.currentUser!!.uid).addSnapshotListener { snapshot, e ->
 
             if (e != null) {
                 Log.w("Data pro invi badge", "Listen failed.", e)
@@ -40,30 +35,44 @@ class DashboardFragmentViewModel:BaseViewModel() {
             }
 
             if (snapshot != null && snapshot.documents.size != 0) {
-                _invitationBadgeVisible.value= true
-                _invitationNumber.value = snapshot.documents.size.toString()
+                _invitationRecievedBadgeVisible.value = true
+                _invitationRecievedNumber.value = snapshot.documents.size.toString()
 
             } else {
                 Log.d("Data pro invi badge", "Current data: null")
-                _invitationBadgeVisible.value= false
-                _invitationNumber.value = "0"
+                _invitationRecievedBadgeVisible.value = false
+                _invitationRecievedNumber.value = "0"
+            }
+
+        }
+
+        invitationSendListener = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("from", auth.currentUser!!.uid).addSnapshotListener { snapshot, e ->
+
+            if (e != null) {
+                Log.w("Data pro invi badge", "Listen failed.", e)
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null && snapshot.documents.size != 0) {
+                _invitationSendBadgeVisible.value = true
+                _invitationSendNumber.value = snapshot.documents.size.toString()
+
+            } else {
+                Log.d("Data pro invi badge", "Current data: null")
+                _invitationSendBadgeVisible.value = false
+                _invitationSendNumber.value = "0"
             }
 
         }
 
 
-
-
     }
 
-    fun unregistrateBadgeListeners(){
+    fun unregistrateBadgeListeners() {
         Log.d("badgers", "odpojuji badgery")
-        invitationListener.remove()
-
-        //TODO napojit notifikace
-//        notificationListener.remove()
+        invitationRecievedListener.remove()
+        invitationSendListener.remove()
     }
-
 
 
 }

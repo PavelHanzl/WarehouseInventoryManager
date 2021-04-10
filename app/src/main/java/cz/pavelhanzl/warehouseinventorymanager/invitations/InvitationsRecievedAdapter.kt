@@ -1,29 +1,24 @@
 package cz.pavelhanzl.warehouseinventorymanager.invitations
 
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.core.content.ContextCompat.getColor
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.*
-import kotlinx.android.synthetic.main.rv_log_warehouse_list_item.view.*
 import kotlinx.android.synthetic.main.rv_warehouse_invitation_list_item.view.*
 
-class InvitationsAdapter(options: FirestoreRecyclerOptions<Invitation>) : FirestoreRecyclerAdapter<Invitation, InvitationsAdapter.InvitationViewHolder>(options) {
+class InvitationsRecievedAdapter(options: FirestoreRecyclerOptions<Invitation>) : FirestoreRecyclerAdapter<Invitation, InvitationsRecievedAdapter.InvitationViewHolder>(options) {
     val db = Firebase.firestore
     val auth = Firebase.auth
 
@@ -112,7 +107,7 @@ class InvitationsAdapter(options: FirestoreRecyclerOptions<Invitation>) : Firest
 
         //binduje jaký sklad
         warehouseRef.get().addOnSuccessListener { document ->
-            if (document != null) {
+            if (document != null && document.data != null) {
                 Log.d("Invi", "DocumentSnapshot data: ${document.data}")
                 holder.bindWarehouse(document.toObject(Warehouse::class.java)!!)
             } else {

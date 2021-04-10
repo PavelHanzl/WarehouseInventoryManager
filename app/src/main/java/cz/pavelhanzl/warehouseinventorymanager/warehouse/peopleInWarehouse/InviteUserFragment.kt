@@ -62,7 +62,7 @@ class InviteUserFragment : BottomSheetDialogFragment() {
             .onEach {
                 when (it) {
                     PeopleInWarehouseFragmentViewModel.Event.NavigateBack -> {
-                        hideKeyboard(activity as MainActivity)
+                        hideKeyboard(requireActivity())
                         findNavController().navigateUp()
                     }
 

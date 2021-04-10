@@ -178,8 +178,11 @@
     <fragment
         android:id="@+id/invitationsFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.invitations.InvitationsFragment"
-        android:label="@string/warehouseInvitations"
-        tools:layout="@layout/fragment_invitations" />
+        tools:layout="@layout/fragment_invitations">
+        <argument
+            android:name="fragmentMode"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/peopleInWarehouseFragment"
         android:name="cz.pavelhanzl.warehouseinventorymanager.warehouse.peopleInWarehouse.PeopleInWarehouseFragment"
@@ -220,4 +223,14 @@
         android:name="cz.pavelhanzl.warehouseinventorymanager.settings.ChangeNameFragment"
         android:label="fragment_change_name"
         tools:layout="@layout/fragment_change_name" />
+    <action android:id="@+id/action_global_invitationsFragment_recieved" app:destination="@id/invitationsFragment" >
+        <argument
+            android:name="fragmentMode"
+            android:defaultValue="recieved" />
+    </action>
+    <action android:id="@+id/action_global_invitationsFragment_send" app:destination="@id/invitationsFragment">
+        <argument
+            android:name="fragmentMode"
+            android:defaultValue="send" />
+    </action>
 </navigation>

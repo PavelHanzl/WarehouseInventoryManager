@@ -46,9 +46,10 @@
                 app:lottie_loop="true" />
 
             <TextView
+                android:id="@+id/emptyRecycleAnimText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Vypadá to, že zde není \n ani jedna jediná pozvánka..."
+                android:text="@string/looksLikeThereIsNoInvitation"
                 android:textAlignment="center"
                 android:textColor="@color/lightGrayColor"
                 app:layout_constraintEnd_toEndOf="@+id/noinvitations_lottie"

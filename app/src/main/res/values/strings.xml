@@ -70,7 +70,7 @@
     <string name="drawerMenu_warehouses">Sklady</string>
     <string name="drawerMenu_sharedWarehouses">Ostatní sklady</string>
     <string name="drawerMenu_ownWarehouses">Mé sklady</string>
-    <string name="drawerMenu_warehouseInvitations">Pozvánky do skladů</string>
+    <string name="drawerMenu_warehouseInvitationsRecieved">Obdržené pozvánky</string>
     <string name="drawerMenu_notification">Notifikace</string>
     <string name="drawerMenu_help">Nápověda</string>
     <string name="ownWarehouses">Mé sklady</string>
@@ -175,6 +175,14 @@
     <string name="operationCanceled">Operace zrušena</string>
     <string name="photoWasChanged">Fotka byla změněna.</string>
     <string name="NoPhotoSelected">Nezvolili jste novou fotku. Není co měnit.</string>
+    <string name="drawerMenu_warehouseInvitationsSend">Odeslané pozvánky</string>
+    <string name="addItemToWarehouse">Přidat položku na sklad</string>
+    <string name="removeItemFromWarehouse">Odebrat položku ze skladu</string>
+    <string name="enterNumberOfRemovedItems">Zadejte počet odebíraných kusů</string>
+    <string name="looksLikeThereIsNoInvitation">Vypadá to, že zde není \n ani jedna jediná pozvánka…</string>
+    <string name="youHaveNotInvitedAnyoneInWh">Aktuálně jste nikoho nepozvali \nk sobě do skladu.</string>
+    <string name="userWasInvitedToWh">Uživatele jste pozvali do skladu:</string>
+    <string name="cancleInvitation">Zrušit</string>
 
 
 </resources>

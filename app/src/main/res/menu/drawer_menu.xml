@@ -26,13 +26,13 @@
                 android:title="@string/drawerMenu_sharedWarehouses"
                 />
             <item
-                android:id="@+id/invitationsFragment"
+                android:id="@+id/action_global_invitationsFragment_recieved"
                 android:icon="@drawable/ic_warehousenotification"
-                android:title="@string/drawerMenu_warehouseInvitations" />
+                android:title="@string/drawerMenu_warehouseInvitationsRecieved" />
             <item
-                android:id="@+id/notificationFragment"
-                android:icon="@drawable/ic_notification"
-                android:title="@string/drawerMenu_notification" />
+                android:id="@+id/action_global_invitationsFragment_send"
+                android:icon="@drawable/ic_send"
+                android:title="@string/drawerMenu_warehouseInvitationsSend" />
             </group>
             <!--</menu>
         </item>-->

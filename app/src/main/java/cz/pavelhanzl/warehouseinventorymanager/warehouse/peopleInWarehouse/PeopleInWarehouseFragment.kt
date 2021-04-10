@@ -3,36 +3,20 @@ package cz.pavelhanzl.warehouseinventorymanager.warehouse.peopleInWarehouse
 import android.animation.Animator
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Query
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
-import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentPeopleInWarehouseBinding
-import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentWarehouseLogBinding
-import cz.pavelhanzl.warehouseinventorymanager.invitations.InvitationsAdapter
 import cz.pavelhanzl.warehouseinventorymanager.repository.*
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehouseDetailFragmentDirections
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehousesDetailFragmentViewModel
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseLog.WarehouseLogFragmentArgs
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseLog.WarehouseLogFragmentViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 class PeopleInWarehouseFragment : BaseFragment() {
 
@@ -55,6 +39,7 @@ class PeopleInWarehouseFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
 
         //binduje a přiřazuje viewmodel
         binding = FragmentPeopleInWarehouseBinding.inflate(inflater, container, false)

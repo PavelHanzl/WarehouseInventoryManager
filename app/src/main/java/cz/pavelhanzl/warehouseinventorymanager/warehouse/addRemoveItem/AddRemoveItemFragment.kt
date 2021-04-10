@@ -234,7 +234,7 @@ class AddRemoveItemFragment : BaseFragment() {
 
     private fun runFragmentInAddingMode() {
         //nastaví odpovídající title v actionbaru "Ostatní sklady"
-        (activity as MainActivity).supportActionBar!!.title = "Přidat položku na sklad"
+        (activity as MainActivity).supportActionBar!!.title = getString(R.string.addItemToWarehouse)
 
         //nastaví private variable o módu tohoto fragmentu
         sharedViewModel.addingMode = true
@@ -244,10 +244,10 @@ class AddRemoveItemFragment : BaseFragment() {
     private fun runFragmentInRemovingMode() {
 
         //nastaví odpovídající title v actionbaru "Ostatní sklady"
-        (activity as MainActivity).supportActionBar!!.title = "Odebrat položku ze skladu"
+        (activity as MainActivity).supportActionBar!!.title = getString(R.string.removeItemFromWarehouse)
 
         //přepíše hint u počtu
-        binding.tfItemCountAddRemoveFragment.hint = "Zadejte počet odebíraných kusů"
+        binding.tfItemCountAddRemoveFragment.hint = getString(R.string.enterNumberOfRemovedItems)
 
         //nastaví private variable o módu tohoto fragmentu
         sharedViewModel.addingMode = false

@@ -13,6 +13,7 @@ import cz.pavelhanzl.warehouseinventorymanager.dashboard.DashboardFragmentDirect
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateEditWarehouseBinding
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentDashboardBinding
+import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditWarehouse.CreateEditWarehouseFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
@@ -25,6 +26,8 @@ class DashboardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        hideKeyboard(requireActivity())
 
         //binduje a přiřazuje viewmodel
         viewModel = ViewModelProvider(this).get(DashboardFragmentViewModel::class.java)
@@ -57,8 +60,13 @@ class DashboardFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    fun navigateToInvitations(){
-        val action = DashboardFragmentDirections.actionDashboardFragmentToInvitationsFragment()
+    fun navigateToRecievedInvitations(){
+        val action = DashboardFragmentDirections.actionGlobalInvitationsFragmentRecieved()
+        findNavController().navigate(action)
+    }
+
+    fun navigateToSendInvitations(){
+        val action = DashboardFragmentDirections.actionGlobalInvitationsFragmentSend()
         findNavController().navigate(action)
     }
 
