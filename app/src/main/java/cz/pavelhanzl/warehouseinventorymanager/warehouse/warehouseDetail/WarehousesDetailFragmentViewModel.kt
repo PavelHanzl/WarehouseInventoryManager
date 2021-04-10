@@ -21,7 +21,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 
 class WarehousesDetailFragmentViewModel : BaseViewModel() {
 
@@ -56,12 +55,10 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
     val localListOfAllItemCodes = mutableListOf<String>()
     val dropdownMenuDataReady = MutableLiveData<Boolean>(false)
 
-
-
     sealed class Event {
         object NavigateBack : Event()
-        object PlaySuccessAnimation: Event()
-        object PlayErrorAnimation: Event()
+        object PlaySuccessAnimation : Event()
+        object PlayErrorAnimation : Event()
         data class SetVisibilityOfCreateItemBtnt(val visibility: Boolean) : Event()
         //data class CreateEdit(val debtID: String?) : Event()
     }
@@ -153,7 +150,7 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
         }
 
 
-        if (itemCountContent.value!!.isNotEmpty() && itemCountContent.value!!.toDouble()<=0) {
+        if (itemCountContent.value!!.isNotEmpty() && itemCountContent.value!!.toDouble() <= 0) {
             _itemCountError.value = stringResource(R.string.typeInValueGraterThenZero)
             valid = false
         }
@@ -162,8 +159,7 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
         return valid
     }
 
-
-   fun setDropdownsBasedOnName(itemNameString: String) {
+    fun setDropdownsBasedOnName(itemNameString: String) {
         //ověří jestli se položka s tímto názvem nachází ve skladu a případně jí vrátí
         val item = returnWarehouseItemWithGivenParameters(itemName = itemNameString, itemBarcode = "", listOfAllWarehouseItems = localListOfAllItems)
 
@@ -173,7 +169,7 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
             GlobalScope.launch { eventChannel.send(Event.SetVisibilityOfCreateItemBtnt(false)) }//skryje možnost vytvoření nové položky
             //createItemBtn.hide() //skryje možnost vytvoření nové položky
         } else {//pokud se položka nenachází
-            if(addingMode) GlobalScope.launch { eventChannel.send(Event.SetVisibilityOfCreateItemBtnt(true)) }//zobrazí možnost vytvoření nové položky
+            if (addingMode) GlobalScope.launch { eventChannel.send(Event.SetVisibilityOfCreateItemBtnt(true)) }//zobrazí možnost vytvoření nové položky
             //if(addingMode)createItemBtn.show() //zobrazí možnost vytvoření nové položky
             itemBarcodeContent.value = "" //vymaže hodnotu v barcode poli
             itemPhotoUrl.value = "" //nastaví defaultní obrázek
@@ -181,7 +177,7 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
         }
     }
 
-   fun setDropdownsBasedOnBarcode(barcodeString: String) {
+    fun setDropdownsBasedOnBarcode(barcodeString: String) {
         Log.d("banány", barcodeString)
 
         //ověří jestli se položka s tímto barcodem nachází ve skladu a případně jí vrátí
@@ -196,7 +192,7 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
             //createItemBtn.hide() //skryje možnost vytvoření nové položky
         } else {//pokud se položka nenachází
             Log.d("banány", "barcode null")
-            if(addingMode) GlobalScope.launch { eventChannel.send(Event.SetVisibilityOfCreateItemBtnt(true)) }//zobrazí možnost vytvoření nové položky
+            if (addingMode) GlobalScope.launch { eventChannel.send(Event.SetVisibilityOfCreateItemBtnt(true)) }//zobrazí možnost vytvoření nové položky
             //if(addingMode) createItemBtn.show() //zobrazí možnost vytvoření nové položky
             itemNameContent.value = "" //vymaže hodnotu v poli název
             itemPhotoUrl.value = "" //nastaví defaultní obrázek
@@ -217,7 +213,6 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
         return foundObject
 
     }
-
 
     //******************End of functions  for AddRemoveItemFragment**********************//
 
@@ -260,9 +255,9 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
 
                     //při úspěchu provede log o operaci
                     if (addingMode) {//mód přidávání
-                        repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemAdded), itemNameContent.value.toString(), "+$count",warehouseObject.value!!.warehouseID)
-                    }else{//mód odebírání
-                        repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemRemoved), itemNameContent.value.toString(), "-$count",warehouseObject.value!!.warehouseID)
+                        repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemAdded), itemNameContent.value.toString(), "+$count", warehouseObject.value!!.warehouseID)
+                    } else {//mód odebírání
+                        repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemRemoved), itemNameContent.value.toString(), "-$count", warehouseObject.value!!.warehouseID)
                     }
 
                     //todo dořešit aby se event zkonzumoval už na skenneru
@@ -277,12 +272,11 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
                     //přehraje animaci neúspěchu
                     GlobalScope.launch { eventChannel.send(Event.PlayErrorAnimation) }
 
-                    Log.d("Transakce", "Transaction failure!!!!!!!!!!"+ it.message)
+                    Log.d("Transakce", "Transaction failure!!!!!!!!!!" + it.message)
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d("EXCEPTION", e.message!!)
             }
-
 
         }
 
@@ -300,7 +294,17 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
         //běží v globalscope, aby bylo možné sklad obnovit ve funkci delete WhUndo i po zničení viewmodelu
         GlobalScope.launch(Dispatchers.IO) {
             makeWarehouseSnapshot()
+            //odstraní sklad
             db.collection("warehouses").document(warehouseObject.value!!.warehouseID).delete()
+
+            //odstraní všechny pozvánky do tohoto skladu
+            var query = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("warehouseId", warehouseObject.value!!.warehouseID)
+
+            val batch = db.batch()
+            query.get().await().forEach {
+                batch.delete(it.reference)
+            }
+            batch.commit()
         }
     }
 
