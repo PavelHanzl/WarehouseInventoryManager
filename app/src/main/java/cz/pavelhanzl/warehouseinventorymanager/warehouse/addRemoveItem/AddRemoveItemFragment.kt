@@ -228,7 +228,7 @@ class AddRemoveItemFragment : BaseFragment() {
 
     fun navigateToScanner() {
         Log.d("Navigujus", "navigace ted")
-        val action = AddRemoveItemFragmentDirections.actionAddRemoveItemToScannerFragment(Constants.READING_STRING)
+        val action = AddRemoveItemFragmentDirections.actionAddRemoveItemToScannerFragment(Constants.READING_STRING, null)
         Navigation.findNavController(requireView()).navigate(action)
     }
 

@@ -101,7 +101,7 @@ class WarehouseDetailFragment : BaseFragment() {
         binding.fabOwnWhDetailAddItemByScan.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
             Toast.makeText(requireContext(), "add by scan", Toast.LENGTH_SHORT).show()
-            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment("adding")
+            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment("adding", viewModel.warehouseObject.value)
             findNavController().navigate(action)
         }
 
@@ -120,7 +120,7 @@ class WarehouseDetailFragment : BaseFragment() {
         binding.fabOwnWhDetailRemoveItemByScan.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
             Toast.makeText(requireContext(), "remove by scan", Toast.LENGTH_SHORT).show()
-            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment("removing")
+            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment("removing",  viewModel.warehouseObject.value)
             findNavController().navigate(action)
         }
     }

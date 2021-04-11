@@ -47,6 +47,27 @@
             app:layout_constraintTop_toTopOf="parent"
             app:maskColor="#77000000" />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_sucessErrorAnim_scannerFragment"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:lottie_fileName="success.json" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/linearProgressIndicator2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="@{viewmodel.loading ? View.VISIBLE : View.GONE}"
+            app:hideAnimationBehavior="inward"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:showAnimationBehavior="outward" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/linearProgressIndicator"
@@ -130,6 +151,38 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/toggleButtons_scannerFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <Button
+                android:id="@+id/removingbutton_scannerFragment"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/removingMode" />
+
+            <Button
+                android:id="@+id/addingbutton_scannerFragment"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/addingMode" />
+
+
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -226,14 +226,17 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
 
     fun runAddingRemovingTransaction(code: String, count: Double = 1.0, addingMode: Boolean = true) {
 
-        //todo přidat validování prázdných polí
+
         GlobalScope.launch(Dispatchers.IO) {
+            //zde vždy přijde barcode položky, která v databázi existuje (ošetřeno na frontendu), pak můžeme předávat rovnou id itemy, díky čemuž je celá operace rychlejší a úspěšnější
+            var foundWhItem = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = code, listOfAllWarehouseItems = localListOfAllItems)
 
-            try { //todo dořešit aby sem nedošel barkód co není v databázi, resp klidně ať dojde, ale nepokusí se zapsat, jelikož ten dokument neexistuje, zatím ošetřeno trycatchem
+            try {
                 _loading.postValue(true)
-                val sfQueryRef = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code", code).limit(1).get().await()
+                //val sfQueryRef = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code", code).limit(1).get().await()
+                //val sfDocRef = sfQueryRef.documents[0].reference
 
-                val sfDocRef = sfQueryRef.documents[0].reference
+                val sfDocRef =  db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").document(foundWhItem!!.warehouseItemID)
                 db.runTransaction { transaction ->
                     val snapshot = transaction.get(sfDocRef)
 
@@ -260,7 +263,7 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
                         repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemRemoved), itemNameContent.value.toString(), "-$count", warehouseObject.value!!.warehouseID)
                     }
 
-                    //todo dořešit aby se event zkonzumoval už na skenneru
+
                     //přehraje animaci úspěchu
                     GlobalScope.launch { eventChannel.send(Event.PlaySuccessAnimation) }
 
@@ -275,6 +278,7 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
                     Log.d("Transakce", "Transaction failure!!!!!!!!!!" + it.message)
                 }
             } catch (e: Exception) {
+                _loading.postValue(false)
                 Log.d("EXCEPTION", e.message!!)
             }
 

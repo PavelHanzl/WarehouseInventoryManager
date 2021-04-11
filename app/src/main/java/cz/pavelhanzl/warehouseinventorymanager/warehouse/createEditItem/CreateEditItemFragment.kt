@@ -41,6 +41,10 @@ class CreateEditItemFragment : BaseFragment() {
         if (savedInstanceState == null) {
             viewModel = ViewModelProvider(this).get(CreateEditItemFragmentViewModel::class.java)
             viewModel.setdata(args.warehouseId)
+
+            //pokud jsme na skenneru naskenovali nějakou položku co ještě není na skladě, tak předáváme v safe args jeji barcode a chceme jej tedy předvyplnit
+            if(args.scannedBarcodeValue != null) viewModel.itemBarcodeContent.value = args.scannedBarcodeValue
+
         }
 
     }
@@ -103,7 +107,7 @@ class CreateEditItemFragment : BaseFragment() {
 
     fun navigateToScanner() {
         Log.d("Naviguju", "navigace ted")
-        val action = CreateEditItemFragmentDirections.actionCreateEditItemFragmentToScannerFragment(Constants.READING_STRING)
+        val action = CreateEditItemFragmentDirections.actionCreateEditItemFragmentToScannerFragment(Constants.READING_STRING,null)
         Navigation.findNavController(requireView()).navigate(action)
     }
 

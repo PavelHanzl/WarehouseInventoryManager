@@ -183,6 +183,8 @@
     <string name="youHaveNotInvitedAnyoneInWh">Aktuálně jste nikoho nepozvali \nk sobě do skladu.</string>
     <string name="userWasInvitedToWh">Uživatele jste pozvali do skladu:</string>
     <string name="cancleInvitation">Zrušit</string>
+    <string name="removingMode">Režim odebírání</string>
+    <string name="addingMode">Režim přidávání</string>
 
 
 </resources>

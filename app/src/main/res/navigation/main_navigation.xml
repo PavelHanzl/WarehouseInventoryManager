@@ -138,6 +138,13 @@
             android:name="mode"
             android:defaultValue="reading"
             app:argType="string" />
+        <argument
+            android:name="warehouseObject"
+            app:argType="cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_scannerFragment_to_createEditItemFragment"
+            app:destination="@id/createEditItemFragment" />
     </fragment>
     <fragment
         android:id="@+id/addRemoveItemFragment"
@@ -163,6 +170,11 @@
         <argument
             android:name="warehouseItemObject"
             app:argType="cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="scannedBarcodeValue"
+            app:argType="string"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
