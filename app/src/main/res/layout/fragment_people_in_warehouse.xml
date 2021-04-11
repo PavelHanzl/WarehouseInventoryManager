@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vypadá to, že jste tu zatím sám.\n Pozvěte někoho k sobě do skladu."
+            android:text="@string/emptyRecycleAnimPeopleInWarehouse"
             android:textAlignment="center"
             android:textColor="@color/lightGrayColor"
             app:layout_constraintEnd_toEndOf="@+id/nousers_lottie"
@@ -162,7 +162,8 @@
         android:clickable="true"
         android:src="@drawable/ic_plus"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="true" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

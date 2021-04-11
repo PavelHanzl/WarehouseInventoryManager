@@ -258,9 +258,5 @@
             app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
 
-
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

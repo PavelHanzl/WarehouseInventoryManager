@@ -49,7 +49,7 @@
         android:maxLines="1"
         android:singleLine="true"
         android:minWidth="70dp"
-        android:text="1000 Ks"
+        android:text="@string/xPcs"
         android:textAlignment="viewEnd"
         android:textColor="@color/blue3"
         android:textStyle="bold"

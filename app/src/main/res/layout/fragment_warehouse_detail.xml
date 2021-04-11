@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ať děláme co děláme,\n nemůžeme zde najít žádnou položku."
+                android:text="@string/emptyRecycleAnimWhItemsList"
                 android:textAlignment="center"
                 android:textColor="@color/lightGrayColor"
                 app:layout_constraintEnd_toEndOf="@+id/noitem_lottie"
@@ -86,7 +86,8 @@
             android:src="@drawable/ic_edit"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/fab_ownWhDetail_addItem"
-            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_addItem" />
+            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_addItem"
+            android:focusable="true" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_ownWhDetail_addItem_byScan"
@@ -98,7 +99,8 @@
             android:src="@drawable/ic_scaner"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/fab_ownWhDetail_addItem_byHand"
-            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_addItem_byHand" />
+            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_addItem_byHand"
+            android:focusable="true" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_ownWhDetail_removeItem"
@@ -122,7 +124,8 @@
             android:src="@drawable/ic_edit"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/fab_ownWhDetail_removeItem"
-            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_removeItem" />
+            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_removeItem"
+            android:focusable="true" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_ownWhDetail_removeItem_byScan"
@@ -134,7 +137,8 @@
             android:src="@drawable/ic_scaner"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/fab_ownWhDetail_removeItem_byHand"
-            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_removeItem_byHand" />
+            app:layout_constraintEnd_toEndOf="@+id/fab_ownWhDetail_removeItem_byHand"
+            android:focusable="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

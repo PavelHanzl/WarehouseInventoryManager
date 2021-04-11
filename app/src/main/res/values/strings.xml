@@ -195,6 +195,29 @@
     <string name="temsAndCon">všeobecnými podmínkami</string>
     <string name="forgottenPassword">Zapomenuté heslo?</string>
     <string name="renew">Obnovit.</string>
+    <string name="agreeWith">Souhlasím s</string>
+    <string name="enterRegistrationEmail">Zadejte registrační e-mail</string>
+    <string name="resetPassword">Resetovat heslo</string>
+    <string name="cancel">Zrušit</string>
+    <string name="itemName">Název</string>
+    <string name="itemBarcode">Čárový kód</string>
+    <string name="itemDescription">Popis</string>
+    <string name="priceForItem">Cena za kus</string>
+    <string name="totalSumOfItems">Počet kusů celkem</string>
+    <string name="totalPriceOfItems">Celková cena všech položek</string>
+    <string name="emptyRecycleAnimWarehouseList">Ať děláme co děláme,\n nemůžeme zde najít žádný sklad.</string>
+    <string name="emptyRecycleAnimPeopleInWarehouse">Vypadá to, že jste tu zatím sám.\n Pozvěte někoho k sobě do skladu.</string>
+    <string name="emptyRecycleAnimWhItemsList">Ať děláme co děláme,\n nemůžeme zde najít žádnou položku.</string>
+    <string name="nameAndSurname">Jméno a příjmení</string>
+    <string name="item">Položka</string>
+    <string name="itemWithName">Položka s názvem</string>
+    <string name="user">Uživatel</string>
+    <string name="janNovak">Jan Novák</string>
+    <string name="action">Akce</string>
+    <string name="storage">Naskladnění</string>
+    <string name="totalPcs">Počet kusů</string>
+    <string name="xPcs">1000 Ks</string>
+    <string name="date">Datum</string>
 
 
 </resources>

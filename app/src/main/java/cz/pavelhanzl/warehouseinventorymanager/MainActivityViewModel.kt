@@ -14,7 +14,6 @@ import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
 import cz.pavelhanzl.warehouseinventorymanager.repository.User
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
-import kotlinx.android.synthetic.main.fragment_about.*
 import kotlinx.android.synthetic.main.menu_header.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

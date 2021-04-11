@@ -42,7 +42,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ať děláme co děláme,\n nemůžeme zde najít žádný sklad."
+            android:text="@string/emptyRecycleAnimWarehouseList"
             android:textAlignment="center"
             android:textColor="@color/lightGrayColor"
             app:layout_constraintEnd_toEndOf="@+id/nowarehouse_lottie"
@@ -70,7 +70,8 @@
         android:clickable="true"
         android:src="@drawable/ic_plus"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

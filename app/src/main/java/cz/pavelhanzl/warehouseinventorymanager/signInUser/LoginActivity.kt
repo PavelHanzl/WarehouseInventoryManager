@@ -132,10 +132,12 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         loginViewModel.firebaseAuthWithGoogleLogic(credential)
     }
+
 
     fun forgotPasswordDialogShow() {
         val factory = LayoutInflater.from(this)
@@ -143,21 +145,21 @@ class LoginActivity : AppCompatActivity() {
         val forgottenPasswordDialog: AlertDialog = AlertDialog.Builder(this).create()
         forgottenPasswordDialog.setView(forgottenPasswordDialogView)
 
-        forgottenPasswordDialogView.btn_cancel_forgotten_password_dialog.setOnClickListener {
+        forgottenPasswordDialogView.btn_cancel_forgottenPasswordDialog.setOnClickListener {
             Log.d("CTVRTEK", "Spis ne")
             forgottenPasswordDialog.dismiss()
         }
 
-        forgottenPasswordDialogView.btn_reset_forgotten_password_dialog.setOnClickListener {
-            val email = forgottenPasswordDialogView.textInputEditText_forgotten_password_dialog.text.toString()
+        forgottenPasswordDialogView.btn_reset_forgottenPasswordDialog.setOnClickListener {
+            val email = forgottenPasswordDialogView.textInputEditText_forgottenPasswordDialog.text.toString()
             val validation = loginViewModel.validateEmailForForgottenPass(email)
             if(validation.first) {
-                forgottenPasswordDialogView.textInputLayout_forgotten_password_dialog.error = validation.second
+                forgottenPasswordDialogView.textInputLayout_forgottenPasswordDialog.error = validation.second
                 loginViewModel.sendResetPassword(email)
                 forgottenPasswordDialog.dismiss()
                 Toast.makeText(this, "E-mail pro reset hesla byl odeslán", Toast.LENGTH_LONG).show()
             } else {
-                forgottenPasswordDialogView.textInputLayout_forgotten_password_dialog.error = validation.second
+                forgottenPasswordDialogView.textInputLayout_forgottenPasswordDialog.error = validation.second
             }
         }
 
