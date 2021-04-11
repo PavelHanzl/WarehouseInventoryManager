@@ -152,7 +152,15 @@ class CreateEditItemFragment : BaseFragment() {
 
         //zamezí uživateli měnit počet, k tomu by měl využít standartní funkčnost aplikace, aby došlo k vytvoření logu + nastaví odpovídající hint
         binding.tfInitialItemCountCreateEditItemFragment.hint = getString(R.string.numberOfPcsInWarehouse)
-        binding.tfInitialItemCountContentCreateEditItemFragment.isEnabled = false
+
+        //replikuje funkčnost isEnabled=false, ale dovolí připojit onclick listener
+        binding.tfInitialItemCountContentCreateEditItemFragment.isFocusable = false
+        binding.tfInitialItemCountContentCreateEditItemFragment.isLongClickable = false
+        binding.tfInitialItemCountContentCreateEditItemFragment.isCursorVisible = false
+
+        binding.tfInitialItemCountContentCreateEditItemFragment.setOnClickListener {
+            Toast.makeText(requireContext(),"V módu editace nemůžete toto pole měnit.\n\nKe změně počtu u této položky použijte prosím standartní operace naskladnění a vyskladnění...", Toast.LENGTH_LONG).show()
+        }
 
 
         Glide.with(requireContext())

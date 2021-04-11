@@ -265,6 +265,7 @@ class ScannerFragmentViewModel : BaseViewModel() {
 
     }
 
+
     private fun returnWarehouseItemWithGivenParameters(itemName: String = "", itemBarcode: String = "", listOfAllWarehouseItems: MutableList<WarehouseItem>): WarehouseItem? {
         var foundObject: WarehouseItem? = null
 
