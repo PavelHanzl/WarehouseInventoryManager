@@ -8,7 +8,9 @@
             name="viewmodel"
             type="cz.pavelhanzl.warehouseinventorymanager.signInUser.RegisterViewModel" />
     </data>
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:theme="@style/Theme.WarehouseInventoryManager"
         android:layout_width="match_parent"
@@ -196,4 +198,5 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
 </layout>

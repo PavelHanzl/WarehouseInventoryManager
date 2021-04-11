@@ -1,20 +1,17 @@
 package cz.pavelhanzl.warehouseinventorymanager.dashboard
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import cz.pavelhanzl.warehouseinventorymanager.dashboard.DashboardFragmentDirections
-import cz.pavelhanzl.warehouseinventorymanager.R
-import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateEditWarehouseBinding
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentDashboardBinding
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditWarehouse.CreateEditWarehouseFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 class DashboardFragment : Fragment() {
@@ -74,6 +71,16 @@ class DashboardFragment : Fragment() {
         val action = DashboardFragmentDirections.navigateDashboardToSettings(5)
         findNavController().navigate(action)
     }
+
+    fun navigateToAbout(){
+
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.seznam.cz/"))
+        startActivity(intent)
+
+    }
+
+
+
 
 
 

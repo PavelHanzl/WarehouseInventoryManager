@@ -124,10 +124,11 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_marginStart="16dp"
-                    android:text="@string/help"
+                    android:text="@string/aboutApplication"
                     android:textColor="@color/darkGrayColor"
                     android:textSize="15sp"
                     android:textStyle="bold"
+                    android:onClick="@{()->fragmentClass.navigateToAbout()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"
                     app:layout_constraintTop_toTopOf="parent" />

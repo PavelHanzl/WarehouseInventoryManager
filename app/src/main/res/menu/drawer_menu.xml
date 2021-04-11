@@ -47,9 +47,9 @@
                     android:icon="@drawable/ic_settings"
                     android:title="@string/Settings" />
                 <item
-                    android:id="@+id/helpFragment"
+                    android:id="@+id/menuItem_aboutApp"
                     android:icon="@drawable/ic_help"
-                    android:title="@string/drawerMenu_help" />
+                    android:title="@string/aboutApplication" />
                 <item
                     android:id="@+id/menuItem_logout"
                     android:icon="@drawable/ic_logout"

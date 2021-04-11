@@ -1,6 +1,7 @@
 package cz.pavelhanzl.warehouseinventorymanager
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -104,6 +105,15 @@ class MainActivity : AppCompatActivity() {
         val menuItemLogout = drawerNavigationView.menu.findItem(R.id.menuItem_logout)
         menuItemLogout.setOnMenuItemClickListener {
             logOut()
+            true
+        }
+
+
+        //About app menu item
+        val menuItemAboutApp = drawerNavigationView.menu.findItem(R.id.menuItem_aboutApp)
+        menuItemAboutApp.setOnMenuItemClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.seznam.cz/"))
+            startActivity(intent)
             true
         }
 

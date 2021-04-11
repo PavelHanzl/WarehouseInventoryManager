@@ -9,7 +9,9 @@
             type="cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginViewModel" />
     </data>
 
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -174,5 +176,5 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayoutSocials" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+</ScrollView>
 </layout>
