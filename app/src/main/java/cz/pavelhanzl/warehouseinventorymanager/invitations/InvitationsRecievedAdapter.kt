@@ -18,14 +18,32 @@ import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.*
 import kotlinx.android.synthetic.main.rv_warehouse_invitation_list_item.view.*
 
+/**
+ * Invitations recieved adapter
+ *
+ * @constructor
+ *
+ * @param options
+ */
 class InvitationsRecievedAdapter(options: FirestoreRecyclerOptions<Invitation>) : FirestoreRecyclerAdapter<Invitation, InvitationsRecievedAdapter.InvitationViewHolder>(options) {
     val db = Firebase.firestore
     val auth = Firebase.auth
 
-
+    /**
+     * Invitation view holder
+     *
+     * @constructor
+     *
+     * @param itemView
+     */
     inner class InvitationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-
+        /**
+         * Bind user
+         * Binds info about user who send invitation.
+         *
+         * @param fromUser user who send invitation
+         */
         fun bindUser(fromUser:User) {
             itemView.rv_userName_warehouseInvitationFragment.text = fromUser.name
 
@@ -39,30 +57,45 @@ class InvitationsRecievedAdapter(options: FirestoreRecyclerOptions<Invitation>) 
             itemView.userProfileImage_warehouseInvitationFragment
         }
 
+        /**
+         * Bind warehouse
+         * Binds info about warehouse joined with this invitation.
+         * @param warehouse warehouse to be joined
+         */
         fun bindWarehouse(warehouse: Warehouse) {
             itemView.rv_warehouseName_warehouseInvitationFragment.text = warehouse.name
         }
 
+        /**
+         * Bind date
+         * Binds date when was invitation send.
+         *
+         * @param date date when was invitation send
+         */
         fun bindDate(date:String){
             itemView.rv_date_warehouseInvitationFragment.text = date
         }
 
+        /**
+         * Bind btns
+         * Binds actions to buttons of invitation. Actions are join warehouse and decline invitation
+         *
+         * @param warehouseId warehouse joined with invitation
+         * @param invitationId id of this invitation
+         */
         fun bindBtns(warehouseId:String, invitationId:String ){
 
             itemView.btn_acceptInvitation_warehouseInvitationFragment.setOnClickListener{
 
-                Log.d("invi", "accept warehouse:" + warehouseId + " ivni:" + invitationId )
                 //zapíše současného usera do pole users v daném skladě
                 val warehouse = db.collection(Constants.WAREHOUSES_STRING).document(warehouseId)
-                warehouse.update("users", FieldValue.arrayUnion(auth.currentUser!!.uid))
+                warehouse.update(Constants.USERS_STRING, FieldValue.arrayUnion(auth.currentUser!!.uid))
 
                 //smaže tuto pozvánku
                 db.collection(Constants.INVITATIONS_STRING).document(invitationId).delete()
             }
 
             itemView.btn_declineInvitation_warehouseInvitationFragment.setOnClickListener{
-                Log.d("invi", "decline warehouse:" + warehouseId + " ivni:" + invitationId )
-
                 //smaže tuto pozvánku
                 db.collection(Constants.INVITATIONS_STRING).document(invitationId).delete()
             }
@@ -95,26 +128,24 @@ class InvitationsRecievedAdapter(options: FirestoreRecyclerOptions<Invitation>) 
         //binduje od koho přišla pozvánka
         fromRef.get().addOnSuccessListener { document ->
             if (document != null) {
-                Log.d("Invi", "DocumentSnapshot data: ${document.data}")
                 holder.bindUser(document.toObject(User::class.java)!!)
-
             } else {
-                Log.d("Invi", "No such document")
-            }
+            Log.d("InviRecievedAdapter", "No such document")
+        }
         }.addOnFailureListener { exception ->
-            Log.d("Invi", "get failed with ", exception)
+            Log.d("InviRecievedAdapter", "get failed with ", exception)
         }
 
         //binduje jaký sklad
         warehouseRef.get().addOnSuccessListener { document ->
             if (document != null && document.data != null) {
-                Log.d("Invi", "DocumentSnapshot data: ${document.data}")
+                Log.d("InviRecievedAdapter", "DocumentSnapshot data: ${document.data}")
                 holder.bindWarehouse(document.toObject(Warehouse::class.java)!!)
             } else {
-                Log.d("Invi", "No such document")
+                Log.d("InviRecievedAdapter", "No such document")
             }
         }.addOnFailureListener { exception ->
-            Log.d("Invi", "get failed with ", exception)
+            Log.d("InviRecievedAdapter", "get failed with ", exception)
         }
 
         //binduje datum
@@ -129,9 +160,9 @@ class InvitationsRecievedAdapter(options: FirestoreRecyclerOptions<Invitation>) 
     override fun onViewAttachedToWindow(holder: InvitationViewHolder) {
         super.onViewAttachedToWindow(holder)
 
+        //přidá animaci na položky
         val animation: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.scale_up)
         holder.itemView.startAnimation(animation);
-
 
     }
 

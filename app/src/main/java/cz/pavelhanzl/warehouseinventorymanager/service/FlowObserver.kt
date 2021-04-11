@@ -11,7 +11,17 @@ import kotlinx.coroutines.flow.collect
 
 import kotlinx.coroutines.launch
 
-
+/**
+ * Flow observer
+ * Class used to send event messages from viewmodels to fragment classes.
+ *
+ * @param T
+ * @property flow
+ * @property collector
+ * @constructor
+ *
+ * @param lifecycleOwner
+ */
 
 @OptIn(InternalCoroutinesApi::class)
 class FlowObserver<T> (

@@ -13,6 +13,11 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.reflect.full.memberProperties
 
+/**
+ * Get date time
+ * gets actual date time of device
+ * @return date time in string pattern dd-MM-yyyy HH:mm:ss
+ */
 fun getDateTime(): String {
     return DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").withLocale(Locale.getDefault())
         .withZone(
@@ -20,6 +25,10 @@ fun getDateTime(): String {
         ).format(Instant.now())
 }
 
+/**
+ * Hides keyboard
+ * @param activity
+ */
 fun hideKeyboard(activity: Activity) {
     val inputMethodManager =
         activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -42,7 +51,10 @@ inline fun <reified T> Any.getField(fieldName: String): T? {
     return null
 }
 
-
+/**
+ * Vibrates phone success
+ * @param context
+ */
 fun vibratePhoneSuccess(context: Context) {
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     if (Build.VERSION.SDK_INT >= 26) {
@@ -52,7 +64,10 @@ fun vibratePhoneSuccess(context: Context) {
     }
 }
 
-
+/**
+ * Vibrates phone error
+ * @param context
+ */
 fun vibratePhoneError(context: Context) {
     val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     if (Build.VERSION.SDK_INT >= 26) {

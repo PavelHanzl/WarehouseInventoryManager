@@ -21,6 +21,11 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
+/**
+ * Invitations fragment
+ *
+ * @constructor Create empty Invitations fragment
+ */
 class InvitationsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentInvitationsBinding
@@ -46,51 +51,47 @@ class InvitationsFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        //binduje a přiřazuje viewmodel
+        //binds and assigns a viewmodel
         binding = FragmentInvitationsBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(InvitationsFragmentViewModel::class.java)
 
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        //sets fragment to corresponding mode
         when(fragmentMode){
             Constants.RECIEVED_STRING -> runFragmentRecievedMode()
             Constants.SEND_STRING -> runFragmentSendMode()
         }
-
-
-
-
 
         setUpRecycleView()
         // Inflate the layout for this fragment
         return binding.root
     }
 
+    /**
+     * Set up recycle view
+     * Sets up recycleview for this fragment.
+     */
     private fun setUpRecycleView() {
 
         var query:Query
 
 
-        //nastaví recycleview query pro recycle view v závislosti na módu fragmentu
+        //sets the recycleview query for the recycle view depending on the fragment mode
         if(fragmentMode == Constants.RECIEVED_STRING) { //fragment je v modu recieved
             query = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("to", auth.currentUser!!.uid).orderBy("date", Query.Direction.DESCENDING)
-        }else{ //fragment je v módu send
+        }else{ //the fragment is in send mode
             query = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("from", auth.currentUser!!.uid).orderBy("date", Query.Direction.DESCENDING)
         }
 
-
-
         val options = FirestoreRecyclerOptions.Builder<Invitation>().setQuery(query, Invitation::class.java).setLifecycleOwner(this).build()
-
 
         val invitationsRecievedAdapter = InvitationsRecievedAdapter(options)
         val invitationsSendAdapter = InvitationsSendAdapter(options)
 
-
         queryListener = query.addSnapshotListener { snapshot, e ->
             if (e != null) {
-                Log.w("Invitation Listener", "Listen failed.", e)
                 return@addSnapshotListener
             }
 
@@ -99,9 +100,6 @@ class InvitationsFragment : BaseFragment() {
             } else {
                 binding.noinvitationsAnim.visibility = View.GONE
             }
-
-
-
         }
 
         binding.rvInvitationsListInvitationsFragment.apply {
@@ -115,6 +113,9 @@ class InvitationsFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Run fragment recieved mode
+     */
     private fun runFragmentRecievedMode() {
         //nastaví odpovídající title v actionbaru "Obdržené pozvánky"
         (activity as MainActivity).supportActionBar!!.title = getString(R.string.drawerMenu_warehouseInvitationsRecieved)
@@ -124,6 +125,9 @@ class InvitationsFragment : BaseFragment() {
 
     }
 
+    /**
+     * Run fragment send mode
+     */
     private fun runFragmentSendMode() {
         //nastaví odpovídající title v actionbaru "Odeslané pozvánky"
         (activity as MainActivity).supportActionBar!!.title = getString(R.string.drawerMenu_warehouseInvitationsSend)
@@ -135,12 +139,9 @@ class InvitationsFragment : BaseFragment() {
         navigationView.menu.getItem(4).isChecked = true
     }
 
-
-
     override fun onDestroy() {
         queryListener.remove()
         hideKeyboard(requireActivity())
         super.onDestroy()
     }
-   
 }

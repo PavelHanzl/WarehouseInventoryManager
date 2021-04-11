@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -25,25 +24,25 @@ import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.zxing.Result
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
-import cz.pavelhanzl.warehouseinventorymanager.dashboard.DashboardFragmentDirections
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentScannerBinding
-import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehousesDetailFragmentViewModel
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.repository.vibratePhoneError
-import cz.pavelhanzl.warehouseinventorymanager.repository.vibratePhoneSuccess
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import kotlin.math.absoluteValue
 
+/**
+ * Scanner fragment
+ *
+ * @constructor Create empty Scanner fragment
+ */
 class ScannerFragment : BaseFragment() {
     private lateinit var codeScanner: CodeScanner
     private val CAMERA_REQUEST_CODE = 1016
@@ -112,6 +111,11 @@ class ScannerFragment : BaseFragment() {
         return binding.root
     }
 
+    /**
+     * Handle decode callback if scanner is in reading mode
+     *
+     * @param it value of scanned barcode
+     */
     private fun handleDecodeCallbackIfScannerIsInReadingMode(it: Result) {
 
         if (viewModel.scannerMode == Constants.READING_STRING) {
@@ -124,6 +128,9 @@ class ScannerFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Runs fragment in reading mode
+     */
     private fun runFragmentInReadingMode() {
         hideKeyboard(requireActivity())
         viewModel.scannerMode = Constants.READING_STRING
@@ -139,16 +146,25 @@ class ScannerFragment : BaseFragment() {
 
     }
 
+    /**
+     * Runs fragment in removing mode
+     */
     private fun runFragmentInRemovingMode() {
         viewModel.scannerMode = Constants.REMOVING_STRING
         binding.toggleButtonsScannerFragment.check(R.id.removingbutton_scannerFragment)
     }
 
+    /**
+     * Runs fragment in adding mode
+     */
     private fun runFragmentInAddingMode() {
         viewModel.scannerMode = Constants.ADDING_STRING
         binding.toggleButtonsScannerFragment.check(R.id.addingbutton_scannerFragment)
     }
 
+    /**
+     * Register observers
+     */
     private fun registerObservers() {
         //observer na změnu přepínače přidávání/odebírání
        binding.toggleButtonsScannerFragment.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
@@ -168,33 +184,26 @@ class ScannerFragment : BaseFragment() {
                 viewModel.scannerStartPreview()
                 binding.fabStartScaning.hide()
             } else {
-                Log.d("fabik", "if")
                 binding.fabStartScaning.show()
             }
 
         })
 
- /*       //při úspěšném decodu provede tyto akce
-        viewModel.barcodeScanned.observe(viewLifecycleOwner, Observer { it ->
-            if (it) {
-                Log.d("skener", "hraju na city")
-                playBeepSound()
-                vibratePhone()
-            }
-        })*/
 
         //zapíná preview v kontinuálním módu po uběhnutí časového limitu
         viewModel.scannerStartPreview.observe(viewLifecycleOwner, Observer { it ->
             if (it) {
                 codeScanner.startPreview()
-                Log.d("skenerek", "zapinam skener")
             } else {
                 codeScanner.stopPreview()
-                Log.d("skenerek", "vypinam skener")
             }
         })
     }
 
+    /**
+     * Set up slider for scanning speed
+     * Sets the speed of scanning in continuous mode, when value of slider is changed.
+     */
     private fun setUpSliderForScanningSpeed() {
         //nastavuje rychlost skenování při posunu slideru, složité na realizaci v MVVM, proto change listener
         binding.sliderScanningSpeed.addOnChangeListener { slider, value, fromUser ->
@@ -218,6 +227,11 @@ class ScannerFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Set up speed of lottie animation
+     * sets up speed of lottie animation
+     * @param value value of slider, the bigger value the slower animation
+     */
     private fun setUpSpeedOfLottieAnimation(value: Float) {
         if (value.toInt() == 0) {
             binding.lottieSucessErrorAnimScannerFragment.speed = 2F / viewModel.minimumSpeed
@@ -236,11 +250,17 @@ class ScannerFragment : BaseFragment() {
         super.onPause()
     }
 
+    /**
+     * Plays beep sound
+     */
     private fun playBeepSound() {
         val toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
         toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, 150)
     }
 
+    /**
+     * Vibrates phone
+     */
     private fun vibratePhone() {
         val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (Build.VERSION.SDK_INT >= 26) {
@@ -250,15 +270,21 @@ class ScannerFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Setup permissions
+     * Sets up cammera permissions
+     */
     private fun setupPermissions() {
-
         val cameraPermission = ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
-            reqestCameraPermission()
+            requestCameraPermission()
         }
     }
 
-    private fun reqestCameraPermission() {
+    /**
+     * Request camera permission
+     */
+    private fun requestCameraPermission() {
         requestPermissions(arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
     }
 
@@ -267,11 +293,9 @@ class ScannerFragment : BaseFragment() {
         when (requestCode) {
             CAMERA_REQUEST_CODE -> {
                 if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Log.d("práva", "práva ke kameře neudělena")
                     Toast.makeText(requireContext(), resources.getString(R.string.needsCameraPermission), Toast.LENGTH_LONG).show()
                     findNavController().navigateUp()
                 } else {
-                    Log.d("práva", "práva ke kameře udělena")
                     // permisions successfuly granted
                 }
             }
@@ -301,12 +325,10 @@ class ScannerFragment : BaseFragment() {
                         //freezne kameru s naskenovaným kódem
                         codeScanner.stopPreview()
 
-
-
                         //zobrazí dialog s výzvou k opuštění cizího skladu
                         MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Neexistující položka")
-                            .setMessage("Položka s čárovým kódem "+ it.scannedBarcode +" zatím neexistuje. \n\nPřejete si ji vytvořit?")
+                            .setTitle(getString(R.string.nonExistingItem))
+                            .setMessage(getString(R.string.ItemWithBarcode)+ it.scannedBarcode +getString(R.string.isNotExistingYetWannaCreate))
                             .setNegativeButton(R.string.no) { dialog, which ->
                               // zrušení dialogu
                                 codeScanner.startPreview()
@@ -319,31 +341,30 @@ class ScannerFragment : BaseFragment() {
 
                     }
                     is ScannerFragmentViewModel.Event.SendToast -> {
-                        Log.d("skenerek", "vypinam skener")
                         Toast.makeText(requireContext(),it.toastMessage,Toast.LENGTH_LONG).show()
                     }
                     ScannerFragmentViewModel.Event.PlayBeepSoundAndVibrate -> {
                         playBeepSound()
                         vibratePhone()
                     }
-
                 }
             }.observeInLifecycle(viewLifecycleOwner)
-
-
     }
 
+    /**
+     * Play success or error animation
+     *
+     * @param success if true then it plays success, if false then it plays error
+     */
     private fun playSuccessErrorAnimation(success: Boolean) {
 
         //nastaví odpovídající animaci
         if (success) {
-            Log.d("skenerek", "budu prehravat animaci uspechu")
             binding.lottieSucessErrorAnimScannerFragment.setAnimation("success.json")
 
 
         } else {
             binding.lottieSucessErrorAnimScannerFragment.setAnimation("error.json")
-            Log.d("skenerek", "budu prehravat animaci neuspechu")
             //zavibruje error
             vibratePhoneError(requireContext())
         }
@@ -351,36 +372,30 @@ class ScannerFragment : BaseFragment() {
         //zobrazí a přehraje animaci
         binding.lottieSucessErrorAnimScannerFragment.visibility = View.VISIBLE
         binding.lottieSucessErrorAnimScannerFragment.playAnimation()
-        Log.d("skenerek", "prehravam animaci")
 
         binding.lottieSucessErrorAnimScannerFragment.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator?) {
-                //Log.d("Animation:", "start")
 
             }
 
             override fun onAnimationEnd(animation: Animator?) {
-                //Log.d("Animation:", "end")
                 //skryje animaci po dokončení
                 try {
-                    Log.d("skenerek", "animace skoncila")
                     binding.lottieSucessErrorAnimScannerFragment.visibility = View.GONE
                 } catch (ex: Exception) {
-                    ex.toString()
+                    Log.d("Exception", ex.toString())
                 }
             }
 
             override fun onAnimationCancel(animation: Animator?) {
                 try {
-                    Log.d("skenerek", "animace zrusena")
                     binding.lottieSucessErrorAnimScannerFragment.visibility = View.GONE
                 } catch (ex: Exception) {
-                    ex.toString()
+                    Log.d("Exception", ex.toString())
                 }
             }
 
             override fun onAnimationRepeat(animation: Animator?) {
-                //Log.e("Animation:", "repeat")
             }
         })
 

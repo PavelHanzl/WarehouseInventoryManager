@@ -3,6 +3,23 @@ package cz.pavelhanzl.warehouseinventorymanager.repository
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.sql.Time
+
+/**
+ * Warehouse item
+ * Warehouse item data object class.
+ *
+ * @property warehouseItemID
+ * @property warehouseID
+ * @property name
+ * @property name_lowercase needed because of sorting in firebase is case sensitive
+ * @property note
+ * @property code
+ * @property photoURL
+ * @property createDate default is current datetime of device
+ * @property price
+ * @property count
+ * @constructor Create empty Warehouse item
+ */
 @Parcelize
 data class WarehouseItem (
     var warehouseItemID: String = "",

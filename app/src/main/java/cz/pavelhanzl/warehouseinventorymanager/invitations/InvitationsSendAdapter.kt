@@ -26,7 +26,11 @@ class InvitationsSendAdapter(options: FirestoreRecyclerOptions<Invitation>) : Fi
 
     inner class InvitationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-
+        /**
+         * Bind user
+         * Binds info about user to who the invitation was send.
+         * @param toUser user who we send invitation to warehouse
+         */
         fun bindUser(toUser:User) {
             itemView.rv_userName_warehouseInvitationFragment.text = toUser.name
 
@@ -40,14 +44,31 @@ class InvitationsSendAdapter(options: FirestoreRecyclerOptions<Invitation>) : Fi
             itemView.userProfileImage_warehouseInvitationFragment
         }
 
+        /**
+         * Bind warehouse
+         * Binds info about warehouse joined with this invitation.
+         * @param warehouse warehouse to be joined
+         */
         fun bindWarehouse(warehouse: Warehouse) {
             itemView.rv_warehouseName_warehouseInvitationFragment.text = warehouse.name
         }
-
+        /**
+         * Bind date
+         * Binds date when was invitation send.
+         *
+         * @param date date when was invitation send
+         */
         fun bindDate(date:String){
             itemView.rv_date_warehouseInvitationFragment.text = date
         }
 
+        /**
+         * Bind btns
+         * Binds actions to buttons of invitation. Actions is decline invitation. Hides second unnecessary button.
+         *
+         * @param warehouseId warehouse joined with invitation
+         * @param invitationId id of this invitation
+         */
         fun bindBtns(warehouseId:String, invitationId:String ){
 
             //změní text akčního tlačítka
@@ -63,6 +84,11 @@ class InvitationsSendAdapter(options: FirestoreRecyclerOptions<Invitation>) : Fi
 
         }
 
+        /**
+         * Bind label
+         *
+         * @param label binds different label for invitation card
+         */
         fun bindLabel(label: String){
             itemView.rv_invitationDescription_warehouseInvitationFragment.text = label
         }
@@ -92,26 +118,26 @@ class InvitationsSendAdapter(options: FirestoreRecyclerOptions<Invitation>) : Fi
         //binduje od komu byla odeslána pozvánka
         toRef.get().addOnSuccessListener { document ->
             if (document != null) {
-                Log.d("Invi", "DocumentSnapshot data: ${document.data}")
+                Log.d("InviSendAdapter", "DocumentSnapshot data: ${document.data}")
                 holder.bindUser(document.toObject(User::class.java)!!)
 
             } else {
-                Log.d("Invi", "No such document")
+                Log.d("InviSendAdapter", "No such document")
             }
         }.addOnFailureListener { exception ->
-            Log.d("Invi", "get failed with ", exception)
+            Log.d("InviSendAdapter", "get failed with ", exception)
         }
 
         //binduje jaký sklad
         warehouseRef.get().addOnSuccessListener { document ->
             if (document != null && document.data != null) {
-                Log.d("Invi", "DocumentSnapshot data: ${document.data}")
+                Log.d("InviSendAdapter", "DocumentSnapshot data: ${document.data}")
                 holder.bindWarehouse(document.toObject(Warehouse::class.java)!!)
             } else {
-                Log.d("Invi", "No such document")
+                Log.d("InviSendAdapter", "No such document")
             }
         }.addOnFailureListener { exception ->
-            Log.d("Invi", "get failed with ", exception)
+            Log.d("InviSendAdapter", "get failed with ", exception)
         }
 
         //binduje datum
@@ -128,7 +154,7 @@ class InvitationsSendAdapter(options: FirestoreRecyclerOptions<Invitation>) : Fi
 
     override fun onViewAttachedToWindow(holder: InvitationViewHolder) {
         super.onViewAttachedToWindow(holder)
-
+        //přidá animaci na položky
         val animation: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.scale_up)
         holder.itemView.startAnimation(animation);
 

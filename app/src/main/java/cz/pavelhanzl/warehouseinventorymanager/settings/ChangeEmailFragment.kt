@@ -17,6 +17,11 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * Change email fragment
+ * Lets user to change his email.
+ * @constructor Create empty Change email fragment
+ */
 class ChangeEmailFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentChangeEmailBinding
     private val viewModel: SettingsFragmentViewModel by activityViewModels()
@@ -32,10 +37,6 @@ class ChangeEmailFragment : BottomSheetDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.wipeData()
-
-
-
-
 
         // Inflate the layout for this fragment
         return binding.root

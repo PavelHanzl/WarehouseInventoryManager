@@ -8,6 +8,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import cz.pavelhanzl.warehouseinventorymanager.repository.RepoComunicationLayer
 
+/**
+ * Base fragment
+ *
+ * @constructor Create empty Base fragment
+ */
 abstract class BaseFragment: Fragment(){
     val db = Firebase.firestore
     val auth = Firebase.auth

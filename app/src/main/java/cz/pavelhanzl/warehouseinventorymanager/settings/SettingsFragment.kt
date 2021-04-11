@@ -19,6 +19,11 @@ import cz.pavelhanzl.warehouseinventorymanager.settings.SettingsFragmentArgs
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehousesDetailFragmentViewModel
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
+/**
+ * Settings fragment
+ * Show user available settings for his account.
+ * @constructor Create empty Settings fragment
+ */
 class SettingsFragment : BaseFragment() {
 
     val args: SettingsFragmentArgs by navArgs()
@@ -43,6 +48,10 @@ class SettingsFragment : BaseFragment() {
         return binding.root
     }
 
+    /**
+     * Show only if not using google sign in
+     * Shows specific options to users which are not signed in with google account. Shows possibility to change password and change email.
+     */
     private fun showOnlyIfNotUsingGoogleSignIn() {
         authByPasswordAndEmail = auth.currentUser!!.providerData[auth.currentUser!!.providerData.size - 1].providerId == "password"
         if (authByPasswordAndEmail) {
@@ -51,27 +60,38 @@ class SettingsFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Navigates to change profile photo
+     */
     fun navigateToChangeProfilePhoto(){
         val action = SettingsFragmentDirections.actionSettingsFragmentToChangePhotoFragment()
         findNavController().navigate(action)
     }
 
+    /**
+     * Navigates to change name
+     */
     fun navigateToChangeName(){
         val action = SettingsFragmentDirections.actionSettingsFragmentToChangeNameFragment()
         findNavController().navigate(action)
 
     }
 
+    /**
+     * Navigates to change email
+     */
     fun navigateToChangeEmail(){
         val action = SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment()
         findNavController().navigate(action)
 
     }
 
+    /**
+     * Navigates to change password
+     */
     fun navigateToChangePassword(){
         val action = SettingsFragmentDirections.actionSettingsFragmentToChangePasswordFragment()
         findNavController().navigate(action)
     }
-
 
 }

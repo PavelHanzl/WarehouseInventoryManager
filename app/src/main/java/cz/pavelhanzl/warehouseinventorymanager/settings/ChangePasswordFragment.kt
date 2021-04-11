@@ -18,6 +18,11 @@ import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.warehouseDetail.WarehousesDetailFragmentViewModel
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * Change password fragment
+ * Lets user to change his password.
+ * @constructor Create empty Change password fragment
+ */
 class ChangePasswordFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentChangePasswordBinding
     private val viewModel: SettingsFragmentViewModel by activityViewModels()

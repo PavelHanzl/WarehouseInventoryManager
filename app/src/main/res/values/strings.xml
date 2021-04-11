@@ -218,6 +218,9 @@
     <string name="totalPcs">Počet kusů</string>
     <string name="xPcs">1000 Ks</string>
     <string name="date">Datum</string>
+    <string name="nonExistingItem">Neexistující položka</string>
+    <string name="ItemWithBarcode">Položka s čárovým kódem</string>
+    <string name="isNotExistingYetWannaCreate">" zatím neexistuje. \n\nPřejete si ji vytvořit?"</string>
 
 
 </resources>

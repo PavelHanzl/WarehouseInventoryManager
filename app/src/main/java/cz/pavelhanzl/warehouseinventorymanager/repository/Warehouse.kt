@@ -4,6 +4,20 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 import java.sql.Time
 
+/**
+ * Warehouse
+ * Warehouse data object class.
+ *
+ * @property warehouseID
+ * @property name
+ * @property name_lowercase needed because of sorting in firebase is case sensitive
+ * @property note
+ * @property owner
+ * @property photoURL
+ * @property users default is empty list
+ * @property createDate default is current datetime of device
+ * @constructor Create empty Warehouse
+ */
 //parcelize z toho důodu, abychom mohli tuto tídu posílat v safeargs v navigation component
 @Parcelize
 data class Warehouse (

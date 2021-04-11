@@ -20,6 +20,11 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * Change photo fragment
+ * Lets user to change his profile photo.
+ * @constructor Create empty Change photo fragment
+ */
 class ChangePhotoFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentChangePhotoBinding
     private val viewModel: SettingsFragmentViewModel by activityViewModels()
@@ -42,6 +47,9 @@ class ChangePhotoFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    /**
+     * Runs camera
+     */
     fun runCamera() {
         ImagePicker.with(this)
             .cropOval()

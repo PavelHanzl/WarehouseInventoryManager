@@ -7,6 +7,11 @@ import com.google.firebase.firestore.ListenerRegistration
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 
+/**
+ * Dashboard fragment view model
+ *
+ * @constructor Create empty Dashboard fragment view model
+ */
 class DashboardFragmentViewModel : BaseViewModel() {
 
     var _invitationSendNumber = MutableLiveData<String>("")
@@ -24,13 +29,16 @@ class DashboardFragmentViewModel : BaseViewModel() {
     lateinit var invitationRecievedListener: ListenerRegistration
     lateinit var invitationSendListener: ListenerRegistration
 
+    /**
+     * Registrate badge listeners
+     * Register red badgets shown in upper left corners of buttons on dashboard screen, which show a number of pending invitations.
+     */
     fun registrateBadgeListeners() {
-        Log.d("badgers", "registruju badgery")
 
+        //Recieved invitations
         invitationRecievedListener = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("to", auth.currentUser!!.uid).addSnapshotListener { snapshot, e ->
 
             if (e != null) {
-                Log.w("Data pro invi badge", "Listen failed.", e)
                 return@addSnapshotListener
             }
 
@@ -39,17 +47,16 @@ class DashboardFragmentViewModel : BaseViewModel() {
                 _invitationRecievedNumber.value = snapshot.documents.size.toString()
 
             } else {
-                Log.d("Data pro invi badge", "Current data: null")
                 _invitationRecievedBadgeVisible.value = false
                 _invitationRecievedNumber.value = "0"
             }
 
         }
 
+        //Send invitations
         invitationSendListener = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("from", auth.currentUser!!.uid).addSnapshotListener { snapshot, e ->
 
             if (e != null) {
-                Log.w("Data pro invi badge", "Listen failed.", e)
                 return@addSnapshotListener
             }
 
@@ -58,7 +65,6 @@ class DashboardFragmentViewModel : BaseViewModel() {
                 _invitationSendNumber.value = snapshot.documents.size.toString()
 
             } else {
-                Log.d("Data pro invi badge", "Current data: null")
                 _invitationSendBadgeVisible.value = false
                 _invitationSendNumber.value = "0"
             }
@@ -68,8 +74,11 @@ class DashboardFragmentViewModel : BaseViewModel() {
 
     }
 
+    /**
+     * Unregistrate badge listeners
+     * Removes listeners when called.
+     */
     fun unregistrateBadgeListeners() {
-        Log.d("badgers", "odpojuji badgery")
         invitationRecievedListener.remove()
         invitationSendListener.remove()
     }

@@ -21,14 +21,18 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Settings fragment view model
+ *
+ * @constructor Create empty Settings fragment view model
+ */
 class SettingsFragmentViewModel : BaseViewModel() {
-
 
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
 
     var userProfilePhoto = MutableLiveData<ByteArray>()
-    var _profilePhotoUrl= MutableLiveData<String>("")
+    var _profilePhotoUrl = MutableLiveData<String>("")
     val profilePhotoUrl: LiveData<String> get() = _profilePhotoUrl
 
     var userNewNameContent = MutableLiveData<String>("")
@@ -57,8 +61,7 @@ class SettingsFragmentViewModel : BaseViewModel() {
 
     sealed class Event {
         object NavigateBack : Event()
-        object NoPhotoSelected: Event()
-        //data class CreateEdit(val debtID: String?) : Event()
+        object NoPhotoSelected : Event()
     }
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
@@ -92,30 +95,32 @@ class SettingsFragmentViewModel : BaseViewModel() {
     }
 
     /////////////////////////////////////////////////////začátek změna hesla//////////////////////////////////////////////////
+    /**
+     * Changes users password to his or her account
+     */
     fun changePassword() {
         _loading.value = true
         GlobalScope.launch(Main) {
             if (validateForChangePasswords()) {
-                Log.d("CAJ", "Jsme ready menit hesla")
                 auth.currentUser.updatePassword(userNewPassword1Content.value).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         GlobalScope.launch(Main) { eventChannel.send(Event.NavigateBack) }
-                        Log.d("CAJ", "Heslo zmeneno")
                         _loading.value = false
                     } else {
-                        Log.d("CAJ", "NEco se posralo")
                         _loading.value = false
                     }
                 }
             } else {
-                //eventChannel.send(Event.HideLoading)
-                Log.d("CAJ", "Nejsme ready menit hesla")
                 _loading.value = false
             }
 
         }
     }
 
+    /**
+     * Validate all inputs before changing password
+     * @return returns true if valid
+     */
     suspend fun validateForChangePasswords(): Boolean {
         if (userCurrentPasswordContent.value == "") {
             _userCurrentPasswordError.postValue(stringResource(R.string.passwordCanNotBeEmpty))
@@ -138,6 +143,11 @@ class SettingsFragmentViewModel : BaseViewModel() {
         return currentPasswordValidResult && samePasswordValidResult && newPasswordLength && currentEmailValidResult
     }
 
+    /**
+     * Validate current email before changing it
+     *
+     * @return returns true if valid
+     */
     private fun validateCurrentEmail(): Boolean {
         var result: Boolean
         if (auth.currentUser?.email == userCurrentEmailContent.value) {
@@ -152,12 +162,14 @@ class SettingsFragmentViewModel : BaseViewModel() {
             _userCurrentEmailError.postValue(stringResource(R.string.thisFieldCanNotBeEmpty))
             result = false
         }
-
-
         return result
-
     }
 
+    /**
+     * Validate current password before changing it
+     *
+     * @return returns true if valid
+     */
     suspend private fun validateCurrentPassword(): Boolean {
         val result = CompletableDeferred<Boolean>()
         val credential = EmailAuthProvider.getCredential(auth.currentUser?.email!!, userCurrentPasswordContent.value!!)
@@ -178,6 +190,11 @@ class SettingsFragmentViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * Validate password lenght
+     *
+     * @return returns true if valid
+     */
     private fun validatePasswordLenght(): Boolean {
 
         return if (userNewPassword1Content.value!!.length < Constants.MIN_PASSWORD_LENGTH) {
@@ -193,30 +210,32 @@ class SettingsFragmentViewModel : BaseViewModel() {
 
     /////////////////////////////////////////////////////začátek změna emailu//////////////////////////////////////////////////
 
+    /**
+     * Changes user email to his or her account
+     */
     fun changeEmail() {
         _loading.value = true
         GlobalScope.launch(Main) {
             if (validateForChangeEmail()) {
-                Log.d("CAJ", "Jsme ready menit emaily")
                 auth.currentUser.updateEmail(userNewEmailContent.value).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         GlobalScope.launch(Main) { eventChannel.send(Event.NavigateBack) }
-                        Log.d("CAJ", "email zmenen")
                         _loading.value = false
                     } else {
-                        Log.d("CAJ", "NEco se posralo")
                         _loading.value = false
                     }
                 }
-
             } else {
                 _loading.value = false
-                Log.d("CAJ", "Nejsme ready menit maily")
             }
-
         }
     }
 
+    /**
+     * Validate all inputs before changing email
+     *
+     * @return returns true if valid
+     */
     suspend fun validateForChangeEmail(): Boolean {
 
         val currentEmailValidResult = validateCurrentEmail()
@@ -240,6 +259,11 @@ class SettingsFragmentViewModel : BaseViewModel() {
         return currentEmailValidResult && currentPasswordValidResult && newEmailValidResult
     }
 
+    /**
+     * Validates input with new email
+     *
+     * @return returns true if valid
+     */
     private fun validateNewEmail(): Boolean {
         return if (!android.util.Patterns.EMAIL_ADDRESS.matcher(userNewEmailContent.value!!).matches() || userNewEmailContent.value == "") {
             _userNewEmailError.value = stringResource(R.string.mail_is_not_in_form)
@@ -252,21 +276,17 @@ class SettingsFragmentViewModel : BaseViewModel() {
 
     /////////////////////////////////////////////////////konec změna hesla//////////////////////////////////////////////////
 
-
-
-
-
     /////////////////////////////////////////////////////začátek změna jména//////////////////////////////////////////////////
 
-
-
-
-    fun changeName(){
-        if(!userNewNameContent.value.isNullOrEmpty()) {
+    /**
+     * Changes users name which is displayed in application
+     */
+    fun changeName() {
+        if (!userNewNameContent.value.isNullOrEmpty()) {
             _userNewNameError.value = ""
             GlobalScope.launch(IO) {
                 _loading.postValue(true)
-                db.collection(Constants.USERS_STRING).document(auth.currentUser.uid).update("name", userNewNameContent.value).await()
+                db.collection(Constants.USERS_STRING).document(auth.currentUser.uid).update(Constants.NAME_STRING, userNewNameContent.value).await()
                 _loading.postValue(false)
                 eventChannel.send(Event.NavigateBack)
             }
@@ -276,50 +296,52 @@ class SettingsFragmentViewModel : BaseViewModel() {
         }
 
 
-}
+    }
     /////////////////////////////////////////////////////konec změna jména/////////////////////////////////////////////////
 
     /////////////////////////////////////////////////////začátek změna fotky//////////////////////////////////////////////////
 
-
-    fun getUsersPhoto(){
+    /**
+     * Gets current users photo which is displayed in application
+     */
+    fun getUsersPhoto() {
         GlobalScope.launch(IO) {
             try {
                 _loading.postValue(true)
                 _profilePhotoUrl.postValue(storage.child("images/users/" + auth.currentUser?.uid + "/profile.jpg").downloadUrl.await().toString())
-                Log.d("Storage", "imageUrl: " + profilePhotoUrl)
                 _loading.postValue(false)
             } catch (e: StorageException) {
-                Log.d("Storage", "image null" + e.message)
                 _loading.postValue(false)
             }
 
         }
     }
 
-    fun changePhoto(){
-        if(userProfilePhoto.value!!.isNotEmpty()){
-        GlobalScope.launch(IO) {
-            _loading.postValue(true)
-            try {
-                //ukladam do storage
-                storage.child("/images/users/${auth.currentUser?.uid}/profile.jpg").putBytes(userProfilePhoto.value!!).await()
+    /**
+     * Changes users photo which is displayed in application
+     */
+    fun changePhoto() {
+        if (userProfilePhoto.value!!.isNotEmpty()) {
+            GlobalScope.launch(IO) {
+                _loading.postValue(true)
+                try {
+                    //ukladam do storage
+                    storage.child("/images/users/${auth.currentUser?.uid}/profile.jpg").putBytes(userProfilePhoto.value!!).await()
 
-                //ziskavam url prave ulozeneho obrazku
-                val newPhotoUrl = storage.child("/images/users/${auth.currentUser?.uid}/profile.jpg").downloadUrl.await()
+                    //ziskavam url prave ulozeneho obrazku
+                    val newPhotoUrl = storage.child("/images/users/${auth.currentUser?.uid}/profile.jpg").downloadUrl.await()
 
-                //zapisuji url obrazku k objektu usera v DB
-                db.collection(Constants.USERS_STRING).document(auth.currentUser!!.uid).update("photoURL", newPhotoUrl.toString())
-                _loading.postValue(false)
+                    //zapisuji url obrazku k objektu usera v DB
+                    db.collection(Constants.USERS_STRING).document(auth.currentUser!!.uid).update("photoURL", newPhotoUrl.toString())
+                    _loading.postValue(false)
 
-                eventChannel.send(Event.NavigateBack) //zavirame fragment
-            } catch (e: Exception) {
-                Log.d("Storage", "Error: " + e.message)
-                _loading.postValue(false)
+                    eventChannel.send(Event.NavigateBack) //zavirame fragment
+                } catch (e: Exception) {
+                    _loading.postValue(false)
+                }
             }
-        }}else{
+        } else {
             GlobalScope.launch(Main) { eventChannel.send(Event.NoPhotoSelected) }
-            Log.d("Pole", "prazdne pole, nic nedelam")
         }
 
     }

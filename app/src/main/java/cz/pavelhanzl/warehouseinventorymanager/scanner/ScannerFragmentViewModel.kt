@@ -21,6 +21,11 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Scanner fragment view model
+ *
+ * @constructor Create empty Scanner fragment view model
+ */
 class ScannerFragmentViewModel : BaseViewModel() {
     lateinit var scannerMode: String
 
@@ -90,10 +95,19 @@ class ScannerFragmentViewModel : BaseViewModel() {
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
+    /**
+     * Scanner starts preview
+     *
+     */
     fun scannerStartPreview() {
         scannerStartPreview.postValue(true)
     }
 
+    /**
+     * Decode code
+     * Decodes barcode, here main logic is happening.
+     * @param result value of decoded barcode passed form fragment class
+     */
     fun decodeCode(result: Result) {
         GlobalScope.launch(Dispatchers.IO) {
 
@@ -112,7 +126,7 @@ class ScannerFragmentViewModel : BaseViewModel() {
                 }
             }
 
-
+            //pokude je zaplé kontinuální skenování, pak proveď obsah těla ifu
             if (continuouslyScaning.value!!) {
 
                 //nastaví countDown na čas vybraný na slideru (např. 1.5s), vynásobí 1000 abychom se dostali na ms
@@ -134,7 +148,11 @@ class ScannerFragmentViewModel : BaseViewModel() {
         }
     }
 
-    //po ve slideru stanovenou dobu pozastaví další skenování
+    /**
+     * Do count down
+     * Pauses the next scan for the time specified in the slider
+     * @param countDown time in miliseconds
+     */
     private suspend fun doCountDown(countDown: Int) {
         var countDownProgress = countDown
         while (countDownProgress > 0) {
@@ -147,7 +165,13 @@ class ScannerFragmentViewModel : BaseViewModel() {
         _scanningProgress.postValue(scanningSpeed.value!! * 1000)
     }
 
-    //pokud je nastavená hodnota rychlosti skenování na 0, tak ji to nastaví na minimální stanovenou hodnotu, aby to bylo user friendly a nečetlo např 50 čtení/s
+    /**
+     * Check if scan speed is zero and then set min scan speed
+     * If the set value of the scan speed (slider) is set to 0, then it sets it to the minimum defined value so that it is user friendly and does not read eg 50 reads/s
+     *
+     * @param countDown time in miliseconds
+     * @return minimal countdown in miliseconds
+     */
     private fun checkIfScanSpeedIsZeroAndThenSetMinScanSpeed(countDown: Int): Int {
         var minimalCountDown = countDown
         if (minimalCountDown == 0) {
@@ -158,13 +182,20 @@ class ScannerFragmentViewModel : BaseViewModel() {
         return minimalCountDown
     }
 
-    //spustí transakci přidávání/odebírání do databáze
+    /**
+     * Run adding removing transaction
+     * Starts an add / remove transaction to the database
+     *
+     * @param code scanned barcode
+     * @param count number of items to add/remove
+     * @param addingMode if true then adding to db, if false then removing from db
+     */
     fun runAddingRemovingTransaction(code: String, count: Double = 1.0, addingMode: Boolean = true) {
 
         GlobalScope.launch(Dispatchers.IO) {
 
             //vrátí položku skladu v závislosti na naskenovaném kódu, pokud položka s tímto kódem na skladě ještě neexistuje, tak vrátí null
-            var foundWhItem = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = code, listOfAllWarehouseItems = localListOfAllItems)
+            val foundWhItem = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = code, listOfAllWarehouseItems = localListOfAllItems)
 
             //pokud nevrátilo null, tak položka existuje a můžeme pokročit k transakci za tímto ifem, pokud vrátila null, tak pozastavíme sken a zobrazíme možnost přidání do skladu
             if (foundWhItem != null) {
@@ -188,28 +219,24 @@ class ScannerFragmentViewModel : BaseViewModel() {
                 return@launch
             }
 
-
-
             try {
                 _loading.postValue(true)
 
-                //val querySnapshot = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code", code).limit(1).get().await()
-                //val sfDocRef = querySnapshot.documents[0].reference
-
-                val sfDocRef = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").document(foundWhItem.warehouseItemID)
+                //získá refenci na dokument na kterém budeme provádět transakci
+                val sfDocRef = db.collection(Constants.WAREHOUSES_STRING).document(warehouseObject.value!!.warehouseID).collection(Constants.ITEMS_STRING).document(foundWhItem.warehouseItemID)
                 db.runTransaction { transaction ->
                     val snapshot = transaction.get(sfDocRef)
 
                     var newCount: Double
 
                     if (addingMode) {//přidáváme
-                        newCount = snapshot.getDouble("count")!! + count
+                        newCount = snapshot.getDouble(Constants.COUNT_STRING)!! + count
                     } else {//odebíráme
-                        newCount = snapshot.getDouble("count")!! - count
+                        newCount = snapshot.getDouble(Constants.COUNT_STRING)!! - count
 
                     }
 
-                    transaction.update(sfDocRef, "count", newCount)
+                    transaction.update(sfDocRef, Constants.COUNT_STRING, newCount)
 
                     // Success
                     null
@@ -226,59 +253,58 @@ class ScannerFragmentViewModel : BaseViewModel() {
                     //přehraje animaci úspěchu
                     GlobalScope.launch { eventChannel.send(Event.PlaySuccessAnimation) }
 
-                    Log.d("Transakce", "Transaction success!")
                 }.addOnFailureListener {
                     _loading.postValue(false)
 
                     //přehraje animaci neúspěchu
                     GlobalScope.launch { eventChannel.send(Event.PlayErrorAnimation) }
 
-                    Log.d("Transakce", "Transaction failure!!!!!!!!!!" + it.message)
                 }
             } catch (e: Exception) {
                 _loading.postValue(false)
                 //přehraje animaci neúspěchu
                 GlobalScope.launch { eventChannel.send(Event.PlayErrorAnimation) }
 
-                Log.d("EXCEPTION", e.message!!)
+                Log.d("Exception", e.message!!)
             }
-
         }
-
-
     }
 
+    /**
+     * Get list of actual warehouse items
+     * Gets the actual list of warehouse items stored in actual warehouse.
+     */
     suspend fun getListOfActualWarehouseItems() {
 
         localListOfAllItemNames.clear()
         localListOfAllItemCodes.clear()
         localListOfAllItems.clear()
 
-
-        allItemsInDb = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").orderBy("name", Query.Direction.ASCENDING).get().await()
+        allItemsInDb = db.collection(Constants.WAREHOUSES_STRING).document(warehouseObject.value!!.warehouseID).collection(Constants.ITEMS_STRING).orderBy(Constants.NAME_STRING, Query.Direction.ASCENDING).get().await()
         for (document in allItemsInDb.documents) {
             localListOfAllItems.add(document.toObject(WarehouseItem::class.java)!!)
             localListOfAllItemNames.add(document.toObject(WarehouseItem::class.java)!!.name)
             localListOfAllItemCodes.add(document.toObject(WarehouseItem::class.java)!!.code)
         }
-
-
     }
 
-
+    /**
+     * Return warehouse item with given parameters
+     *
+     * @param itemName name of item which you want to be returned
+     * @param itemBarcode barcode of item which you want to be returned
+     * @param listOfAllWarehouseItems list of all warehouse items
+     * @return returns found item based on given parameters or null if no item was found
+     */
     private fun returnWarehouseItemWithGivenParameters(itemName: String = "", itemBarcode: String = "", listOfAllWarehouseItems: MutableList<WarehouseItem>): WarehouseItem? {
         var foundObject: WarehouseItem? = null
 
         listOfAllWarehouseItems.any {
             if (it.name == itemName || it.code == itemBarcode) {
                 foundObject = it
-                Log.d("hajdin", "Nalezeno - Item:" + foundObject!!.name + " Code:" + foundObject!!.code)
                 true //shoda našli jsme shodu podle jména nebo podle kódu
             } else false //neshoda nic jsme nenanšli
         }
-
         return foundObject
-
     }
-
 }

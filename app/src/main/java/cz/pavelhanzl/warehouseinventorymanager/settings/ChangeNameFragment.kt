@@ -17,6 +17,11 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * Change name fragment
+ * Lets user to change his name.
+ * @constructor Create empty Change name fragment
+ */
 class ChangeNameFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentChangeNameBinding
     private val viewModel: SettingsFragmentViewModel by activityViewModels()
@@ -33,9 +38,6 @@ class ChangeNameFragment : BottomSheetDialogFragment() {
 
 
         viewModel.wipeData()
-
-
-
 
         // Inflate the layout for this fragment
         return binding.root
