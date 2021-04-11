@@ -185,6 +185,12 @@
     <string name="cancleInvitation">Zrušit</string>
     <string name="removingMode">Režim odebírání</string>
     <string name="addingMode">Režim přidávání</string>
+    <string name="threeDots">...</string>
+    <string name="skennerMode">Režim skeneru</string>
+    <string name="lastlyScannedBarcode">Poslední naskenovaný čárový kód</string>
+    <string name="scanItem">Naskenujte položku</string>
+    <string name="lastlyScannedItem">Poslední naskenovaná položka</string>
+    <string name="itemWithThisBarcodeDoesntExists">Položka s tímto čárovým kódem neexistuje.</string>
 
 
 </resources>

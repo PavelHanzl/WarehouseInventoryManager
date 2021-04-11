@@ -4,11 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.zxing.Result
 import cz.pavelhanzl.warehouseinventorymanager.R
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
@@ -52,9 +54,13 @@ class ScannerFragmentViewModel : BaseViewModel() {
     private val _loading = MutableLiveData<Boolean>(false)
     val loading: LiveData<Boolean> get() = _loading
 
-    // hodnota barcodu
-    var _barcodeValue = MutableLiveData<String>("")
+    // hodnota barcodu poslední naskenované položky
+    var _barcodeValue = MutableLiveData<String>(stringResource(R.string.threeDots))
     val barcodeValue: LiveData<String> get() = _barcodeValue
+
+    //jméno poslední naskenované položky
+    var _nameOfScannedBarcode = MutableLiveData<String>(stringResource(R.string.scanItem))
+    val nameOfScannedBarcode: LiveData<String> get() = _nameOfScannedBarcode
 
     // hodnota observovaná ve view
     var scannerStartPreview = MutableLiveData<Boolean>(false)
@@ -75,6 +81,7 @@ class ScannerFragmentViewModel : BaseViewModel() {
         object NavigateBack : Event()
         object PlaySuccessAnimation : Event()
         object PlayErrorAnimation : Event()
+        object PlayBeepSoundAndVibrate : Event()
         data class SendToast(val toastMessage: String) : Event()
         data class NonExistingItem(val scannedBarcode: String) : Event()
         //data class CreateEdit(val debtID: String?) : Event()
@@ -87,26 +94,23 @@ class ScannerFragmentViewModel : BaseViewModel() {
         scannerStartPreview.postValue(true)
     }
 
-    fun scannerStopPreview() {
-        scannerStopPreview.postValue(true)
-    }
-
-    fun scanSuccessful() {
-        barcodeScanned.postValue(true)
-    }
-
-
-
     fun decodeCode(result: Result) {
         GlobalScope.launch(Dispatchers.IO) {
 
-            scanSuccessful()
+            //sustí zvuk pípnutí a zavibruje
+            eventChannel.send(Event.PlayBeepSoundAndVibrate)
 
-            var counterOfScanning = _barcodeValue.value!!.toInt()
-            counterOfScanning++
-            _barcodeValue.postValue(counterOfScanning.toString())
+            //propíše hodnotu naskenovaného čárového kódu do UI
+            _barcodeValue.postValue(result.text)
 
-
+            //pokud se nenacházíme ve četcím reřimu, tak budeme zapisovat do databáze
+            if (scannerMode != Constants.READING_STRING) {
+                if (scannerMode == Constants.ADDING_STRING) {//přidáváme
+                    runAddingRemovingTransaction(result.text.toString(), 1.0, true)
+                } else { //odebíráme
+                    runAddingRemovingTransaction(result.text.toString(), 1.0, false)
+                }
+            }
 
 
             if (continuouslyScaning.value!!) {
@@ -120,9 +124,9 @@ class ScannerFragmentViewModel : BaseViewModel() {
                 //provede odpočítávní
                 doCountDown(countDown)
 
-                if(continuouslyScaning.value == true){
-                //po ukončeném odpočítávání opět zpřístupní skenner
-                scannerStartPreview()
+                if (continuouslyScaning.value == true) {
+                    //po ukončeném odpočítávání opět zpřístupní skenner
+                    scannerStartPreview()
                 }
 
             }
@@ -143,6 +147,7 @@ class ScannerFragmentViewModel : BaseViewModel() {
         _scanningProgress.postValue(scanningSpeed.value!! * 1000)
     }
 
+    //pokud je nastavená hodnota rychlosti skenování na 0, tak ji to nastaví na minimální stanovenou hodnotu, aby to bylo user friendly a nečetlo např 50 čtení/s
     private fun checkIfScanSpeedIsZeroAndThenSetMinScanSpeed(countDown: Int): Int {
         var minimalCountDown = countDown
         if (minimalCountDown == 0) {
@@ -153,6 +158,7 @@ class ScannerFragmentViewModel : BaseViewModel() {
         return minimalCountDown
     }
 
+    //spustí transakci přidávání/odebírání do databáze
     fun runAddingRemovingTransaction(code: String, count: Double = 1.0, addingMode: Boolean = true) {
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -161,14 +167,19 @@ class ScannerFragmentViewModel : BaseViewModel() {
             var foundWhItem = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = code, listOfAllWarehouseItems = localListOfAllItems)
 
             //pokud nevrátilo null, tak položka existuje a můžeme pokročit k transakci za tímto ifem, pokud vrátila null, tak pozastavíme sken a zobrazíme možnost přidání do skladu
-            if( foundWhItem != null){
-                eventChannel.send(Event.SendToast(foundWhItem.name))
-            }else{
+            if (foundWhItem != null) {
+                _nameOfScannedBarcode.postValue(foundWhItem.name)
+            } else {
                 //přehraje animaci neúspěchu
-                 eventChannel.send(Event.PlayErrorAnimation)
+                eventChannel.send(Event.PlayErrorAnimation)
 
-                //zobrazí dialog o neexistující položce
-                eventChannel.send(Event.NonExistingItem(code))
+                if (scannerMode == Constants.ADDING_STRING) { // dialog s možností vytvoření neexistující položky chceme zobrazit pouze v případě, že se nacházíme v módu přidávání, v modu odebírání nemůžeme odebrat položku co na skladě neexistuje
+                    //zobrazí dialog o neexistující položce
+                    eventChannel.send(Event.NonExistingItem(code))
+                }
+
+                //propíše zprávu o neexistující položce do UI
+                _nameOfScannedBarcode.postValue(stringResource(R.string.itemWithThisBarcodeDoesntExists))
 
                 //zastaví kontinuální skenování
                 continuouslyScaning.postValue(false)
@@ -182,11 +193,10 @@ class ScannerFragmentViewModel : BaseViewModel() {
             try {
                 _loading.postValue(true)
 
-
                 //val querySnapshot = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").whereEqualTo("code", code).limit(1).get().await()
                 //val sfDocRef = querySnapshot.documents[0].reference
 
-                val sfDocRef =  db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").document(foundWhItem.warehouseItemID)
+                val sfDocRef = db.collection("warehouses").document(warehouseObject.value!!.warehouseID).collection("items").document(foundWhItem.warehouseItemID)
                 db.runTransaction { transaction ->
                     val snapshot = transaction.get(sfDocRef)
 
@@ -213,7 +223,6 @@ class ScannerFragmentViewModel : BaseViewModel() {
                         repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.itemRemoved), foundWhItem.name, "-$count", warehouseObject.value!!.warehouseID)
                     }
 
-                    //todo dořešit aby se event zkonzumoval už na skenneru
                     //přehraje animaci úspěchu
                     GlobalScope.launch { eventChannel.send(Event.PlaySuccessAnimation) }
 

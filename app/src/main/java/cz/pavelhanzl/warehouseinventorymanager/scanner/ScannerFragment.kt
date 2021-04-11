@@ -42,7 +42,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-
+import kotlin.math.absoluteValue
 
 class ScannerFragment : BaseFragment() {
     private lateinit var codeScanner: CodeScanner
@@ -60,12 +60,12 @@ class ScannerFragment : BaseFragment() {
             viewModel = ViewModelProvider(this).get(ScannerFragmentViewModel::class.java)
             viewModel.warehouseObject.value = args.warehouseObject
 
+            //pokud nepřicházíme z lokace, která nám nepředává objekt skladu, tak si přejeme načíst všechny aktuální položky na skladě
             if (args.warehouseObject!=null){
                GlobalScope.launch(Dispatchers.IO ) {
                    viewModel.getListOfActualWarehouseItems() }
             }
 
-            viewModel._barcodeValue.postValue(args.mode)
         }
     }
 
@@ -94,35 +94,20 @@ class ScannerFragment : BaseFragment() {
         codeScanner.formats = CodeScanner.ONE_DIMENSIONAL_FORMATS
         codeScanner.scanMode = ScanMode.SINGLE
 
-
-
-        viewModel._barcodeValue.postValue("0")
-
+        //callback pro úspěšně naskenovaný čárový kod
         codeScanner.decodeCallback = DecodeCallback {
             requireActivity().runOnUiThread() {
-
                 viewModel.decodeCode(it)
-
                 handleDecodeCallbackIfScannerIsInReadingMode(it)
-
-                //pokud se nenacházíme ve četcím reřimu, tak budeme zapisovat do databáze
-                if (viewModel.scannerMode != Constants.READING_STRING) {
-                    if (viewModel.scannerMode == Constants.ADDING_STRING) {//přidáváme
-                        viewModel.runAddingRemovingTransaction(it.text.toString(), 1.0, true)
-                    } else { //odebíráme
-                        viewModel.runAddingRemovingTransaction(it.text.toString(), 1.0, false)
-                    }
-                }
             }
         }
 
+        //callback pro neúspěšně naskenovaný čárový kod
         codeScanner.errorCallback = ErrorCallback {
             Log.e("camera error", it.message!!)
         }
 
         setUpSliderForScanningSpeed()
-
-
 
         return binding.root
     }
@@ -130,6 +115,8 @@ class ScannerFragment : BaseFragment() {
     private fun handleDecodeCallbackIfScannerIsInReadingMode(it: Result) {
 
         if (viewModel.scannerMode == Constants.READING_STRING) {
+            playBeepSound()
+            vibratePhone()
             // vloží do argumentu výsledek skennování a předá observeru ve fragmentu, který vyvolal skenner ve čtecím režimu
             findNavController().previousBackStackEntry?.savedStateHandle?.set("scannedBarcode", it.text)
             //pokud se nacházíme ve čtecím režimu tak se chceme hned dostat zpět na lokaci odkud jsme na skenner přišli
@@ -187,13 +174,14 @@ class ScannerFragment : BaseFragment() {
 
         })
 
-        //při úspěšném decodu provede tyto akce
+ /*       //při úspěšném decodu provede tyto akce
         viewModel.barcodeScanned.observe(viewLifecycleOwner, Observer { it ->
             if (it) {
+                Log.d("skener", "hraju na city")
                 playBeepSound()
                 vibratePhone()
             }
-        })
+        })*/
 
         //zapíná preview v kontinuálním módu po uběhnutí časového limitu
         viewModel.scannerStartPreview.observe(viewLifecycleOwner, Observer { it ->
@@ -210,12 +198,16 @@ class ScannerFragment : BaseFragment() {
     private fun setUpSliderForScanningSpeed() {
         //nastavuje rychlost skenování při posunu slideru, složité na realizaci v MVVM, proto change listener
         binding.sliderScanningSpeed.addOnChangeListener { slider, value, fromUser ->
+
             viewModel.scanningSpeed.value = value
+
             viewModel._scanningProgress.value = if (value.toInt() == 0) {
                 viewModel.minimumSpeed * 1000
             } else {
                 value * 1000
             }
+
+            setUpSpeedOfLottieAnimation(value)
 
         }
 
@@ -223,6 +215,14 @@ class ScannerFragment : BaseFragment() {
         binding.sliderScanningSpeed.setLabelFormatter { value: Float ->
             val format = resources.getString(R.string.scanningSpeedLabel) + "${value.toInt()}" + resources.getString(R.string.secondsShotFormat)
             format.format(value.toDouble())
+        }
+    }
+
+    private fun setUpSpeedOfLottieAnimation(value: Float) {
+        if (value.toInt() == 0) {
+            binding.lottieSucessErrorAnimScannerFragment.speed = 2F / viewModel.minimumSpeed
+        } else {
+            binding.lottieSucessErrorAnimScannerFragment.speed = 2F / value
         }
     }
 
@@ -321,6 +321,10 @@ class ScannerFragment : BaseFragment() {
                     is ScannerFragmentViewModel.Event.SendToast -> {
                         Log.d("skenerek", "vypinam skener")
                         Toast.makeText(requireContext(),it.toastMessage,Toast.LENGTH_LONG).show()
+                    }
+                    ScannerFragmentViewModel.Event.PlayBeepSoundAndVibrate -> {
+                        playBeepSound()
+                        vibratePhone()
                     }
 
                 }
