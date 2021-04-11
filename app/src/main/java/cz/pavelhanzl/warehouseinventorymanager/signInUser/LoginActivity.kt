@@ -1,9 +1,12 @@
 package cz.pavelhanzl.warehouseinventorymanager.signInUser
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -13,25 +16,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.ActivityLoginBinding
-import cz.pavelhanzl.warehouseinventorymanager.databinding.ActivityRegisterBinding
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import java.lang.Exception
+import kotlinx.android.synthetic.main.forgotten_password.view.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -59,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
             .apply {
                 this.setLifecycleOwner(this@LoginActivity)
                 this.viewmodel = loginViewModel
+                this.fragmentClass=this@LoginActivity
             }
 
 
@@ -142,6 +136,34 @@ class LoginActivity : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         loginViewModel.firebaseAuthWithGoogleLogic(credential)
     }
+
+    fun forgotPasswordDialogShow() {
+        val factory = LayoutInflater.from(this)
+        val forgottenPasswordDialogView: View = factory.inflate(R.layout.forgotten_password, null)
+        val forgottenPasswordDialog: AlertDialog = AlertDialog.Builder(this).create()
+        forgottenPasswordDialog.setView(forgottenPasswordDialogView)
+
+        forgottenPasswordDialogView.btn_cancel_forgotten_password_dialog.setOnClickListener {
+            Log.d("CTVRTEK", "Spis ne")
+            forgottenPasswordDialog.dismiss()
+        }
+
+        forgottenPasswordDialogView.btn_reset_forgotten_password_dialog.setOnClickListener {
+            val email = forgottenPasswordDialogView.textInputEditText_forgotten_password_dialog.text.toString()
+            val validation = loginViewModel.validateEmailForForgottenPass(email)
+            if(validation.first) {
+                forgottenPasswordDialogView.textInputLayout_forgotten_password_dialog.error = validation.second
+                loginViewModel.sendResetPassword(email)
+                forgottenPasswordDialog.dismiss()
+                Toast.makeText(this, "E-mail pro reset hesla byl odeslán", Toast.LENGTH_LONG).show()
+            } else {
+                forgottenPasswordDialogView.textInputLayout_forgotten_password_dialog.error = validation.second
+            }
+        }
+
+        forgottenPasswordDialog.show()
+    }
+
 
 
 

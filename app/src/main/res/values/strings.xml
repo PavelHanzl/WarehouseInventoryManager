@@ -192,6 +192,9 @@
     <string name="lastlyScannedItem">Poslední naskenovaná položka</string>
     <string name="itemWithThisBarcodeDoesntExists">Položka s tímto čárovým kódem neexistuje.</string>
     <string name="aboutApplication">O aplikaci</string>
+    <string name="temsAndCon">všeobecnými podmínkami</string>
+    <string name="forgottenPassword">Zapomenuté heslo?</string>
+    <string name="renew">Obnovit.</string>
 
 
 </resources>

@@ -5,6 +5,10 @@
 
     <data>
         <variable
+            name="fragmentClass"
+            type="cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginActivity" />
+
+        <variable
             name="viewmodel"
             type="cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginViewModel" />
     </data>
@@ -14,7 +18,7 @@
     android:layout_height="wrap_content">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".signInUser.LoginActivity">
 
         <FrameLayout
@@ -103,7 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:gravity="center"
             android:text="@string/loginButtonText"
@@ -122,6 +126,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ActivityLogin_loginButton">
@@ -129,7 +134,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+
                 android:padding="8dp"
                 android:text="@string/loginDontHaveAccount" />
 
@@ -137,12 +142,43 @@
                 android:id="@+id/ActivityLogin_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+
                 android:padding="8dp"
                 android:text="@string/loginRegisterText"
                 android:textColor="@color/primaryColor"
                 android:textStyle="bold"
                 />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:padding="8dp"
+                android:text="@string/forgottenPassword" />
+
+            <TextView
+                android:id="@+id/ActivityLogin_renewPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="@string/renew"
+                android:onClick="@{()-> fragmentClass.forgotPasswordDialogShow()}"
+                android:textColor="@color/primaryColor"
+                android:textStyle="bold" />
+
 
         </LinearLayout>
 
@@ -154,13 +190,13 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:padding="8dp"
                 android:text="@string/LoginWithSocials" />
         </LinearLayout>

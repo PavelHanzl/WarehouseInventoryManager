@@ -17,6 +17,8 @@ class RegisterViewModel : BaseViewModel() {
 
     private val passwordLength = Constants.MIN_PASSWORD_LENGTH
 
+    val allowRegistration = MutableLiveData<Boolean>(false)
+
     // proměné, které může měnit View a jsou nabindované přes XML
     val nameContent = MutableLiveData<String>("")
     val emailContent = MutableLiveData<String>("")
