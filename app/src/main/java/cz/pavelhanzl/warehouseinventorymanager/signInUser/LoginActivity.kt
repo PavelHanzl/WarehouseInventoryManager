@@ -26,6 +26,11 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 import kotlinx.android.synthetic.main.forgotten_password.view.*
 
+/**
+ * Login activity
+ *
+ * @constructor Create empty Login activity
+ */
 class LoginActivity : AppCompatActivity() {
 
     companion object {
@@ -84,6 +89,9 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Moves to dashboard
+     */
     private fun moveToDashboard() {
         Toast.makeText(this, R.string.LoginSuccessful, Toast.LENGTH_SHORT).show()
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
@@ -92,6 +100,9 @@ class LoginActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * Sets google sign in
+     */
     private fun setGoogleSignIn() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
@@ -101,7 +112,10 @@ class LoginActivity : AppCompatActivity() {
         googleSignInClient = GoogleSignIn.getClient(this, gso)
     }
 
-    //google sign in method
+    /**
+     * google sign in method
+     *
+     */
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -132,24 +146,32 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-
+    /**
+     * Firebase auth with google
+     *
+     * @param idToken
+     */
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         loginViewModel.firebaseAuthWithGoogleLogic(credential)
     }
 
-
+    /**
+     * Forgot password dialog show
+     * Shows dialog which will allow you to renew your password
+     */
     fun forgotPasswordDialogShow() {
         val factory = LayoutInflater.from(this)
         val forgottenPasswordDialogView: View = factory.inflate(R.layout.forgotten_password, null)
         val forgottenPasswordDialog: AlertDialog = AlertDialog.Builder(this).create()
         forgottenPasswordDialog.setView(forgottenPasswordDialogView)
 
+        //skryje dialog se zapomenutým heslem
         forgottenPasswordDialogView.btn_cancel_forgottenPasswordDialog.setOnClickListener {
-            Log.d("CTVRTEK", "Spis ne")
             forgottenPasswordDialog.dismiss()
         }
 
+        //provede změnu hesla po kliknutí na tlačítko "změnit heslo"
         forgottenPasswordDialogView.btn_reset_forgottenPasswordDialog.setOnClickListener {
             val email = forgottenPasswordDialogView.textInputEditText_forgottenPasswordDialog.text.toString()
             val validation = loginViewModel.validateEmailForForgottenPass(email)
@@ -157,16 +179,14 @@ class LoginActivity : AppCompatActivity() {
                 forgottenPasswordDialogView.textInputLayout_forgottenPasswordDialog.error = validation.second
                 loginViewModel.sendResetPassword(email)
                 forgottenPasswordDialog.dismiss()
-                Toast.makeText(this, "E-mail pro reset hesla byl odeslán", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.passwordRenewalEmailWasSend), Toast.LENGTH_LONG).show()
             } else {
                 forgottenPasswordDialogView.textInputLayout_forgottenPasswordDialog.error = validation.second
             }
         }
 
+        //zobrazí dialog se zapomenutým heslem
         forgottenPasswordDialog.show()
     }
-
-
-
 
 }

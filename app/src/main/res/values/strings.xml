@@ -195,7 +195,7 @@
     <string name="temsAndCon">všeobecnými podmínkami</string>
     <string name="forgottenPassword">Zapomenuté heslo?</string>
     <string name="renew">Obnovit.</string>
-    <string name="agreeWith">Souhlasím s</string>
+    <string name="agreeWith">"Souhlasím s "</string>
     <string name="enterRegistrationEmail">Zadejte registrační e-mail</string>
     <string name="resetPassword">Resetovat heslo</string>
     <string name="cancel">Zrušit</string>
@@ -221,6 +221,7 @@
     <string name="nonExistingItem">Neexistující položka</string>
     <string name="ItemWithBarcode">Položka s čárovým kódem</string>
     <string name="isNotExistingYetWannaCreate">" zatím neexistuje. \n\nPřejete si ji vytvořit?"</string>
+    <string name="passwordRenewalEmailWasSend">Odeslali jsme vám email pro obnovu hesla.</string>
 
 
 </resources>

@@ -31,6 +31,9 @@ import java.lang.Exception
 class LoginViewModel : BaseViewModel() {
     private val passwordLength = Constants.MIN_PASSWORD_LENGTH
 
+    private val _loading = MutableLiveData<Boolean>(false)
+    val loading: LiveData<Boolean> get() = _loading
+
     var emailContent = MutableLiveData<String>("")
     var passwordContent = MutableLiveData<String>("")
 
@@ -46,15 +49,21 @@ class LoginViewModel : BaseViewModel() {
     private val _moveToDashboard = MutableLiveData<Boolean>()
     val moveToDashboard: LiveData<Boolean> get() = _moveToDashboard
 
+    /**
+     * On login click
+     * Perfom login operation, if all inputs are valid
+     */
     fun onLoginClick() {
-        Log.d("LoginActivity", "Klikáš na login vole!")
-
         if (validForLogin()) {
             login(emailContent.value!!, passwordContent.value!!)
-            Log.d("LoginActivity", "je to valid!")
         }
     }
 
+    /**
+     * Valid for login
+     * Check if all given information are correct and valid
+     * @return returns true if valid
+     */
     fun validForLogin(): Boolean {
 
         val emailValidation = validateEmail()
@@ -63,6 +72,11 @@ class LoginViewModel : BaseViewModel() {
         return emailValidation && lengthPasswordValidation
     }
 
+    /**
+     * Validates password length
+     *
+     * @return returns true if valid
+     */
     private fun validatePasswordLength(): Boolean {
         return if (!(passwordContent.value?.length!! >= passwordLength)) {
             _passwordError.value =
@@ -74,6 +88,11 @@ class LoginViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * Validates email format
+     *
+     * @return returns true if valid
+     */
     private fun validateEmail(): Boolean {
         return if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailContent.value!!).matches()) {
             _emailError.value = stringResource(R.string.mail_is_not_in_form)
@@ -84,6 +103,12 @@ class LoginViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * Validates format of email for forgotten pass
+     *
+     * @param email email address to validate
+     * @return returns true if valid
+     */
     fun validateEmailForForgottenPass(email: String): Pair<Boolean, String> {
         return if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             return Pair(false, stringResource(R.string.mail_is_not_in_form))
@@ -92,11 +117,21 @@ class LoginViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * Sends reset password email to  given email
+     *
+     * @param email email where to send reset password email
+     */
     fun sendResetPassword(email: String) {
         auth.sendPasswordResetEmail(email)
     }
 
-    //provede login na základě emailu a hesla
+    /**
+     * Login
+     * Performs a login based on email and password
+     * @param email users email
+     * @param password users password
+     */
     private fun login(email: String, password: String) {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener(
             OnCompleteListener<AuthResult> { task ->
@@ -109,6 +144,11 @@ class LoginViewModel : BaseViewModel() {
         )
     }
 
+    /**
+     * Saves user profile photo from google auth
+     *
+     * @return returns upload task
+     */
     fun saveUserProfilePhotoFromGoogleAuth(): UploadTask {
         val userImageURL = auth.currentUser!!.photoUrl.toString()
         var photoRef = storage.child("images/users/" + auth.currentUser!!.uid + "/profile.jpg")
@@ -120,6 +160,13 @@ class LoginViewModel : BaseViewModel() {
         return photoRef.putBytes(data)
     }
 
+    /**
+     * Creates user in firebase firestore in users collection
+     *
+     * @param name name of user
+     * @param email users email
+     * @return returns task
+     */
     fun createUserInFirestore(name: String, email: String): Task<Void> {
 
         val user: MutableMap<String, Any> = HashMap()
@@ -128,31 +175,39 @@ class LoginViewModel : BaseViewModel() {
         user["email"] = email
         user["photoURL"] = ""
 
-        return db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+        return db.collection(Constants.USERS_STRING).document(FirebaseAuth.getInstance().currentUser!!.uid)
             .set(user)
-
     }
 
+    /**
+     * Performs a login based on firebase auth with google - logic
+     *
+     * @param credential credential with which we want to login
+     */
     fun firebaseAuthWithGoogleLogic(credential: AuthCredential) {
+        _loading.postValue(true)
         GlobalScope.launch(Dispatchers.IO) {
             try {
                 auth.signInWithCredential(credential).await()
                 Log.d("Firestore", "Login with google")
             } catch (e: FirebaseAuthException) {
-                Log.d("Firestore", "Google down: " + "${e.message}")
+                Log.d("Firestore", "Exception: " + "${e.message}")
+                _loading.postValue(false)
                 return@launch
             }
 
             try {
                 val userDocumentRef =
-                    db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    db.collection(Constants.USERS_STRING).document(FirebaseAuth.getInstance().currentUser!!.uid)
                         .get().await()
                 if (userDocumentRef.exists()) {
                     _moveToDashboard.postValue(true)
+                    _loading.postValue(false)
                     return@launch
                 }
             } catch (e: Exception) {
-                Log.d("Firestore", "Reference dokumentu usera nenalezena!" + "${e.message}")
+                Log.d("Firestore", "Exception" + "${e.message}")
+                _loading.postValue(false)
             }
 
             try {
@@ -162,15 +217,17 @@ class LoginViewModel : BaseViewModel() {
                 ).await()
             } catch (e: Exception) {
                 auth.currentUser!!.delete()
+                _loading.postValue(false)
                 return@launch
             }
 
             try {
                 saveUserProfilePhotoFromGoogleAuth().await()
             } catch (e: Exception) {
-                Log.d("Storage", "Nahrávání obrázku neprošlo!" + "${e.message}")
+                Log.d("Storage", "Exception" + "${e.message}")
             }
 
+            _loading.postValue(false)
             _moveToDashboard.postValue(true)
 
         }

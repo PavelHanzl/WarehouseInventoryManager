@@ -13,6 +13,11 @@ import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Register view model
+ *
+ * @constructor Create empty Register view model
+ */
 class RegisterViewModel : BaseViewModel() {
 
     private val passwordLength = Constants.MIN_PASSWORD_LENGTH
@@ -48,9 +53,13 @@ class RegisterViewModel : BaseViewModel() {
 
     ///
 
-
+    /**
+     * Defines what should happen when user click on register button click
+     *
+     */
     fun onRegisterClick() {
 
+        //check if inputs are valid
         if (validForRegistration()) {
 
             viewModelScope.launch(Dispatchers.IO) {
@@ -78,7 +87,11 @@ class RegisterViewModel : BaseViewModel() {
         }
     }
 
-
+    /**
+     * Checks if all inputs are valid for registration
+     *
+     * @return returns true if valid
+     */
     fun validForRegistration(): Boolean {
 
         val nameValidation = validateName()
@@ -89,6 +102,11 @@ class RegisterViewModel : BaseViewModel() {
         return nameValidation && emailValidation && samePasswordValidation && lengthPasswordValidation
     }
 
+    /**
+     * Validates given name
+     *
+     * @return returns true if valid
+     */
     private fun validateName(): Boolean {
         return if (nameContent.value?.isEmpty()!!) {
             _nameError.value = stringResource(R.string.type_in_name)
@@ -99,6 +117,11 @@ class RegisterViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * Validates given email format
+     *
+     * @return returns true if valid
+     */
     private fun validateEmail(): Boolean {
         return if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailContent.value!!).matches()) {
             _emailError.value = stringResource(R.string.mail_is_not_in_form)
@@ -109,6 +132,11 @@ class RegisterViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * Validates given password length
+     *
+     * @return returns true if valid
+     */
     private fun validatePasswordLength(): Boolean {
         return if (!(password1Content.value?.length!! >= passwordLength)) {
             _passwordErrorLength.value =
@@ -120,6 +148,11 @@ class RegisterViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * Validates if both given passwords are the same
+     *
+     * @return returns true if valid
+     */
     private fun validateSamePassword(): Boolean {
         return if (password1Content.value != password2Content.value) {
             _passwordErrorSimilarity.value = stringResource(R.string.password_not_same)
@@ -130,11 +163,24 @@ class RegisterViewModel : BaseViewModel() {
         }
     }
 
-
+    /**
+     * Creates user in firebase auth
+     *
+     * @param email email of the user
+     * @param password password of the user
+     * @return returns task
+     */
     fun createUserInFirebaseAuth(email: String, password: String): Task<AuthResult> {
         return FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
     }
 
+    /**
+     * Creates user in firestore
+     *
+     * @param name users given name
+     * @param email users email
+     * @return returns task
+     */
     fun createUserInFirestore(name: String, email: String): Task<Void> {
 
         val user: MutableMap<String, Any> = HashMap()
@@ -143,6 +189,6 @@ class RegisterViewModel : BaseViewModel() {
         user["email"] = email
         user["photoURL"] = ""
 
-        return db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).set(user)
+        return db.collection(Constants.USERS_STRING).document(FirebaseAuth.getInstance().currentUser!!.uid).set(user)
     }
 }

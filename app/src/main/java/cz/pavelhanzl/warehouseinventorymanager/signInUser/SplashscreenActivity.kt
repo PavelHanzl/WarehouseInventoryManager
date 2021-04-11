@@ -13,6 +13,12 @@ import com.google.firebase.auth.FirebaseAuth
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 
+/**
+ * Splashscreen activity
+ * Shows splashscreen when app is launched.
+ *
+ * @constructor Create empty Splashscreen activity
+ */
 class SplashscreenActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
 
@@ -32,7 +38,8 @@ class SplashscreenActivity : AppCompatActivity() {
     }
 
     /**
-     * Kontroluje jestli je uživatel již přihlášen, pokud ano, tak přesměrovává na hlavní aktivitu.
+     * Check if already logged in
+     * Checks if the user is already logged in, if so, redirects to the main activity.
      */
     private fun checkIfAlreadyLoggedIn() {
         mAuth = FirebaseAuth.getInstance()

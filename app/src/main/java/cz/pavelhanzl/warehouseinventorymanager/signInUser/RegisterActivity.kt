@@ -17,6 +17,11 @@ import cz.pavelhanzl.warehouseinventorymanager.stringResource
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
 
+/**
+ * Register activity
+ *
+ * @constructor Create empty Register activity
+ */
 class RegisterActivity : AppCompatActivity() {
     lateinit var registerViewModel: RegisterViewModel
 
