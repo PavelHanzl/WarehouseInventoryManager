@@ -22,6 +22,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentChangeNameBinding
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,6 +31,11 @@ import kotlinx.android.synthetic.main.menu_header.view.*
 import kotlinx.android.synthetic.main.rv_warehouse_people_list_item.view.*
 import kotlinx.coroutines.*
 
+/**
+ * Main activity
+ * Main activity of the application.
+ * @constructor Create empty Main activity
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
@@ -55,6 +61,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Sets up drawer menu
+     */
     private fun setUpDrawerMenu() {
         navController = findNavController(R.id.fragment)
         drawerLayout = drawer_layout
@@ -66,6 +75,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Sets up profile info in header of drawer
+     * Sets up profile photo and users display name
+     */
     private fun setUpProfileInfoInHeaderOfDrawer() {
         val navigationView = drawerNavigationView as NavigationView
         val headerView = navigationView.getHeaderView(0)
@@ -84,6 +97,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Sets up action bar based on navigation
+     * Sets  which destinations should have hamburger menu icon
+     */
     private fun setUpActionBarBasedOnNavigation() {
         setSupportActionBar(toolbar)
         appBarConfiguration = AppBarConfiguration(
@@ -97,9 +114,11 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
-    //Nastaví jednotlivé tlačítka v Drawer Menu, která nejsou součástí navigation component např. logout button
+    /**
+     * Set individual menu items
+     * Sets individual buttons in the Drawer Menu that are not part of the navigation component, eg logout button
+     */
     private fun setIndividualMenuItems() {
-
 
         //Logout menu item
         val menuItemLogout = drawerNavigationView.menu.findItem(R.id.menuItem_logout)
@@ -112,14 +131,17 @@ class MainActivity : AppCompatActivity() {
         //About app menu item
         val menuItemAboutApp = drawerNavigationView.menu.findItem(R.id.menuItem_aboutApp)
         menuItemAboutApp.setOnMenuItemClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.seznam.cz/"))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.PROJECTS_WEBSITE_URL))
             startActivity(intent)
             true
         }
 
-        //sem přijdou další tlačítka
+        //sem mohou přijít další tlačítka se speciální funkcionalitou
     }
 
+    /**
+     * Performs Log out
+     */
     private fun logOut() {
         Toast.makeText(applicationContext, getString(R.string.LoggingOut), Toast.LENGTH_SHORT)
             .show()
@@ -136,14 +158,20 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    fun showLoading() {
-       Log.d("LOADING OVERLAY", "Ukazuju loading overlay")
+    /**
+     * Shows loading overlay
+     *
+     */
+    fun showLoadingOverlay() {
        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
        loadingOverlay.visibility = View.VISIBLE
     }
 
-    fun hideLoading() {
-        Log.d("LOADING OVERLAY", "Skrývám loading overlay")
+    /**
+     * Hides loading overlay
+     *
+     */
+    fun hideLoadingOverlay() {
         loadingOverlay.visibility = View.GONE
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }

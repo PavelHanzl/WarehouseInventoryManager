@@ -24,6 +24,11 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.android.synthetic.main.fragment_warehouse_detail.*
 
+/**
+ * Warehouse detail fragment
+ *
+ * @constructor Create empty Warehouse detail fragment
+ */
 class WarehouseDetailFragment : BaseFragment() {
 
 
@@ -49,8 +54,6 @@ class WarehouseDetailFragment : BaseFragment() {
         if (savedInstanceState == null) {
             viewModel.setData(args.warehouseID)
         }
-
-        Toast.makeText(requireContext(), "Tvůj sklad: " + args.ownWarehouse, Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreateView(
@@ -86,76 +89,84 @@ class WarehouseDetailFragment : BaseFragment() {
         setUpRecycleView()
     }
 
+    /**
+     * Set on click listeners on add remove buttons
+     *
+     */
     private fun setOnClickListenersOnAddRemoveButtons() {
         binding.fabOwnWhDetailAddItem.setOnClickListener {
-            onAddOrRemoveItemButtonClicked(addItemClicked, "add")
+            onAddOrRemoveItemButtonClicked(addItemClicked, Constants.ADD_STRING)
         }
 
         binding.fabOwnWhDetailAddItemByHand.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
-            Toast.makeText(requireContext(), "add by hand", Toast.LENGTH_SHORT).show()
             val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToAddRemoveItem()
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailAddItemByScan.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
-            Toast.makeText(requireContext(), "add by scan", Toast.LENGTH_SHORT).show()
-            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment("adding", viewModel.warehouseObject.value)
+            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment(Constants.ADDING_STRING, viewModel.warehouseObject.value)
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailRemoveItem.setOnClickListener {
 
-            onAddOrRemoveItemButtonClicked(removeItemClicked, "remove")
+            onAddOrRemoveItemButtonClicked(removeItemClicked, Constants.REMOVE_STRING)
         }
 
         binding.fabOwnWhDetailRemoveItemByHand.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
-            Toast.makeText(requireContext(), "remove by hand", Toast.LENGTH_SHORT).show()
             val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToAddRemoveItem()
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailRemoveItemByScan.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
-            Toast.makeText(requireContext(), "remove by scan", Toast.LENGTH_SHORT).show()
-            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment("removing",  viewModel.warehouseObject.value)
+            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment(Constants.REMOVING_STRING,  viewModel.warehouseObject.value)
             findNavController().navigate(action)
         }
     }
 
+    /**
+     * Handles on add or remove item button clicked
+     *
+     * @param clicked
+     * @param operation
+     */
     private fun onAddOrRemoveItemButtonClicked(clicked: Boolean, operation: String) {
 
         when (operation) {
-            "add" -> addItemClicked = !addItemClicked
-            "remove" -> removeItemClicked = !removeItemClicked
+            Constants.ADD_STRING -> addItemClicked = !addItemClicked
+            Constants.REMOVE_STRING -> removeItemClicked = !removeItemClicked
         }
 
         setVisibility(clicked, operation)
         setAnimation(clicked, operation)
     }
 
+    /**
+     * Sets animation for add or remove buttons
+     *
+     * @param clicked
+     * @param operation
+     */
     private fun setAnimation(clicked: Boolean, operation: String) {
         when (operation) {
-            "add" -> {
+            Constants.ADD_STRING -> {
                 if (!clicked) {
-                    Log.d("Animace", "Add anim - not clicked")
                     binding.fabOwnWhDetailAddItemByScan.startAnimation(fabAddItemAnimFromBottom)
                     binding.fabOwnWhDetailAddItemByHand.startAnimation(fabAddItemAnimFromBottom)
                 } else {
-                    Log.d("Animace", "Add anim - clicked")
                     binding.fabOwnWhDetailAddItemByScan.startAnimation(fabAddItemAnimToBottom)
                     binding.fabOwnWhDetailAddItemByHand.startAnimation(fabAddItemAnimToBottom)
                 }
             }
-            "remove" -> {
+            Constants.REMOVE_STRING -> {
                 if (!clicked) {
-                    Log.d("Animace", "Remove anim - not clicked")
                     binding.fabOwnWhDetailRemoveItemByScan.startAnimation(fabRemoveItemAnimFromBottom)
                     binding.fabOwnWhDetailRemoveItemByHand.startAnimation(fabRemoveItemAnimFromBottom)
                 } else {
-                    Log.d("Animace", "Remove anim - clicked")
                     binding.fabOwnWhDetailRemoveItemByScan.startAnimation(fabRemoveItemAnimToBottom)
                     binding.fabOwnWhDetailRemoveItemByHand.startAnimation(fabRemoveItemAnimToBottom)
                 }
@@ -164,26 +175,28 @@ class WarehouseDetailFragment : BaseFragment() {
 
     }
 
+    /**
+     * Set visibility for add or remove buttons
+     *
+     * @param clicked
+     * @param operation
+     */
     private fun setVisibility(clicked: Boolean, operation: String) {
         when (operation) {
-            "add" -> {
+            Constants.ADD_STRING -> {
                 if (!clicked) {
-                    Log.d("Animace", "Add visi - not clicked")
                     binding.fabOwnWhDetailAddItemByScan.show()
                     binding.fabOwnWhDetailAddItemByHand.show()
                 } else {
-                    Log.d("Animace", "Add visi - clicked")
                     binding.fabOwnWhDetailAddItemByScan.hide()
                     binding.fabOwnWhDetailAddItemByHand.hide()
                 }
             }
-            "remove" -> {
+            Constants.REMOVE_STRING -> {
                 if (!clicked) {
-                    Log.d("Animace", "Remove visi - not clicked")
                     binding.fabOwnWhDetailRemoveItemByScan.show()
                     binding.fabOwnWhDetailRemoveItemByHand.show()
                 } else {
-                    Log.d("Animace", "Remove visi - clicked")
                     binding.fabOwnWhDetailRemoveItemByScan.hide()
                     binding.fabOwnWhDetailRemoveItemByScan.hide()
                 }
@@ -194,6 +207,7 @@ class WarehouseDetailFragment : BaseFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
 
+        //infaltes different menus for admin and for common user
         if (args.ownWarehouse) {
             inflater.inflate(R.menu.warehouse_detail_menu_admin, menu)
         } else {
@@ -205,7 +219,6 @@ class WarehouseDetailFragment : BaseFragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         when (item!!.itemId) {
             R.id.miOwnWarehouseEdit -> {
                 val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
@@ -232,6 +245,9 @@ class WarehouseDetailFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * Shows dialog to leave shared warehouse
+     */
     private fun leaveSharedWarehouse() {
         //zobrazí dialog s výzvou k opuštění cizího skladu
         MaterialAlertDialogBuilder(requireContext())
@@ -256,6 +272,9 @@ class WarehouseDetailFragment : BaseFragment() {
             .show()
     }
 
+    /**
+     * Shows dialog with option to delete of own warehouse
+     */
     private fun deleteOfOwnWarehouse() {
         //zobrazí dialog s výzvou k potvrzení ke smazání skladu
         MaterialAlertDialogBuilder(requireContext())
@@ -280,11 +299,13 @@ class WarehouseDetailFragment : BaseFragment() {
             .show()
     }
 
+    /**
+     * Sets up recycle view
+     */
     private fun setUpRecycleView() {
         //nastaví recycleview
-        val query = db.collection("warehouses").document(args.warehouseID).collection("items").orderBy("name_lowercase")
+        val query = db.collection(Constants.WAREHOUSES_STRING).document(args.warehouseID).collection(Constants.ITEMS_STRING).orderBy("name_lowercase")
         val options = FirestoreRecyclerOptions.Builder<WarehouseItem>().setQuery(query, WarehouseItem::class.java).setLifecycleOwner(this).build()
-
 
         query.get().addOnCompleteListener {
             if(it.result!!.documents.isEmpty()){

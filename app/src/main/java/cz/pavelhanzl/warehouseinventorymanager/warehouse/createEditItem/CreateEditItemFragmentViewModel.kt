@@ -19,6 +19,11 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Create edit item fragment view model
+ *
+ * @constructor Create empty Create edit item fragment view model
+ */
 class CreateEditItemFragmentViewModel : BaseViewModel() {
     val TAG = "CreateEditItemVM"
 
@@ -70,58 +75,73 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
+    /**
+     * Sets data
+     *
+     * @param warehouseId id of actual warehouse
+     */
     fun setdata(warehouseId: String) {
         this.warehouseId = warehouseId
         getListOfActualWarehouseItems()
 
     }
 
+    /**
+     * Gets list of actual warehouse items
+     */
     private fun getListOfActualWarehouseItems() {
 
         localListOfAllItems.clear()
-        Log.d("Populuju", "vse smazano ted")
 
         val warehouseItemsCollection = db.collection(Constants.WAREHOUSES_STRING).document(warehouseId).collection(Constants.ITEMS_STRING).get()
         warehouseItemsCollection.addOnSuccessListener { documents ->
             for (document in documents) {
-
                 //naplní list současnými položkami z databáze
                 localListOfAllItems.add(document.toObject(WarehouseItem::class.java))
             }
-
-            Log.d("Populuju", "vse nahrano")
-
         }
             .addOnFailureListener { exception ->
-                Log.d("položky", "Error getting documents: " + exception.message)
+                Log.d(TAG, "Error getting documents: " + exception.message)
             }
 
 
     }
 
+    /**
+     * Returns warehouse item with given parameters
+     *
+     * @param itemName name of item you want to get
+     * @param itemBarcode barcode of item you want to get
+     * @param listOfAllWarehouseItems list of all items in actual
+     * @return returns warehouse based on given parameters
+     */
     private fun returnWarehouseItemWithGivenParameters(itemName: String = "", itemBarcode: String = "", listOfAllWarehouseItems: MutableList<WarehouseItem>): WarehouseItem? {
         var foundObject: WarehouseItem? = null
 
         listOfAllWarehouseItems.any {
             if (it.name == itemName || it.code == itemBarcode) {
                 foundObject = it
-                Log.d("hajdin", "Nalezeno - Item:" + foundObject!!.name + " Code:" + foundObject!!.code)
                 true //shoda našli jsme shodu podle jména nebo podle kódu
             } else false //neshoda nic jsme nenanšli
         }
-
         return foundObject
     }
 
+    /**
+     * On back button clicked
+     * navigates to the previous location
+     */
     fun onBackButtonClicked() {
         GlobalScope.launch { eventChannel.send(Event.NavigateBack) }
     }
 
+    /**
+     * On create edit item button clicked
+     * creates or edits a warehouse item
+     */
     fun onCreateEditItemButtonClicked() {
-        Log.d("Item", "Crt1" + valid.toString())
-        //check validity dat
-        if (!isValid()) return
-        Log.d("Item", "Crt2" + valid.toString())
+
+        if (!isValid()) return //pokud není valid, tak nic nedělej
         GlobalScope.launch(Dispatchers.IO) {
 
             //zobrazí progressbar
@@ -132,7 +152,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
 
             try {
                 var profileImageURL: Uri? = null
-                val itemDocRef = db.collection("warehouses").document(warehouseId).collection("items").document()
+                val itemDocRef = db.collection(Constants.WAREHOUSES_STRING).document(warehouseId).collection(Constants.ITEMS_STRING).document()
 
                 //pokud uživatel zvolil ve View fotku ze zařízení, tak ji nahraje na server, pokud ne, tak přeskočí
                 if (itemProfilePhoto.value != null) {
@@ -154,7 +174,7 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
 
                     //log o úpravě
                     repoComunicationLayer.createWarehouseLogItem(
-                        "Prováděny úpravy základních informací položky skladu.",
+                        stringResource(R.string.modificationsOfBasicInformationWereMade),
                         itemName = editedWarehouseItem.name,
                         warehouseID = editedWarehouseItem.warehouseID
                     )
@@ -192,6 +212,11 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
 
     }
 
+    /**
+     * Checks if all inputs are valid
+     *
+     * @return returns true if valid
+     */
     fun isValid(): Boolean {
         valid = true
 
@@ -241,9 +266,12 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
         return valid
     }
 
+    /**
+     * Checks if there is no item with same barcode in warehouse
+     *
+     * @param barcode barcode to compare
+     */
     fun checkIfThereIsNoItemWithSameBarcodeInWH(barcode: String = itemBarcodeContent.value!!) {
-        //todo toto spustit jen v případě že je fragment v módu vytváření, u editace by tato podmínka nedávala smysl
-        Log.d("resul", "Barcode:" + barcode)
 
             //položka se stejným čárovým kódem již existuje
             val existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = "", itemBarcode = barcode, listOfAllWarehouseItems = localListOfAllItems)
@@ -254,16 +282,15 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
                _itemBarcodeError.value = ""
             }
 
-   /*     //todo prazdnej barcode nehodi chybu
-            //pokud zadaný barcode odpovídá barcodu upravované položky, tak je to validní, jelikož chceme upravit položku a teoreticky zachovat barcode
-            if(existingWarehouseItem != null && existingWarehouseItem!!.code == editedWarehouseItem.code){
-                _itemBarcodeError.value = ""
-            }*/
-
     }
 
+    /**
+     * Checks if there is no item with same name in warehouse
+     *
+     * @param name name to compare
+     */
     fun checkIfThereIsNoItemWithSameNameInWH(name: String = itemNameContent.value!!) {
-        //todo toto spustit jen v případě že je fragment v módu vytváření, u editace by tato podmínka nedávala smysl
+
         //položka se stejným názvem již existuje
         val existingWarehouseItem = returnWarehouseItemWithGivenParameters(itemName = name, itemBarcode = "", listOfAllWarehouseItems = localListOfAllItems)
         if (existingWarehouseItem != null && existingWarehouseItem!!.name != editedWarehouseItem.name) {
@@ -273,12 +300,14 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
             _itemNameError.value = ""
         }
 
-   /*     //pokud zadaný název odpovídá názvu upravované položky, tak je to validní, jelikož chceme upravit položku a teoreticky zachovat její název
-        if(existingWarehouseItem != null && existingWarehouseItem!!.name == editedWarehouseItem.name){
-            _itemNameError.value = ""
-        }*/
     }
 
+    /**
+     * Creates item and saves it to db
+     *
+     * @param itemDocRef item document reference to which you will be writing
+     * @param profileImageURL url of image
+     */
     private suspend fun createItemAndSaveToDb(itemDocRef: DocumentReference, profileImageURL: Uri?) {
         //vytvoří instanci položkyy
         val item = WarehouseItem()
@@ -297,6 +326,11 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
         itemDocRef.set(item).await()
     }
 
+    /**
+     * Edit item and save to db
+     *
+     * @param profileImageURL url of image
+     */
     private fun editItemAndSaveToDb(profileImageURL: Uri?) {
         //vytvoří instanci položky
         val item = WarehouseItem()

@@ -21,12 +21,15 @@ import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentCreateEditWar
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import kotlinx.android.synthetic.main.fragment_create_edit_warehouse.*
 
+/**
+ * Create edit warehouse fragment
+ *
+ * @constructor Create empty Create edit warehouse fragment
+ */
 class CreateEditWarehouseFragment : Fragment() {
     private lateinit var binding: FragmentCreateEditWarehouseBinding
     lateinit var viewModel: CreateEditWarehouseFragmentViewModel
     private val args: CreateEditWarehouseFragmentArgs by navArgs()
-
-
 
 
     override fun onCreateView(
@@ -67,6 +70,9 @@ class CreateEditWarehouseFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Runs fragment in edit mode
+     */
     private fun runFragmentInEditMode() {
         //nastaví editmode ve viewmodelu a vytvoří objekt editovaného skladu na základě skladu předáného v safeargs
         viewModel.editMode = true
@@ -78,12 +84,10 @@ class CreateEditWarehouseFragment : Fragment() {
 
 
         //nastaví odpovídající title v actionbaru "Ostatní sklady"
-        (activity as MainActivity).supportActionBar!!.title = "Upravit informace o skladu"
+        (activity as MainActivity).supportActionBar!!.title = getString(R.string.editWarehouseInformation)
 
         //změní text na vytvářejícím tllačítku na "upravit sklad"
         binding.btnCreateWarehouseFragmentCreateWarehouse.text = getString(R.string.edit_warehouse)
-
-
 
         Glide.with(requireContext())
             .load(viewModel.editedWarehouse.photoURL)
@@ -93,6 +97,9 @@ class CreateEditWarehouseFragment : Fragment() {
 
     }
 
+    /**
+     * Runs fragment in create mode
+     */
     private fun runFragmentInCreateMode() {
         //nastaví editmode ve viewmodelu na false - vytváříme nový sklad
         viewModel.editMode = false

@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageException
 import com.google.firebase.storage.ktx.storage
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.User
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import kotlinx.android.synthetic.main.menu_header.view.*
@@ -21,6 +22,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
+/**
+ * Main activity view model
+ *
+ * @constructor Create empty Main activity view model
+ */
 class MainActivityViewModel : BaseViewModel() {
     private val _name = MutableLiveData<String>()
     val name: LiveData<String> get() = _name
@@ -34,9 +40,13 @@ class MainActivityViewModel : BaseViewModel() {
         getUserImage()
     }
 
+    /**
+     * Gets users name
+     * and listen to changes about users info, then writes that info to drawer menu header
+     */
     fun getUserName() {
         CoroutineScope(Dispatchers.IO).launch {
-            val userDocument = db.collection("users").document(auth.currentUser!!.uid)
+            val userDocument = db.collection(Constants.USERS_STRING).document(auth.currentUser!!.uid)
             userDocument.addSnapshotListener { snapshot, error ->
                 if (error != null) {
                     Log.w("Header", "Listen failed.", error)
@@ -55,6 +65,9 @@ class MainActivityViewModel : BaseViewModel() {
         }
     }
 
+    /**
+     * Gets user image
+     */
     fun getUserImage() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -73,5 +86,7 @@ class MainActivityViewModel : BaseViewModel() {
 
 
     }
+
+
 
 }

@@ -18,6 +18,11 @@ import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * People in warehouse fragment
+ *
+ * @constructor Create empty People in warehouse fragment
+ */
 class PeopleInWarehouseFragment : BaseFragment() {
 
     private val args: PeopleInWarehouseFragmentArgs by navArgs()
@@ -31,8 +36,6 @@ class PeopleInWarehouseFragment : BaseFragment() {
         if (savedInstanceState == null) {
             viewModel.setData(args.warehouseObject)
         }
-
-
     }
 
     override fun onCreateView(
@@ -75,6 +78,11 @@ class PeopleInWarehouseFragment : BaseFragment() {
             }.observeInLifecycle(viewLifecycleOwner)
     }
 
+    /**
+     * Play success or error animation
+     *
+     * @param success true for succes, false for error
+     */
     private fun playSuccessErrorAnimation(success: Boolean) {
 
         //nastaví odpovídající animaci
@@ -121,27 +129,28 @@ class PeopleInWarehouseFragment : BaseFragment() {
 
     }
 
+    /**
+     * Sets up recycle view based on snapshot listener attached to current warehouse
+     */
     private fun setUpRecycleView() {
 
         usersInWarehouse = db.collection(Constants.WAREHOUSES_STRING).document(args.warehouseObject.warehouseID).addSnapshotListener { snapshot, e ->
 
             if (e != null) {
-                Log.w("Data pro adapteros", "Listen failed.", e)
+                Log.w("Adapter", "Listen failed.", e)
                 return@addSnapshotListener
             }
 
             if (snapshot != null && snapshot.exists()) {
-                Log.d("Data pro adapteros", "Current data: ${snapshot.data}")
+                Log.d("Adapter", "Current data: ${snapshot.data}")
 
                 //Nastaví live data na zvoleném skladě
                 viewModel.warehouse = snapshot.toObject(Warehouse::class.java)!!
 
                 if (viewModel.warehouse.users.isEmpty()) {
-                    Log.d("Data pro adapteros", "Skryvam")
                     //skryje lottie s informací že zde není jiný user než owner
                     binding.nousersAnim.visibility = View.VISIBLE
                 } else {
-                    Log.d("Data pro adapteros", "Zobrazuji")
                     //zobrazí lottie s informací že zde není jiný user než owner
                     binding.nousersAnim.visibility = View.GONE
                 }
@@ -159,16 +168,13 @@ class PeopleInWarehouseFragment : BaseFragment() {
             } else {
                 //zobrazí lottie s informací že zde není jiný user než owner
                 binding.nousersAnim.visibility = View.VISIBLE
-                Log.d("Data pro adapteros", "Current data: null")
+                Log.d("Adapter", "Current data: null")
             }
-
         }
-
-
     }
 
     override fun onDestroy() {
-        Log.d("Data pro adapteros", "Odpojuji listener")
+        //removes listener
         usersInWarehouse.remove()
         hideKeyboard(requireActivity())
         super.onDestroy()

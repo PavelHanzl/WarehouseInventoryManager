@@ -15,10 +15,24 @@ import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import kotlinx.android.synthetic.main.rv_list_of_warehouses_list_item.view.*
 
+/**
+ * List of warehouses adapter
+ *
+ * @property ownWarehouse
+ * @constructor
+ *
+ * @param options
+ */
 class ListOfWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var ownWarehouse: Boolean) : FirestoreRecyclerAdapter<Warehouse, ListOfWarehousesAdapter.WarehouseViewHolder>(options) {
 
     inner class WarehouseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        /**
+         * Binds visible info about warehouse
+         * name and photo
+         *
+         * @param warehouse warehouse object to show in recycle item view
+         */
         fun bindVisible(warehouse: Warehouse) {
             itemView.rv_ownWarehousesListWarehouseName.text = warehouse.name
 
@@ -30,11 +44,15 @@ class ListOfWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var 
 
         }
 
+        /**
+         * Binds on click action
+         *
+         * @param warehouseID id of displayed warehouse
+         */
         fun  bindID(warehouseID: String){
             itemView.setOnClickListener{
                 val action = ListOfWarehousesFragmentDirections.actionListOfWarehousesFragmentToWarehouseDetailFragment(warehouseID, ownWarehouse)
                 itemView.findNavController().navigate(action)
-                Log.d("test",warehouseID)
             }
 
         }
@@ -64,6 +82,7 @@ class ListOfWarehousesAdapter(options: FirestoreRecyclerOptions<Warehouse>, var 
     override fun onViewAttachedToWindow(holder: WarehouseViewHolder) {
         super.onViewAttachedToWindow(holder)
 
+        //nastavuje animaci
         val animation: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.scale_up)
         holder.itemView.startAnimation(animation);
     }

@@ -20,6 +20,7 @@ import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 import java.security.acl.Owner
 
+
 class PeopleInWarehouseFragmentViewModel : BaseViewModel() {
     lateinit var warehouse: Warehouse
     lateinit var owner: User

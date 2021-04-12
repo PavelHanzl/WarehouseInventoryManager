@@ -17,11 +17,17 @@ import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentDashboardBinding
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentListOfWarehousesBinding
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_list_of_warehouses.*
 
+/**
+ * List of warehouses fragment
+ *
+ * @constructor Create empty List of warehouses fragment
+ */
 class ListOfWarehousesFragment : BaseFragment() {
     val args: ListOfWarehousesFragmentArgs by navArgs()
     lateinit var navigationView: NavigationView
@@ -48,10 +54,7 @@ class ListOfWarehousesFragment : BaseFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
 
-
-
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,6 +77,10 @@ class ListOfWarehousesFragment : BaseFragment() {
 
     }
 
+    /**
+     * Checks warehouse ownership and sets fragment correspondly to it
+     *
+     */
     private fun checkWarehouseOwnership() {
         if (args.ownWarehouse) {//kliknuto na mé sklady
             //nastaví member variable vlastnictví skladu
@@ -102,20 +109,21 @@ class ListOfWarehousesFragment : BaseFragment() {
         setUpRecycleView()
     }
 
+    /**
+     * Sets up recycle view based if location is "own warehouses" or "shared warehouses"
+     */
     private fun setUpRecycleView() {
         val query = //nastaví recycleview query pro recycle view
             if (ownWarehouse) {// vlastní sklady
-                db.collection("warehouses").whereEqualTo("owner", auth.currentUser!!.uid).orderBy("name_lowercase")
+                db.collection(Constants.WAREHOUSES_STRING).whereEqualTo(Constants.OWNER_STRING, auth.currentUser!!.uid).orderBy("name_lowercase")
             } else {// ostatní sklady
-                //TODO: Domyslet načítání skladů cizích
-                db.collection("warehouses").whereArrayContains("users",auth.currentUser!!.uid)
-
+                db.collection(Constants.WAREHOUSES_STRING).whereArrayContains(Constants.USERS_STRING, auth.currentUser!!.uid)
             }
 
         query.get().addOnCompleteListener {
-            if(it.result!!.documents.isEmpty()){
+            if (it.result!!.documents.isEmpty()) {
                 binding.nowarehouseAnim.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.nowarehouseAnim.visibility = View.GONE
             }
         }
@@ -130,11 +138,6 @@ class ListOfWarehousesFragment : BaseFragment() {
         }
 
 
-    }
-
-    override fun onDestroyView() {
-
-        super.onDestroyView()
     }
 
 

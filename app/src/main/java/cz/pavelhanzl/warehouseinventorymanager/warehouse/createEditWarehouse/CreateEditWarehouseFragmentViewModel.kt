@@ -18,6 +18,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
+/**
+ * Create edit warehouse fragment view model
+ *
+ * @constructor Create empty Create edit warehouse fragment view model
+ */
 class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
 
     val TAG = "CreateWarehouseVM"
@@ -44,7 +49,9 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
     private val _createEditButtonEnabled = MutableLiveData<Boolean>(true)
     val createEditButtonEnabled: LiveData<Boolean> get() = _createEditButtonEnabled
 
-
+    /**
+     * Defines what should happen when was clicked on create / edit button
+     */
     @SuppressLint("SimpleDateFormat")
     fun onCreateButtonClicked() {
 
@@ -61,7 +68,7 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
 
             try {
                 var profileImageURL: Uri? = null
-                val warehouseDocRef = db.collection("warehouses").document()
+                val warehouseDocRef = db.collection(Constants.WAREHOUSES_STRING).document()
 
                 //pokud uživatel zvolil ve View fotku ze zařízení, tak ji nahraje na server, pokud ne, tak přeskočí
                 if (warehouseProfilePhoto.value != null) {
@@ -82,7 +89,7 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
                     editWarehouseAndSaveToDb(profileImageURL)
 
                     //log o úpravě
-                    repoComunicationLayer.createWarehouseLogItem("Prováděny úpravy základních informací o skladu.", warehouseID = editedWarehouse.warehouseID)
+                    repoComunicationLayer.createWarehouseLogItem(stringResource(R.string.ModificationsOfBasicInformationAboutWhWereMade), warehouseID = editedWarehouse.warehouseID)
                 } else {
                     //vytváříme
                     createWarehouseAndSaveToDb(warehouseDocRef, profileImageURL)
@@ -108,6 +115,11 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
 
     }
 
+    /**
+     * Edits warehouse and save to db
+     *
+     * @param profileImageURL profile image of wh
+     */
     private fun editWarehouseAndSaveToDb(profileImageURL: Uri?) {
         //vytvoří instanci skladu
         val warehouse = Warehouse()
@@ -129,9 +141,15 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
         warehouse.users = editedWarehouse.users
 
         //zapíše do původního již vytvořeného dokumentu
-        db.collection("warehouses").document(warehouse.warehouseID).set(warehouse)
+        db.collection(Constants.WAREHOUSES_STRING).document(warehouse.warehouseID).set(warehouse)
     }
 
+    /**
+     * Creates warehouse and save to db
+     *
+     * @param warehouseDocRef document of warehouse were will be written
+     * @param profileImageURL profile image of wh
+     */
     private suspend fun createWarehouseAndSaveToDb(warehouseDocRef: DocumentReference, profileImageURL: Uri?) {
         //vytvoří instanci skladu
         val warehouse = Warehouse()
@@ -147,10 +165,19 @@ class CreateEditWarehouseFragmentViewModel : BaseViewModel() {
         warehouseDocRef.set(warehouse).await()
     }
 
+    /**
+     * Navigate to previous location
+     *
+     */
     fun onBackButtonClicked() {
         _goBackToPreviousScreen.postValue(true)
     }
 
+    /**
+     * Check if all inputs are valid
+     *
+     * @return returns true if valid
+     */
     fun isValid(): Boolean {
         var valid = true
         //vyčistí případné errory z předchozího ověření

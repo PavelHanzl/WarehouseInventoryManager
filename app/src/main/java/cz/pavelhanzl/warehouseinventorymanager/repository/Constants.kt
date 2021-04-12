@@ -11,6 +11,9 @@ object Constants {
     const val CREATING_STRING = "creating"
     const val EDITING_STRING = "editing"
 
+    const val ADD_STRING = "add"
+    const val REMOVE_STRING = "remove"
+
 
     const val USERS_STRING = "users"
     const val WAREHOUSES_STRING = "warehouses"
@@ -27,5 +30,6 @@ object Constants {
     //database documents fields
     const val COUNT_STRING = "count"
     const val NAME_STRING = "name"
+    const val OWNER_STRING = "owner"
 
 }

@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
+import cz.pavelhanzl.warehouseinventorymanager.repository.User
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseViewModel
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
 import kotlinx.coroutines.Dispatchers
@@ -157,6 +158,8 @@ class LoginViewModel : BaseViewModel() {
         val baos = ByteArrayOutputStream()
         picture.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
+
+
         return photoRef.putBytes(data)
     }
 
@@ -222,7 +225,18 @@ class LoginViewModel : BaseViewModel() {
             }
 
             try {
-                saveUserProfilePhotoFromGoogleAuth().await()
+                val usersDocRef = db.collection(Constants.USERS_STRING).document(auth.currentUser!!.uid)
+                val usersDocSnap= usersDocRef.get().await()
+                val userObject = usersDocSnap.toObject(User::class.java)
+
+                //pokud user nemá v db uloženou fotku tak to vezme fotku z googlu a uloží ji do databáze
+                if (userObject?.photoURL.isNullOrEmpty()) {
+                    saveUserProfilePhotoFromGoogleAuth().await()
+                    val photoUrl = storage.child("images/users/" + auth.currentUser!!.uid + "/profile.jpg").downloadUrl.await().toString()
+                    usersDocRef.update("photoURL", photoUrl)
+                }
+
+
             } catch (e: Exception) {
                 Log.d("Storage", "Exception" + "${e.message}")
             }

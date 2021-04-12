@@ -19,12 +19,24 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+/**
+ * People in warehouse adapter
+ *
+ * @property users
+ * @property warehouse
+ * @constructor Create empty People in warehouse adapter
+ */
 class PeopleInWarehouseAdapter (var users: List<String>, var warehouse: Warehouse): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         val db = Firebase.firestore
         val auth = Firebase.auth
 
         inner class UserViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
+            /**
+             * Binds visible information about user to recycle item view
+             * Binds name and photo
+             * @param user
+             */
             fun bindVisible(user: User) {
                 itemView.rv_userName_peopleInWarehouseFragment.text = user.name
 
@@ -42,7 +54,7 @@ class PeopleInWarehouseAdapter (var users: List<String>, var warehouse: Warehous
                     itemView.btn_removeUser_peopleInWarehouseFragment.setOnClickListener {
                         //zapíše současného usera do pole users v daném skladě
                         val warehouse = db.collection(Constants.WAREHOUSES_STRING).document(warehouse.warehouseID)
-                        warehouse.update("users", FieldValue.arrayRemove(user.userID))
+                        warehouse.update(Constants.USERS_STRING, FieldValue.arrayRemove(user.userID))
                         itemView.visibility = View.GONE
 
                     }
@@ -73,7 +85,6 @@ class PeopleInWarehouseAdapter (var users: List<String>, var warehouse: Warehous
 
                     if (snapshot != null && snapshot.exists()) {
                         val user = snapshot.toObject(User::class.java)
-
                         (holder as UserViewHolder).bindVisible(user!!)
                     } else {
                         Log.w("Users", "Current data null")

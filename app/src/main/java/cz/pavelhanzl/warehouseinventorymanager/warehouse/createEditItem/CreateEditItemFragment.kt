@@ -28,6 +28,11 @@ import cz.pavelhanzl.warehouseinventorymanager.service.observeInLifecycle
 import kotlinx.coroutines.flow.onEach
 import java.io.File
 
+/**
+ * Create edit item fragment
+ *
+ * @constructor Create empty Create edit item fragment
+ */
 class CreateEditItemFragment : BaseFragment() {
 
     private val args: CreateEditItemFragmentArgs by navArgs()
@@ -105,8 +110,10 @@ class CreateEditItemFragment : BaseFragment() {
         registerObserverForResultOfScanner()
     }
 
+    /**
+     * Navigates to scanner
+     */
     fun navigateToScanner() {
-        Log.d("Naviguju", "navigace ted")
         val action = CreateEditItemFragmentDirections.actionCreateEditItemFragmentToScannerFragment(Constants.READING_STRING,null)
         Navigation.findNavController(requireView()).navigate(action)
     }
@@ -134,6 +141,10 @@ class CreateEditItemFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Runs fragment in edit mode
+     *
+     */
     private fun runFragmentInEditMode() {
         //nastaví editmode ve viewmodelu a vytvoří objekt editované položky skladu na základě skladu předáného v safeargs
         viewModel.editMode = true
@@ -159,7 +170,7 @@ class CreateEditItemFragment : BaseFragment() {
         binding.tfInitialItemCountContentCreateEditItemFragment.isCursorVisible = false
 
         binding.tfInitialItemCountContentCreateEditItemFragment.setOnClickListener {
-            Toast.makeText(requireContext(),"V módu editace nemůžete toto pole měnit.\n\nKe změně počtu u této položky použijte prosím standartní operace naskladnění a vyskladnění...", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(),getString(R.string.youCanNotChangeCountInEditMode), Toast.LENGTH_LONG).show()
         }
 
 
@@ -171,6 +182,10 @@ class CreateEditItemFragment : BaseFragment() {
 
     }
 
+    /**
+     * Runs fragment in create mode
+     *
+     */
     private fun runFragmentInCreateMode() {
         //nastaví editmode ve viewmodelu na false - vytváříme novou položku skladu
         viewModel.editMode = false
@@ -180,8 +195,11 @@ class CreateEditItemFragment : BaseFragment() {
 
     }
 
-    //zajišťuje předání argumentu z předchozí aktivity (v tomto případě získá result pokud přichází ze skenneru)
-    private fun registerObserverForResultOfScanner() {
+    /**
+     * Register observer for result of scanner
+     * Ensures the passing of the argument from the previous activity (in this case it gets the result if it comes from the scanner)
+     */
+    private fun registerObserverForResultOfScanner() {  //zajišťuje předání argumentu z předchozí aktivity (v tomto případě získá result pokud přichází ze skenneru)
         val navBackStackEntry = findNavController().getBackStackEntry(R.id.createEditItemFragment)
 
         // Create observer and add it to the NavBackStackEntry's lifecycle
@@ -190,8 +208,6 @@ class CreateEditItemFragment : BaseFragment() {
                 && navBackStackEntry.savedStateHandle.contains("scannedBarcode")
             ) {
                 val result = navBackStackEntry.savedStateHandle.get<String>("scannedBarcode")
-
-                Log.d("resultik", result.toString())
 
                 // Uloží předaný argument ze skenneru do proměnné barcode v sharedviewmodelu
                 viewModel.itemBarcodeContent.postValue(result)

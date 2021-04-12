@@ -16,10 +16,24 @@ import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseItem
 import kotlinx.android.synthetic.main.rv_warehouse_item_detail_list_item.view.*
 
+/**
+ * Warehouse detail adapter
+ *
+ * @property ownWarehouse
+ * @constructor
+ *
+ * @param options
+ */
 class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>, var ownWarehouse: Boolean) :
     FirestoreRecyclerAdapter<WarehouseItem, WarehouseDetailAdapter.WarehouseItemViewHolder>(options) {
 
     inner class WarehouseItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        /**
+         * Binds visible information about warehouse item
+         * Binds name, count and item profile image
+         *
+         * @param warehouseItem
+         */
         fun bindVisible(warehouseItem: WarehouseItem) {
             itemView.rv_ownWarehousesDetailListItemName.text = warehouseItem.name
             itemView.rv_ownWarehousesDetailListItemCount.text = warehouseItem.count.toString()
@@ -31,11 +45,15 @@ class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>, v
                 .into(itemView.rv_ownWarehousesDetailListItemProfileImage)
         }
 
+        /**
+         * Binds id for on click listener to warehouse item recycle item view
+         *
+         * @param warehouseItem
+         */
         fun bindID(warehouseItem: WarehouseItem) {
             itemView.setOnClickListener {
                 val action = WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToItemDetailFragment(warehouseItem, ownWarehouse)
                 itemView.findNavController().navigate(action)
-                Log.d("test", warehouseItem.name)
             }
 
         }
@@ -62,6 +80,7 @@ class WarehouseDetailAdapter(options: FirestoreRecyclerOptions<WarehouseItem>, v
     override fun onViewAttachedToWindow(holder: WarehouseItemViewHolder) {
         super.onViewAttachedToWindow(holder)
 
+        //sets animation
         val animation: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.scale_up)
         holder.itemView.startAnimation(animation);
     }

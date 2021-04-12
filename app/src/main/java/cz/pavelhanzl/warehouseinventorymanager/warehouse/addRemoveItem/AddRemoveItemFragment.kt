@@ -30,6 +30,11 @@ import kotlinx.android.synthetic.main.fragment_add_remove_item.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.onEach
 
+/**
+ * Add remove item fragment
+ *
+ * @constructor Create empty Add remove item fragment
+ */
 class AddRemoveItemFragment : BaseFragment() {
     private lateinit var binding: FragmentAddRemoveItemBinding
     private val sharedViewModel: WarehousesDetailFragmentViewModel by activityViewModels()
@@ -40,14 +45,12 @@ class AddRemoveItemFragment : BaseFragment() {
     private lateinit var createItemBtn: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("AddRemove", "create" + sharedViewModel.localListOfAllItems.size.toString())
         //získá list všech aktuálních položek, které se nacházejí na skladě
         sharedViewModel.getListOfActualWarehouseItems()
         super.onCreate(savedInstanceState)
     }
 
     override fun onDestroy() {
-        Log.d("AddRemove", "destroy" + sharedViewModel.localListOfAllItems.size.toString())
         sharedViewModel.initVariablesForAddRemoveFragment()
         super.onDestroy()
     }
@@ -56,7 +59,6 @@ class AddRemoveItemFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("AddRemove", "createView" + sharedViewModel.localListOfAllItems.size.toString())
         binding = FragmentAddRemoveItemBinding.inflate(inflater, container, false)
         binding.sharedViewmodel = sharedViewModel
         binding.fragmentClass = this
@@ -79,15 +81,17 @@ class AddRemoveItemFragment : BaseFragment() {
         populateDropdowns()
 
         binding.fabCreateItemAddRemoveFragment.setOnClickListener {
-            Log.d("create item", "pressed")
             val action = AddRemoveItemFragmentDirections.actionAddRemoveItemToCreateEditItemFragment(sharedViewModel.warehouseID.value!!)
             findNavController().navigate(action)
         }
 
-
         return binding.root
     }
 
+    /**
+     * Register dropdowns do after text change listeners
+     *
+     */
     private fun registerDropdownsDoAfterTextChangeListeners() {
         //pokud zadaný čárový kód odpovídá nějakému názvu, tak předvyplň název
         dropDownBarcodesMenuView.doAfterTextChanged {
@@ -110,7 +114,10 @@ class AddRemoveItemFragment : BaseFragment() {
         }
     }
 
-
+    /**
+     * Shows and hides floating action button to create new item
+     *
+     */
     private fun showHideFabCreateBtn() {
         dropDownItemsMenuView.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus //pole pro výběr názvu má focus
@@ -128,12 +135,13 @@ class AddRemoveItemFragment : BaseFragment() {
         }
     }
 
-    //naplní dropdown menu aktualními položkami na skladě
+    /**
+     * Populates the dropdown menus with current items in warehouse
+     */
     private fun populateDropdowns() {
         sharedViewModel.dropdownMenuDataReady.observe(viewLifecycleOwner, Observer { dataReady ->
             if (dataReady) {
 
-                Log.d("Populuju", "populuju ted")
                 //názvy položek
                 (binding.dropdownItemSelectorAddRemoveFragment.editText as? AutoCompleteTextView)?.setAdapter(
                     ArrayAdapter(
@@ -165,10 +173,8 @@ class AddRemoveItemFragment : BaseFragment() {
                     }
                     is WarehousesDetailFragmentViewModel.Event.SetVisibilityOfCreateItemBtnt -> {
                         if (it.visibility) {
-                            Log.d("create", it.visibility.toString())
                             createItemBtn.show()
                         } else {
-                            Log.d("create", it.visibility.toString())
                             createItemBtn.hide()
                         }
 
@@ -179,12 +185,6 @@ class AddRemoveItemFragment : BaseFragment() {
                     WarehousesDetailFragmentViewModel.Event.PlayErrorAnimation -> {
                         playSuccessErrorAnimation(false)
                     }
-                    /* is WarehousesDetailFragmentViewModel.Event.CreateEditDebt -> {
-                        val action = FriendDetailFragmentDirections.actionFriendDetailFragmentToAddEditDebtFragment(it.debtID,
-                            viewModel.friendshipData.value!!,
-                            viewModel.friendData.value!!.name)
-                        Navigation.findNavController(view).navigate(action)
-                    }*/
                 }
             }.observeInLifecycle(viewLifecycleOwner)
 
@@ -193,13 +193,11 @@ class AddRemoveItemFragment : BaseFragment() {
 
     }
 
-    override fun onResume() {
-        Log.d("AddRemove", "resume" + sharedViewModel.localListOfAllItems.size.toString())
-        super.onResume()
-    }
-
-    //zajišťuje předání argumentu z předchozí aktivity (v tomto případě získá result pokud přichází ze skenneru)
-    private fun registerObserverForResultOfScanner() {
+    /**
+     * Register observer for result of scanner
+     * Ensures the passing of the argument from the previous activity (in this case it gets the result if it comes from the scanner)
+     * */
+    private fun registerObserverForResultOfScanner() {//zajišťuje předání argumentu z předchozí aktivity (v tomto případě získá result pokud přichází ze skenneru)
         val navBackStackEntry = findNavController().getBackStackEntry(R.id.addRemoveItemFragment)
 
         // Create observer and add it to the NavBackStackEntry's lifecycle
@@ -226,12 +224,17 @@ class AddRemoveItemFragment : BaseFragment() {
         })
     }
 
+    /**
+     * Navigates to scanner fragment
+     */
     fun navigateToScanner() {
-        Log.d("Navigujus", "navigace ted")
         val action = AddRemoveItemFragmentDirections.actionAddRemoveItemToScannerFragment(Constants.READING_STRING, null)
         Navigation.findNavController(requireView()).navigate(action)
     }
 
+    /**
+     * Runs fragment in adding mode
+     */
     private fun runFragmentInAddingMode() {
         //nastaví odpovídající title v actionbaru "Ostatní sklady"
         (activity as MainActivity).supportActionBar!!.title = getString(R.string.addItemToWarehouse)
@@ -241,6 +244,9 @@ class AddRemoveItemFragment : BaseFragment() {
 
     }
 
+    /**
+     * Runs fragment in removing mode
+     */
     private fun runFragmentInRemovingMode() {
 
         //nastaví odpovídající title v actionbaru "Ostatní sklady"
@@ -254,6 +260,11 @@ class AddRemoveItemFragment : BaseFragment() {
 
     }
 
+    /**
+     * Plays success or error animation
+     *
+     * @param success true for success, false for error
+     */
     private fun playSuccessErrorAnimation(success: Boolean) {
 
         //nastaví odpovídající animaci

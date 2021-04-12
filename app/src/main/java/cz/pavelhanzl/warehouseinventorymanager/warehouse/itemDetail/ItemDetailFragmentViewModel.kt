@@ -18,6 +18,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Item detail fragment view model
+ *
+ * @constructor Create empty Item detail fragment view model
+ */
 class ItemDetailFragmentViewModel: BaseViewModel() {
     val TAG = "ItemDetailFragmentVM"
 
@@ -53,6 +58,11 @@ class ItemDetailFragmentViewModel: BaseViewModel() {
     lateinit var warehouseItemInDbSnapshot: Map<String, Any>
     lateinit var warehouseItemInDbDocRef: DocumentReference
 
+    /**
+     * Sets initial data of viewmodel
+     *
+     * @param selectedWarehouseItem
+     */
     fun setdata(selectedWarehouseItem: WarehouseItem){
         this._selectedWarehouseItem.value = selectedWarehouseItem
 
@@ -62,10 +72,13 @@ class ItemDetailFragmentViewModel: BaseViewModel() {
         //následně data přenastaví na snapshot listener, aby byly live s databází, kdyby docházelo ke změnám
         setDataBasedOnDatabaseObserver(selectedWarehouseItem)
 
-
-
     }
 
+    /**
+     * Sets data based on database observer, changes are live
+     *
+     * @param selectedWarehouseItem
+     */
     private fun setDataBasedOnDatabaseObserver(selectedWarehouseItem: WarehouseItem) {
         val warehouseItemDocRef = db.collection(Constants.WAREHOUSES_STRING).document(selectedWarehouseItem.warehouseID).collection(Constants.ITEMS_STRING).document(selectedWarehouseItem.warehouseItemID)
         warehouseItemDocRef.addSnapshotListener { snapshot, e ->
@@ -83,6 +96,11 @@ class ItemDetailFragmentViewModel: BaseViewModel() {
         }
     }
 
+    /**
+     * Sets data from given warehouse item object, fast and later replaced with snapshotlistener
+     *
+     * @param selectedWarehouseItem warehouse item object
+     */
     private fun setDataFromGivenWarehouseItemObject(selectedWarehouseItem: WarehouseItem) {
         //setne novou (teoreticky upravenou z upravovací databáze) položku z databáze jako selected warehouse item
         _selectedWarehouseItem.value = selectedWarehouseItem
@@ -100,9 +118,9 @@ class ItemDetailFragmentViewModel: BaseViewModel() {
         _itemProfilePhotoUrl.value=selectedWarehouseItem.photoURL
     }
 
-
-
-    //odstraní skladovou položku z databáze
+    /**
+     * Deletes the warehouse item from the database
+     */
     fun deleteWarehouseItem() {
         //běží v globalscope, aby bylo možné skladovou položku obnovit ve funkci delete WhUndo i po zničení viewmodelu
         GlobalScope.launch(Dispatchers.IO) {
@@ -111,12 +129,18 @@ class ItemDetailFragmentViewModel: BaseViewModel() {
         }
     }
 
+    /**
+     * Undo changes of deleted warehouse item document
+     */
     fun undoChangesOfWarehouseItemDocument() {
         GlobalScope.launch(Dispatchers.IO) {
             warehouseItemInDbDocRef.set(warehouseItemInDbSnapshot)
         }
     }
 
+    /**
+     * Makes warehouse item snapshot of deleted item
+     */
     suspend fun makeWarehouseItemSnapshot() {
         warehouseItemInDbDocRef = db.collection(Constants.WAREHOUSES_STRING).document(selectedWarehouseItem.value!!.warehouseID).collection(Constants.ITEMS_STRING).document(selectedWarehouseItem.value!!.warehouseItemID)
         warehouseItemInDbSnapshot = warehouseItemInDbDocRef.get().await().data!!

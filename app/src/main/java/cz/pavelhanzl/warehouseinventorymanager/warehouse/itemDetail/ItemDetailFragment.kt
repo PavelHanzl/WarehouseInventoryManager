@@ -13,6 +13,11 @@ import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentItemDetailBinding
 import cz.pavelhanzl.warehouseinventorymanager.service.BaseFragment
 
+/**
+ * Item detail fragment
+ *
+ * @constructor Create empty Item detail fragment
+ */
 class ItemDetailFragment : BaseFragment() {
     private val args: ItemDetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentItemDetailBinding
@@ -39,10 +44,6 @@ class ItemDetailFragment : BaseFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         Log.d("editeditemos", "trigthis")
         viewModel.setdata(args.selectedWarehouseItemObject)
-
-
-
-
 
 
 
@@ -79,6 +80,9 @@ class ItemDetailFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * Deletes warehouse item and gives an option to undo action
+     */
     private fun deleteWarehouseItem() {
         //zobrazí dialog s výzvou k potvrzení ke smazání skladu
         MaterialAlertDialogBuilder(requireContext())

@@ -29,14 +29,16 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+/**
+ * Invite user fragment
+ *
+ * @constructor Create empty Invite user fragment
+ */
+
 class InviteUserFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentInviteUserBinding
     private val viewModel: PeopleInWarehouseFragmentViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +51,6 @@ class InviteUserFragment : BottomSheetDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.wipeData()
-
 
 
 
