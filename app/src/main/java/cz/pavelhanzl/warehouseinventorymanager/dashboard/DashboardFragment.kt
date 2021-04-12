@@ -96,6 +96,9 @@ class DashboardFragment : Fragment() {
      * Starts new intent, opening web browser with website of project.
      */
     fun navigateToAbout(){
+        //val action = DashboardFragmentDirections.actionDashboardFragmentToAboutFragment()
+        //findNavController().navigate(action)
+
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.PROJECTS_WEBSITE_URL))
         startActivity(intent)
     }

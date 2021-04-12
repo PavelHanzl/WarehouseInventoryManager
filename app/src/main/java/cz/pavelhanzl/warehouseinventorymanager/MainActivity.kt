@@ -26,6 +26,7 @@ import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_about.*
 import kotlinx.android.synthetic.main.menu_header.*
 import kotlinx.android.synthetic.main.menu_header.view.*
 import kotlinx.android.synthetic.main.rv_warehouse_people_list_item.view.*
@@ -87,6 +88,7 @@ class MainActivity : AppCompatActivity() {
             headerView.drawerHeaderEmail.text = name
         })
 
+        try {
         mainActivityViewModel.profilePhotoUrl.observe(this, Observer { profilePhotoURL ->
             Glide.with(applicationContext)
                 .load(profilePhotoURL)
@@ -94,6 +96,9 @@ class MainActivity : AppCompatActivity() {
                 .error(R.drawable.avatar_profileavatar)
                 .into(profileImage)
         })
+        } catch (e : Exception){
+            Log.d("Drawer menu header", "Image not ready yet.")
+        }
 
     }
 
@@ -109,6 +114,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.settingsFragment,
                 R.id.listOfWarehousesFragment,
                 R.id.invitationsFragment
+                //R.id.aboutFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -126,6 +132,7 @@ class MainActivity : AppCompatActivity() {
             logOut()
             true
         }
+
 
 
         //About app menu item
@@ -175,4 +182,6 @@ class MainActivity : AppCompatActivity() {
         loadingOverlay.visibility = View.GONE
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
+
+
 }

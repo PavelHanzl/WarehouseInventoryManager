@@ -1,0 +1,429 @@
+<?xml version="1.0"?>
+
+<resources>
+
+    <string name="yes">Yes</string>
+
+    <string name="no">No</string>
+
+    <string name="back">Back</string>
+
+    <string name="loginLable">Login</string>
+
+    <string name="emailLable">E-mail</string>
+
+    <string name="emailHint">john.black@domain.com</string>
+
+    <string name="passwordLable">Password</string>
+
+    <string name="passwordLableCheck">Password again</string>
+
+    <string name="loginButtonText">Log in</string>
+
+    <string name="loginDontHaveAccount">Don\'t have an account?</string>
+
+    <string name="loginRegisterText">Register.</string>
+
+    <string name="RegisterLable">Create Account</string>
+
+    <string name="RegisterButtonText">Register</string>
+
+    <string name="AlreadyHaveAnAccount">Already have an account?</string>
+
+    <string name="ActivityRegister_LoginText">Log in.</string>
+
+    <string name="RegistrationSuccessful">Registration was successful</string>
+
+    <string name="emptyPassword">Password cannot be empty!</string>
+
+    <string name="emptyEmail">Email cannot be empty!</string>
+
+    <string name="emptyEmailCheck">Password confirmation cannot be empty!</string>
+
+    <string name="invalidEmailFormat">The email you entered is in the wrong format!</string>
+
+    <string name="invalidPassword">Passwords do not match or the condition for a minimum password length of 6 characters is not met!</string>
+
+    <string name="LoginSuccessful">Login was successful!</string>
+
+    <string name="LoginWithSocials">Login with social networks</string>
+
+    <string name="title_choose_image_provider">Choose</string>
+
+    <string name="action_cancel">Cancel</string>
+
+    <string name="title_gallery">Gallery</string>
+
+    <string name="title_camera">Camera</string>
+
+    <string name="message_gallery_permission_denied">Read External Storage permission is needed to select Image. Please turn on the requested permission from Settings> Permissions.</string>
+
+    <string name="message_camera_permission_denied">Camera and External Storage permissions are needed to capture the image. Turning off any permission wont allow the application to run smoothly. Please turn on all requested permissions from Settings> Permissions.</string>
+
+    <string name="permission_gallery_denied">Storage permission is needed to pick gallery image. Please allow storage permission from Settings&gt; Permissions.</string>
+
+    <string name="permission_camera_extended_denied"> Camera and Storage permissions are needed to take a picture. Please allow both the requested permissions from Settings&gt; Permissions. </string>
+
+    <string name="permission_camera_denied">Storage permission is needed to take a picture. Please allow storage permission from Settings&gt; Permissions.</string>
+
+    <string name="error_failed_to_create_camera_image_file">Failed to create Camera image file</string>
+
+    <string name="error_failed_pick_gallery_image">Failed to pick Gallery image</string>
+
+    <string name="error_failed_to_crop_image">Failed to crop image</string>
+
+    <string name="error_failed_to_compress_image">Failed to compress image</string>
+
+    <string name="error_task_cancelled">Task Canceled</string>
+
+    <string name="error_camera_app_not_found">Camera app not found</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="LoggingOut">Checking out …</string>
+
+    <string name="Dashboard">Dashboard</string>
+
+    <string name="Settings">Settings</string>
+
+    <string name="logout">Log out</string>
+
+    <string name="open">Open</string>
+
+    <string name="close">Close</string>
+
+    <string name="edit_profile">Edit profile</string>
+
+    <string name="type_in_name">This field cannot be empty!</string>
+
+    <string name="note_to_long">Exceeds allowed number of characters!</string>
+
+    <string name="mail_is_not_in_form">Email is in bad format!</string>
+
+    <string name="password_must_have">"Password must be at least"</string>
+
+    <string name="number_of_characters">"characters long!"</string>
+
+    <string name="password_not_same">Passwords must be the same!</string>
+
+    <string name="nameLable">Full name</string>
+
+    <string name="RegistrationSuccess">Registration was successful!</string>
+
+    <string name="drawerMenu_other">Other</string>
+
+    <string name="drawerMenu_warehouses">Warehouses</string>
+
+    <string name="drawerMenu_sharedWarehouses">Other warehouses</string>
+
+    <string name="drawerMenu_ownWarehouses">My warehouses</string>
+
+    <string name="drawerMenu_warehouseInvitationsRecieved">Invitations received</string>
+
+    <string name="drawerMenu_notification">Notification</string>
+
+    <string name="drawerMenu_help">Help</string>
+
+    <string name="ownWarehouses">My warehouses</string>
+
+    <string name="warehouse_name">Warehouse name</string>
+
+    <string name="CreateNewWarehouse">Create a new warehouse</string>
+
+    <string name="makeNewWarehouse">Create a warehouse</string>
+
+    <string name="Note">Note</string>
+
+    <string name="warehouseName">Warehouse name</string>
+
+    <string name="Canceled">Ended</string>
+
+    <string name="warehouseCreated">Warehouse created.</string>
+
+    <string name="warehouse_was_deleted">Warehouse removed!</string>
+
+    <string name="restore">Restore</string>
+
+    <string name="item_name">Item name</string>
+
+    <string name="item_detail">Item detail</string>
+
+    <string name="leave_warehouse_title">Leave the warehouse?</string>
+
+    <string name="leave_warehouse_description">"If you leave the warehouse, you will lose access to it. However, its owner will be able to invite you to it again. \N \nAre you sure you want to leave the warehouse?"</string>
+
+    <string name="delete_warehouse_title">Delete warehouse?</string>
+
+    <string name="delete_warehouse_description">Deleting a warehouse will also delete all items in it. \N \nAre you sure you want to delete the warehouse?</string>
+
+    <string name="you_left_the_warehouse">You have left the warehouse!</string>
+
+    <string name="edit_warehouse">Edit warehouse</string>
+
+    <string name="scanningSpeedLabel">"Timeout between scans:"</string>
+
+    <string name="secondsLongFormat">"seconds."</string>
+
+    <string name="scanContinuously">Scan continuously</string>
+
+    <string name="needsCameraPermission">The application needs to get permission to the camera to use the scanner function.</string>
+
+    <string name="addItem">Add</string>
+
+    <string name="removeItem">Remove</string>
+
+    <string name="create">Create</string>
+
+    <string name="edit">Edit</string>
+
+    <string name="scanBarcode">Scan the barcode</string>
+
+    <string name="itemAdded">Item added.</string>
+
+    <string name="itemRemoved">Item removed.</string>
+
+    <string name="chooseItem">Select an item</string>
+
+    <string name="enterBarcode">Enter the barcode</string>
+
+    <string name="insertCountOfAddedItems">Enter the number of pieces to add</string>
+
+    <string name="enterInitialNumberOfItems">Enter the initial number of pieces</string>
+
+    <string name="enterItemPrice">Enter the price per unit</string>
+
+    <string name="enterItemName">Enter an item name</string>
+
+    <string name="typeInValueGraterOrEqualToZero">Enter a value greater than or equal to zero!</string>
+
+    <string name="newItemWasCreated">A new warehouse item has been created.</string>
+
+    <string name="initialQuantity">"Initial quantity:"</string>
+
+    <string name="editItem">Edit the item</string>
+
+    <string name="CreateNewItem">Create a new item</string>
+
+    <string name="itemWithZhisNameAlreadyExists">An item with this name already exists in warehouse. Please enter a unique item name.</string>
+
+    <string name="itemWithThisBarcodeAreadyExistsPart1">"You already have an item under this barcode:"</string>
+
+    <string name="itemWithThisBarcodeAreadyExistsPart2">. Please enter a unique barcode.</string>
+
+    <string name="itemHasAnyNote">The item does not have a note.</string>
+
+    <string name="editItemsInfo">Edit item information</string>
+
+    <string name="deleteItem">Delete item</string>
+
+    <string name="itemLog">Items log</string>
+
+    <string name="numberOfPcsInWarehouse">Number of pieces in stock</string>
+
+    <string name="deleteItemQuestion">Remove item?</string>
+
+    <string name="itemWasRemoved">Item deleted!</string>
+
+    <string name="deleteItemQuestionWarning">By deleting an item, not only you but all the other people in this warehouse will lose access to it. \n\nAre you sure you want to delete the item?</string>
+
+    <string name="warehouseLog">Warehouse log</string>
+
+    <string name="typeInValueGraterThenZero">Enter a value greater than zero!</string>
+
+    <string name="isInvitingYouToJoinWarehouse">Invites you to join the warehouse:</string>
+
+    <string name="decline">Refuse</string>
+
+    <string name="accept">Accept</string>
+
+    <string name="peopleInThisWarehouse">People in this warehouse</string>
+
+    <string name="leaveWarehouse">Leave the warehouse</string>
+
+    <string name="editInfoAboutWarehouse">Edit warehouse information</string>
+
+    <string name="PeopleInThisWarehouse">People in this warehouse</string>
+
+    <string name="logOfWarehouse">Warehouse log</string>
+
+    <string name="deleteWarehouse">Delete warehouse</string>
+
+    <string name="warehouseInvitations">Invitations to warehouses</string>
+
+    <string name="nameSurname">Name surname</string>
+
+    <string name="owner">Owner</string>
+
+    <string name="OtherPeopleInWarehouse">Other people in the warehouse</string>
+
+    <string name="inviteUserIntoWarehouse">Invite users to the warehouse</string>
+
+    <string name="whoToInvite">Who do you want to invite?</string>
+
+    <string name="enterEmailOfTheUser">Enter the user\'s email</string>
+
+    <string name="userWithThisEmailDoesntExists">We do not register users with this email in our database.</string>
+
+    <string name="userIsAlreadyMemberOfThisWh">The user with this email is already a member of this warehouse.</string>
+
+    <string name="notifications">Notification</string>
+
+    <string name="help">Help</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="sharedWarehouses">Other warehouses</string>
+
+    <string name="changePassword">Change Password</string>
+
+    <string name="changeEmail">Change email</string>
+
+    <string name="changeName">Change name</string>
+
+    <string name="changeProfileImage">Change profile photo</string>
+
+    <string name="fillInTheseFieldsToChangePassword">To change your password, please fill in the following fields:</string>
+
+    <string name="enterCurrentEmail">Enter your current email</string>
+
+    <string name="enterCurrentPassword">Enter the current password</string>
+
+    <string name="enterNewPassword">Enter a new password</string>
+
+    <string name="enterNewPasswordAgain">Re-enter the new password</string>
+
+    <string name="passwordWasChanged">The password has been changed.</string>
+
+    <string name="enterNewEmail">Enter a new email</string>
+
+    <string name="fillInTheseFieldsToChangeEmail">To change your email, please fill in the following fields:</string>
+
+    <string name="passwordCanNotBeEmpty">Password cannot be empty</string>
+
+    <string name="EnteredPasswordIsNotRight">The password you entered is incorrect</string>
+
+    <string name="ThisIsNotEmailAccountConnectedToThisUserAccount">This is not an email associated with this account</string>
+
+    <string name="passwordsDoNotMatch">Passwords do not match</string>
+
+    <string name="thisFieldCanNotBeEmpty">This field cannot be empty.</string>
+
+    <string name="EnterNewName">Enter a new name</string>
+
+    <string name="fillInTheseFieldsToChangeName">To change the name, please fill in this field:</string>
+
+    <string name="emailWasChanged">Email changed.</string>
+
+    <string name="nameWasChanged">Name changed</string>
+
+    <string name="changePhoto">Change the photo</string>
+
+    <string name="operationCanceled">Operation canceled</string>
+
+    <string name="photoWasChanged">Photo changed.</string>
+
+    <string name="NoPhotoSelected">You have not selected a new photo. There is nothing to change.</string>
+
+    <string name="drawerMenu_warehouseInvitationsSend">Invitations sent</string>
+
+    <string name="addItemToWarehouse">Add an item to the warehouse</string>
+
+    <string name="removeItemFromWarehouse">Remove item from warehouse</string>
+
+    <string name="enterNumberOfRemovedItems">Enter the number of pieces to be removed</string>
+
+    <string name="looksLikeThereIsNoInvitation">Looks like there\'s not \na single invitation…</string>
+
+    <string name="youHaveNotInvitedAnyoneInWh">You currently haven\'t invited anyone to your warehouse.</string>
+
+    <string name="userWasInvitedToWh">You have invited the user to the warehouse:</string>
+
+    <string name="cancleInvitation">Cancel</string>
+
+    <string name="removingMode">Removing mode</string>
+
+    <string name="addingMode">Add mode</string>
+
+    <string name="threeDots">…</string>
+
+    <string name="skennerMode">Scanner mode</string>
+
+    <string name="lastlyScannedBarcode">Last scanned barcode</string>
+
+    <string name="scanItem">Scan the item</string>
+
+    <string name="lastlyScannedItem">Last scanned item</string>
+
+    <string name="itemWithThisBarcodeDoesntExists">An item with this barcode does not exist.</string>
+
+    <string name="aboutApplication">About app</string>
+
+    <string name="temsAndCon">privacy policy</string>
+
+    <string name="forgottenPassword">Forgotten password?</string>
+
+    <string name="renew">Restore.</string>
+
+    <string name="agreeWith">"I agree with "</string>
+
+    <string name="enterRegistrationEmail">Enter your registration email</string>
+
+    <string name="resetPassword">Reset password</string>
+
+    <string name="cancel">Cancel</string>
+
+    <string name="itemName">Name</string>
+
+    <string name="itemBarcode">Barcode</string>
+
+    <string name="itemDescription">Description</string>
+
+    <string name="priceForItem">Price per piece</string>
+
+    <string name="totalSumOfItems">Total number of pieces</string>
+
+    <string name="totalPriceOfItems">The total price of all items</string>
+
+    <string name="emptyRecycleAnimWarehouseList">No matter what we do, \nwe can\'t find a warehouse here.</string>
+
+    <string name="emptyRecycleAnimPeopleInWarehouse">Looks like you\'re alone here. \n Invite someone to your warehouse.</string>
+
+    <string name="emptyRecycleAnimWhItemsList">Whatever we do, \nwe can\'t find any items here.</string>
+
+    <string name="nameAndSurname">Name and surname</string>
+
+    <string name="item">Item</string>
+
+    <string name="itemWithName">An item named</string>
+
+    <string name="user">User</string>
+
+    <string name="action">Action</string>
+
+    <string name="storage">Storage</string>
+
+    <string name="totalPcs">Quantity</string>
+
+    <string name="xPcs">1000 pcs</string>
+
+    <string name="date">Date</string>
+
+    <string name="nonExistingItem">Non-existent item</string>
+
+    <string name="ItemWithBarcode">Item with barcode</string>
+
+    <string name="isNotExistingYetWannaCreate">"does not exist yet. \n\nDo you want to create one?"</string>
+
+    <string name="passwordRenewalEmailWasSend">We\'ve sent you a password reset email.</string>
+
+    <string name="youCanNotChangeCountInEditMode">You cannot change this field in edit mode. \n  Please use standard stock and unload operations to change the number of this item…</string>
+
+    <string name="modificationsOfBasicInformationWereMade">Modifications of basic information were made.</string>
+
+    <string name="editWarehouseInformation">Edit warehouse information</string>
+
+    <string name="ModificationsOfBasicInformationAboutWhWereMade">Modifications to warehouse information were made.</string>
+    <string name="janNovak">John Black</string>
+
+
+</resources>

@@ -24,8 +24,8 @@ object Constants {
     const val RECIEVED_STRING = "recieved"
     const val SEND_STRING = "send"
 
-    const val PROJECTS_WEBSITE_URL = "http://warehouseinventorymanager.pavelhanzl.cz/"
-    const val PROJECTS_TERMS_AND_CONDITIONS_URL = "http://warehouseinventorymanager.pavelhanzl.cz/privacy-policy/"
+    const val PROJECTS_WEBSITE_URL = "https://warehouseinventorymanager.pavelhanzl.cz/"
+    const val PROJECTS_TERMS_AND_CONDITIONS_URL = "https://warehouseinventorymanager.pavelhanzl.cz/privacy-policy/"
 
     //database documents fields
     const val COUNT_STRING = "count"
