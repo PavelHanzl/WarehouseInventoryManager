@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="true"
-                    android:src="@drawable/ic_plus"
+                    android:src="@drawable/ic_createitem"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@+id/ci_ItemProfileImage_AddRemoveItemFragment"
                     app:layout_constraintEnd_toEndOf="@+id/ci_ItemProfileImage_AddRemoveItemFragment"

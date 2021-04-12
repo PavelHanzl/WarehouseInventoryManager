@@ -1,8 +1,9 @@
 package cz.pavelhanzl.warehouseinventorymanager.warehouse.addRemoveItem
 
 import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -17,7 +18,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
@@ -78,6 +79,10 @@ class AddRemoveItemFragment : BaseFragment() {
 
         showHideFabCreateBtn()
 
+
+
+        setUpFabCreateBtnAnimation()
+
         populateDropdowns()
 
         binding.fabCreateItemAddRemoveFragment.setOnClickListener {
@@ -86,6 +91,25 @@ class AddRemoveItemFragment : BaseFragment() {
         }
 
         return binding.root
+    }
+
+    /**
+     * Sets up fab create btn animation
+     * gives this button simple animation to draw more attention
+     */
+    private fun setUpFabCreateBtnAnimation() {
+        val viewToAnimate = binding.fabCreateItemAddRemoveFragment
+
+        val scaleDownAnimation: ObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+            viewToAnimate,
+            PropertyValuesHolder.ofFloat("scaleX", 1.1f),
+            PropertyValuesHolder.ofFloat("scaleY", 1.1f)
+        )
+        scaleDownAnimation.duration = 700
+        scaleDownAnimation.repeatCount = ObjectAnimator.INFINITE
+        scaleDownAnimation.repeatMode = ObjectAnimator.REVERSE
+
+        scaleDownAnimation.start()
     }
 
     /**
