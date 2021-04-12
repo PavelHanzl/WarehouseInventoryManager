@@ -1,6 +1,7 @@
 package cz.pavelhanzl.warehouseinventorymanager.signInUser
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import cz.pavelhanzl.warehouseinventorymanager.MainActivity
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.databinding.ActivityRegisterBinding
+import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.stringResource
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_register.*
@@ -63,6 +65,12 @@ class RegisterActivity : AppCompatActivity() {
                 finish()
             }
         })
+
+        // přesměruje na stránku s podmínkami užití
+        tv_RegisterActivity_Terms_link.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.PROJECTS_TERMS_AND_CONDITIONS_URL))
+            startActivity(intent)
+        }
 
     }
 

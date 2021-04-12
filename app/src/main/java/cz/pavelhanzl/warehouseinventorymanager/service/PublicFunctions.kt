@@ -19,7 +19,7 @@ import kotlin.reflect.full.memberProperties
  * @return date time in string pattern dd-MM-yyyy HH:mm:ss
  */
 fun getDateTime(): String {
-    return DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").withLocale(Locale.getDefault())
+    return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withLocale(Locale.getDefault())
         .withZone(
             ZoneId.systemDefault()
         ).format(Instant.now())

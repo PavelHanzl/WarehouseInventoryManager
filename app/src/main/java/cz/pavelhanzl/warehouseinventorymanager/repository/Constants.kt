@@ -31,5 +31,6 @@ object Constants {
     const val COUNT_STRING = "count"
     const val NAME_STRING = "name"
     const val OWNER_STRING = "owner"
+    const val DATE_STRING="date"
 
 }

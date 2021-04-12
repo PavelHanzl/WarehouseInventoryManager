@@ -22,6 +22,11 @@ import cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditItem.CreateEd
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.createEditItem.CreateEditItemFragmentViewModel
 import cz.pavelhanzl.warehouseinventorymanager.warehouse.listOfWarehouses.ListOfWarehousesAdapter
 
+/**
+ * Warehouse log fragment
+ *
+ * @constructor Create empty Warehouse log fragment
+ */
 class WarehouseLogFragment : BaseFragment() {
 
     private val args: WarehouseLogFragmentArgs by navArgs()
@@ -59,10 +64,13 @@ class WarehouseLogFragment : BaseFragment() {
         return binding.root
     }
 
+    /**
+     * Sets up recycle view
+     */
     private fun setUpRecycleView() {
 
         //nastaví recycleview query pro recycle view
-        val query = db.collection(Constants.WAREHOUSES_STRING).document(args.warehouseObject.warehouseID).collection(Constants.LOG_STRING).orderBy("date", Query.Direction.DESCENDING)
+        val query = db.collection(Constants.WAREHOUSES_STRING).document(args.warehouseObject.warehouseID).collection(Constants.LOG_STRING).orderBy(Constants.DATE_STRING, Query.Direction.DESCENDING)
 
         val options = FirestoreRecyclerOptions.Builder<WarehouseLogItem>().setQuery(query, WarehouseLogItem::class.java).setLifecycleOwner(this).build()
         val warehouseLogAdapter = WarehouseLogAdapter(options)

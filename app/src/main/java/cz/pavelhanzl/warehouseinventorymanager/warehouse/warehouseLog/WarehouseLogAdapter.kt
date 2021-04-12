@@ -14,15 +14,28 @@ import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.firebase.Timestamp
 import cz.pavelhanzl.warehouseinventorymanager.R
 import cz.pavelhanzl.warehouseinventorymanager.repository.Warehouse
 import cz.pavelhanzl.warehouseinventorymanager.repository.WarehouseLogItem
 import kotlinx.android.synthetic.main.rv_log_warehouse_list_item.view.*
 
+/**
+ * Warehouse log adapter
+ *
+ * @constructor
+ *
+ * @param options
+ */
 class WarehouseLogAdapter(options: FirestoreRecyclerOptions<WarehouseLogItem>) : FirestoreRecyclerAdapter<WarehouseLogItem, WarehouseLogAdapter.WarehouseLogItemViewHolder>(options) {
 
     class WarehouseLogItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        /**
+         * Binds visible information about warehouse log item
+         * Binds name of the item, name of the user who made an action, type of action, count of item, date and time of made operation
+         * @param warehouseLogItem
+         */
         fun bindVisible(warehouseLogItem: WarehouseLogItem) {
             //název položky
             bindItemName(warehouseLogItem)
@@ -41,6 +54,11 @@ class WarehouseLogAdapter(options: FirestoreRecyclerOptions<WarehouseLogItem>) :
 
         }
 
+        /**
+         * Binds date and time if it is not null or empty
+         *
+         * @param warehouseLogItem
+         */
         private fun bindDateAndTime(warehouseLogItem: WarehouseLogItem) {
             if (warehouseLogItem.date != "") {
                 itemView.rv_dateOfAction_warehouseLog.visibility = View.VISIBLE
@@ -52,6 +70,11 @@ class WarehouseLogAdapter(options: FirestoreRecyclerOptions<WarehouseLogItem>) :
             }
         }
 
+        /**
+         * Bind item count if it is not null or empty
+         *
+         * @param warehouseLogItem
+         */
         private fun bindItemCount(warehouseLogItem: WarehouseLogItem) {
             if (warehouseLogItem.itemCount != "") {
                 itemView.rv_numberOfItems_warehouseLog.visibility = View.VISIBLE
@@ -80,6 +103,11 @@ class WarehouseLogAdapter(options: FirestoreRecyclerOptions<WarehouseLogItem>) :
             }
         }
 
+        /**
+         * Bind action if it is not null or empty
+         *
+         * @param warehouseLogItem
+         */
         private fun bindAction(warehouseLogItem: WarehouseLogItem) {
             if (warehouseLogItem.logMessage != "") {
                 itemView.rv_action_warehouseLog.visibility = View.VISIBLE
@@ -91,6 +119,11 @@ class WarehouseLogAdapter(options: FirestoreRecyclerOptions<WarehouseLogItem>) :
             }
         }
 
+        /**
+         * Bind user if it is not null or empty
+         *
+         * @param warehouseLogItem
+         */
         private fun bindUser(warehouseLogItem: WarehouseLogItem) {
             if (warehouseLogItem.userName != "") {
                 itemView.rv_userName_warehouseLog.visibility = View.VISIBLE
@@ -102,6 +135,11 @@ class WarehouseLogAdapter(options: FirestoreRecyclerOptions<WarehouseLogItem>) :
             }
         }
 
+        /**
+         * Bind item name if it is not null or empty
+         *
+         * @param warehouseLogItem
+         */
         private fun bindItemName(warehouseLogItem: WarehouseLogItem) {
             if (warehouseLogItem.itemName != "") {
                 itemView.rv_WhItemName_warehouseLog.visibility = View.VISIBLE
@@ -137,6 +175,7 @@ class WarehouseLogAdapter(options: FirestoreRecyclerOptions<WarehouseLogItem>) :
     override fun onViewAttachedToWindow(holder: WarehouseLogItemViewHolder) {
         super.onViewAttachedToWindow(holder)
 
+        //attach animation to recycle view item
         val animation: Animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.scale_up)
         holder.itemView.startAnimation(animation);
     }
