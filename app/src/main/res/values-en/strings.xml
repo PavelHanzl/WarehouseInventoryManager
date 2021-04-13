@@ -100,9 +100,9 @@
 
     <string name="mail_is_not_in_form">Email is in bad format!</string>
 
-    <string name="password_must_have">"Password must be at least"</string>
+    <string name="password_must_have">"Password must be at least "</string>
 
-    <string name="number_of_characters">"characters long!"</string>
+    <string name="number_of_characters">" characters long!"</string>
 
     <string name="password_not_same">Passwords must be the same!</string>
 
