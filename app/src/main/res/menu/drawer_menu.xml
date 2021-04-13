@@ -50,6 +50,12 @@
                     android:id="@+id/menuItem_aboutApp"
                     android:icon="@drawable/ic_help"
                     android:title="@string/aboutApplication" />
+
+                <item
+                    android:id="@+id/menuItem_contact"
+                    android:icon="@drawable/ic_email"
+                    android:title="@string/contactDeveloper" />
+
                 <item
                     android:id="@+id/menuItem_logout"
                     android:icon="@drawable/ic_logout"

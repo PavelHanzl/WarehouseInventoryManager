@@ -143,6 +143,15 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+
+        //Contact developer app menu item
+        val menuItemContact = drawerNavigationView.menu.findItem(R.id.menuItem_contact)
+        menuItemContact.setOnMenuItemClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.PROJECTS_WEBSITE_URL_CONTACT))
+            startActivity(intent)
+            true
+        }
+
         //sem mohou přijít další tlačítka se speciální funkcionalitou
     }
 

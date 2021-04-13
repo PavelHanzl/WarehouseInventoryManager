@@ -226,6 +226,7 @@
     <string name="modificationsOfBasicInformationWereMade">Prováděny úpravy základních informací.</string>
     <string name="editWarehouseInformation">Upravit informace o skladu</string>
     <string name="ModificationsOfBasicInformationAboutWhWereMade">Prováděny úpravy informací o skladu.</string>
+    <string name="contactDeveloper">Kontaktovat vývojáře</string>
 
 
 </resources>
