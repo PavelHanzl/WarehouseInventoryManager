@@ -30,7 +30,7 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        hideKeyboard(requireActivity())
+
 
         //binds and assigns a viewmodel
         viewModel = ViewModelProvider(this).get(DashboardFragmentViewModel::class.java)
@@ -103,8 +103,10 @@ class DashboardFragment : Fragment() {
         startActivity(intent)
     }
 
-
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        hideKeyboard(requireActivity())
+        super.onViewCreated(view, savedInstanceState)
+    }
 
 
 
