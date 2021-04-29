@@ -248,11 +248,14 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
     lateinit var warehouseSnapshot: Map<String, Any>
 
     /**
-     * Makes warehouse snapshot of currently deleted warehouse, so we can restore them if user pres undo button in snackbar
+     * Makes warehouse snapshot of currently deleted warehouse,
+     * so we can restore them if user pres undo button in snackbar
      *
      */
     suspend fun makeWarehouseSnapshot() {
-        warehouseSnapshot = db.collection(Constants.WAREHOUSES_STRING).document(warehouseObject.value!!.warehouseID).get().await().data!!
+        warehouseSnapshot = db.collection(Constants.WAREHOUSES_STRING)
+            .document(warehouseObject.value!!.warehouseID).get()
+            .await().data!!
     }
 
     /**
@@ -321,11 +324,15 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
 
     /**
      * Undo changes of warehouse document
-     * takes previously made warehouse snapshot and sets it in to the db, leading to restore deleted warehouse
+     * takes previously made warehouse snapshot
+     * and saves it back in to the db,
+     * leading to restoration of previously deleted warehouse
      */
     fun undoChangesOfWarehouseDocument() {
         GlobalScope.launch(Dispatchers.IO) {
-            db.collection(Constants.WAREHOUSES_STRING).document(warehouseObject.value!!.warehouseID).set(warehouseSnapshot)
+            db.collection(Constants.WAREHOUSES_STRING)
+                .document(warehouseObject.value!!.warehouseID)
+                .set(warehouseSnapshot)
         }
     }
 
@@ -334,15 +341,24 @@ class WarehousesDetailFragmentViewModel : BaseViewModel() {
      * delete current warehouse and invitations to this warehouse
      */
     fun deleteWarehouse() {
-        //běží v globalscope, aby bylo možné sklad obnovit ve funkci delete WhUndo i po zničení viewmodelu
+        //runs coroutine in globalscope, so there is a possibility to restore
+        // warehouse, even after destroying this viewmodel class instance
         GlobalScope.launch(Dispatchers.IO) {
+            //saves actual snapshot of warehouse we are going to delete
             makeWarehouseSnapshot()
-            //odstraní sklad
-            db.collection(Constants.WAREHOUSES_STRING).document(warehouseObject.value!!.warehouseID).delete()
 
-            //odstraní všechny pozvánky do tohoto skladu
-            var query = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("warehouseId", warehouseObject.value!!.warehouseID)
+            //deletes warehouse from firebase firestore database
+            db.collection(Constants.WAREHOUSES_STRING)
+                .document(warehouseObject.value!!.warehouseID).delete()
 
+            //query all pending invitations to this warehouse
+            var query = db.collection(Constants.INVITATIONS_STRING)
+                .whereEqualTo(
+                    "warehouseId",
+                    warehouseObject.value!!.warehouseID
+                )
+
+            //makes batch delete of all found pending invitations
             val batch = db.batch()
             query.get().await().forEach {
                 batch.delete(it.reference)

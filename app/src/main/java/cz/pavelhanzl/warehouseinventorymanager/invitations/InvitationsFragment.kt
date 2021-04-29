@@ -1,7 +1,6 @@
 package cz.pavelhanzl.warehouseinventorymanager.invitations
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,14 +34,13 @@ class InvitationsFragment : BaseFragment() {
     private val args: InvitationsFragmentArgs by navArgs()
     lateinit var navigationView: NavigationView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         //získá odkaz na drawer navigation view, abychom pomocí něho mohli později checknout aktivní položku v menu, podle toho jestli se nacházíme v "Obdržené pozvánky" nebo "Odeslané pozvánky"
         navigationView = requireActivity().drawerNavigationView
 
-        fragmentMode= args.fragmentMode
+        fragmentMode = args.fragmentMode
 
     }
 
@@ -52,15 +50,17 @@ class InvitationsFragment : BaseFragment() {
     ): View? {
 
         //binds and assigns a viewmodel
-        binding = FragmentInvitationsBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(InvitationsFragmentViewModel::class.java)
+        binding =
+            FragmentInvitationsBinding.inflate(inflater, container, false)
+        viewModel =
+            ViewModelProvider(this).get(InvitationsFragmentViewModel::class.java)
 
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         //sets fragment to corresponding mode
-        when(fragmentMode){
-            Constants.RECIEVED_STRING -> runFragmentRecievedMode()
+        when (fragmentMode) {
+            Constants.RECIEVED_STRING -> runFragmentReceivedMode()
             Constants.SEND_STRING -> runFragmentSendMode()
         }
 
@@ -70,72 +70,109 @@ class InvitationsFragment : BaseFragment() {
     }
 
     /**
-     * Set up recycle view
-     * Sets up recycleview for this fragment.
+     * Sets up recycle view
+     *
+     * Sets up recycleview for this fragment correspondingly to chosen
+     * frament mode.
      */
     private fun setUpRecycleView() {
 
-        var query:Query
+        var query: Query
 
+        //sets the recycleview query for the recycle view
+        // depending on the fragment mode
 
-        //sets the recycleview query for the recycle view depending on the fragment mode
-        if(fragmentMode == Constants.RECIEVED_STRING) { //fragment je v modu recieved
-            query = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("to", auth.currentUser!!.uid).orderBy("date", Query.Direction.DESCENDING)
-        }else{ //the fragment is in send mode
-            query = db.collection(Constants.INVITATIONS_STRING).whereEqualTo("from", auth.currentUser!!.uid).orderBy("date", Query.Direction.DESCENDING)
+        //fragment is in received invitations mode
+        if (fragmentMode == Constants.RECIEVED_STRING) {
+            //query all received invitations for current user
+            query = db.collection(Constants.INVITATIONS_STRING)
+                .whereEqualTo("to", auth.currentUser!!.uid)
+                .orderBy("date", Query.Direction.DESCENDING)
+        }
+        //fragment is in send invitations mode
+        else {
+            //query all send invitations by current user
+            query = db.collection(Constants.INVITATIONS_STRING)
+                .whereEqualTo("from", auth.currentUser!!.uid)
+                .orderBy("date", Query.Direction.DESCENDING)
         }
 
-        val options = FirestoreRecyclerOptions.Builder<Invitation>().setQuery(query, Invitation::class.java).setLifecycleOwner(this).build()
+        //sets up options for Firestore Recycler View Adapter,
+        //takes previously made query as a parameter
+        val options = FirestoreRecyclerOptions.Builder<Invitation>()
+            .setQuery(query, Invitation::class.java).setLifecycleOwner(this)
+            .build()
 
+        //makes instances of recycleview adapters
+        // with options from previous step
         val invitationsRecievedAdapter = InvitationsRecievedAdapter(options)
         val invitationsSendAdapter = InvitationsSendAdapter(options)
 
-        queryListener = query.addSnapshotListener { snapshot, e ->
-            if (e != null) {
-                return@addSnapshotListener
-            }
+        //Display empty animation if there is no data in query
+        showEmptyAnimationIfQueryIsEmpty(query)
 
-            if (snapshot!!.documents.isEmpty()) {
-                binding.noinvitationsAnim.visibility = View.VISIBLE
-            } else {
-                binding.noinvitationsAnim.visibility = View.GONE
-            }
-        }
-
+        //Finally set up recycle view
         binding.rvInvitationsListInvitationsFragment.apply {
+            //set up linear layout for chosen recycle view
             layoutManager = LinearLayoutManager(activity)
-            if(fragmentMode == Constants.RECIEVED_STRING){
-                adapter = invitationsRecievedAdapter
-            }else{
-                adapter = invitationsSendAdapter
-            }
 
+            //assigns different recycle view adapter for received mode
+            //and different for send mode to chosen recycle view
+            adapter = if (fragmentMode == Constants.RECIEVED_STRING) {
+                invitationsRecievedAdapter
+            } else {
+                invitationsSendAdapter
+            }
         }
     }
 
     /**
-     * Run fragment recieved mode
+     * Shows empty animation, if there is no invitation in the current list
      */
-    private fun runFragmentRecievedMode() {
-        //nastaví odpovídající title v actionbaru "Obdržené pozvánky"
-        (activity as MainActivity).supportActionBar!!.title = getString(R.string.drawerMenu_warehouseInvitationsRecieved)
+    private fun showEmptyAnimationIfQueryIsEmpty(query: Query) {
+        //Listen for real time changes in query, so empty animation can be
+        //shown dynamically
+        queryListener = query.addSnapshotListener { snapshot, e ->
+            if (e != null) { // if error occurred, stops to listen
+                return@addSnapshotListener
+            }
 
-        //nastaví aktivní ikonu v drawer menu na "Obdržené pozvánky"
+            //if query is empty, show empty animation
+            if (snapshot!!.documents.isEmpty()) {
+                binding.noinvitationsAnim.visibility = View.VISIBLE
+            } else { // hide empty animation
+                binding.noinvitationsAnim.visibility = View.GONE
+            }
+        }
+    }
+
+    /**
+     * Runs fragment in received mode
+     */
+    private fun runFragmentReceivedMode() {
+        //set the corresponding name in the "Invitations received" actionbar
+        (activity as MainActivity).supportActionBar!!.title =
+            getString(R.string.drawerMenu_warehouseInvitationsRecieved)
+
+        //set the active icon in the drawer menu to "Invitations received"
         navigationView.menu.getItem(3).isChecked = true
 
     }
 
     /**
-     * Run fragment send mode
+     * Runs fragment in send mode
      */
     private fun runFragmentSendMode() {
-        //nastaví odpovídající title v actionbaru "Odeslané pozvánky"
-        (activity as MainActivity).supportActionBar!!.title = getString(R.string.drawerMenu_warehouseInvitationsSend)
+        //sets the corresponding title in the "Sent invitations" actionbar
+        (activity as MainActivity).supportActionBar!!.title =
+            getString(R.string.drawerMenu_warehouseInvitationsSend)
 
-        //změní text pod animací v případě prázdného recycleview
-        binding.emptyRecycleAnimText.text = getString(R.string.youHaveNotInvitedAnyoneInWh)
+        // correspondingly changes the text below the animation
+        // in the case of an empty recycleview
+        binding.emptyRecycleAnimText.text =
+            getString(R.string.youHaveNotInvitedAnyoneInWh)
 
-        //nastaví aktivní ikonu v drawer menu na "Odeslané pozvánky"
+        //sets the active icon in the drawer menu to "Sent invitations"
         navigationView.menu.getItem(4).isChecked = true
     }
 

@@ -53,9 +53,11 @@ class SettingsFragment : BaseFragment() {
      * Shows specific options to users which are not signed in with google account. Shows possibility to change password and change email.
      */
     private fun showOnlyIfNotUsingGoogleSignIn() {
-        authByPasswordAndEmail = auth.currentUser!!.providerData[auth.currentUser!!.providerData.size - 1].providerId == "password"
+        authByPasswordAndEmail =
+            auth.currentUser!!.providerData[auth.currentUser!!.providerData.size - 1].providerId == "password"
         if (authByPasswordAndEmail) {
-            binding.btnChangePasswordSettingsFragment.visibility = View.VISIBLE
+            binding.btnChangePasswordSettingsFragment.visibility =
+                View.VISIBLE
             binding.btnChangeEmailSettingsFragment.visibility = View.VISIBLE
         }
     }

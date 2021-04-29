@@ -23,37 +23,60 @@ class SplashscreenActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //Vypne defaultně tmavý režim při spuštění pro celou apku
+        AppCompatDelegate.setDefaultNightMode(
+            AppCompatDelegate.MODE_NIGHT_NO
+        ) //Vypne defaultně tmavý režim při spuštění pro celou apku
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN) //Skryje status bar pro tuto aktivitu
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        ) //Skryje status bar pro tuto aktivitu
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splashscreen)
 
-        //zobrazí splashscreen po dobu 0,7 sekundy
-        Handler(Looper.getMainLooper()).postDelayed({
-            checkIfAlreadyLoggedIn()
-        }, 1570)
+        //shows SplashScreen for 1,57s
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+                checkIfAlreadyLoggedIn()
+            },
+            1570
+        )
 
     }
 
     /**
      * Check if already logged in
-     * Checks if the user is already logged in, if so, redirects to the main activity.
+     *
+     * Checks if the user is already logged in, if so,
+     * redirects to the main activity.
      */
     private fun checkIfAlreadyLoggedIn() {
         mAuth = FirebaseAuth.getInstance()
         val user = mAuth.currentUser
 
-        if (user != null) { //pokud je někdo přihlášen, tak přesměruje do hlavní aktivity
-            val mainActivityIntent = Intent(this@SplashscreenActivity, MainActivity::class.java)
+        //if user is logged in, then redirect to main activity
+        if (user != null) {
+            val mainActivityIntent = Intent(
+                this@SplashscreenActivity,
+                MainActivity::class.java
+            )
             startActivity(mainActivityIntent)
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            overridePendingTransition(
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            )
             finish()
-        } else { //pokud nění někdo přihlášen, tak přesměruje na loginActivitu
-            val loginActivityIntent = Intent(this@SplashscreenActivity, LoginActivity::class.java)
+        } else { //if user is not logged in, then redirect to login activity
+            val loginActivityIntent = Intent(
+                this@SplashscreenActivity,
+                LoginActivity::class.java
+            )
             startActivity(loginActivityIntent)
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            overridePendingTransition(
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            )
             finish()
         }
     }

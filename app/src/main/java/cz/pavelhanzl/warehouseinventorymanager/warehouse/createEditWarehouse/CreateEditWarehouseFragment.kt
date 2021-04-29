@@ -57,10 +57,16 @@ class CreateEditWarehouseFragment : Fragment() {
 
         binding.ciWarehouseProfileImageFragmentCreateWarehouse.setOnClickListener {
             ImagePicker.with(this)
+                //display circle mask over taken/chosen image
                 .cropOval()
-                .cropSquare() //Crop image(Optional), Check Customization for more option
-                .compress(1024)	//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080) //Final image resolution will be less than 1080 x 1080(Optional)
+                //crop taken/chosen image to square format
+                .cropSquare()
+                //comress image so final image size
+                //will be less than 1 MB
+                .compress(1024)
+                //sets final image resolution will be less than 1080 x 1080
+                .maxResultSize(1080, 1080)
+                //launch image picker
                 .start()
         }
 
@@ -90,9 +96,14 @@ class CreateEditWarehouseFragment : Fragment() {
         binding.btnCreateWarehouseFragmentCreateWarehouse.text = getString(R.string.edit_warehouse)
 
         Glide.with(requireContext())
+            //image which should be loaded
             .load(viewModel.editedWarehouse.photoURL)
+            //placeholder for loading time
             .placeholder(R.drawable.avatar_ownwarehouseavatar_secondary_color)
+            //which image should be loaded when input for load() is null
+            // or empty or in case of other error
             .error(R.drawable.avatar_ownwarehouseavatar_secondary_color)
+            //into which element should be image loaded
             .into(binding.ciWarehouseProfileImageFragmentCreateWarehouse)
 
     }

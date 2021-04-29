@@ -30,7 +30,8 @@ class RegisterViewModel : BaseViewModel() {
     val password1Content = MutableLiveData<String>("")
     val password2Content = MutableLiveData<String>("")
 
-    // pár otevřené (Mutable) a uzavřené (ne Mutable) proměnné, které nemůže měnit view
+    // pár otevřené (Mutable) a uzavřené (ne Mutable) proměnné,
+    // které nemůže měnit view
     private val _nameError = MutableLiveData<String>()
     val nameError: LiveData<String> get() = _nameError
 
@@ -43,13 +44,11 @@ class RegisterViewModel : BaseViewModel() {
     private val _passwordErrorSimilarity = MutableLiveData<String>()
     val passwordErrorSimilarity: LiveData<String> get() = _passwordErrorSimilarity
 
-
     private val _status = MutableLiveData<String>("")
     val status: LiveData<String> get() = _status
 
     private val _moveToDashboard = MutableLiveData<Boolean>()
     val moveToDashboard: LiveData<Boolean> get() = _moveToDashboard
-
 
     ///
 
@@ -65,20 +64,25 @@ class RegisterViewModel : BaseViewModel() {
             viewModelScope.launch(Dispatchers.IO) {
 
                 try {
-                    createUserInFirebaseAuth(emailContent.value!!, password1Content.value!!).await()
+                    createUserInFirebaseAuth(
+                        emailContent.value!!,
+                        password1Content.value!!
+                    ).await()
                 } catch (e: Exception) {
                     _status.postValue(e.message)
                     return@launch
                 }
 
                 try {
-                    createUserInFirestore(nameContent.value!!, emailContent.value!!).await()
+                    createUserInFirestore(
+                        nameContent.value!!,
+                        emailContent.value!!
+                    ).await()
                 } catch (e: Exception) {
                     _status.postValue(e.localizedMessage)
                     FirebaseAuth.getInstance().currentUser!!.delete()
                     return@launch
                 }
-
 
                 _moveToDashboard.postValue(true)
             }
@@ -99,7 +103,10 @@ class RegisterViewModel : BaseViewModel() {
         val samePasswordValidation = validateSamePassword()
         val lengthPasswordValidation = validatePasswordLength()
 
-        return nameValidation && emailValidation && samePasswordValidation && lengthPasswordValidation
+        return     nameValidation
+                && emailValidation
+                && samePasswordValidation
+                && lengthPasswordValidation
     }
 
     /**
@@ -123,7 +130,10 @@ class RegisterViewModel : BaseViewModel() {
      * @return returns true if valid
      */
     private fun validateEmail(): Boolean {
-        return if (!android.util.Patterns.EMAIL_ADDRESS.matcher(emailContent.value!!).matches()) {
+        return if (!android.util.Patterns.EMAIL_ADDRESS
+                .matcher(emailContent.value!!)
+                .matches()
+        ) {
             _emailError.value = stringResource(R.string.mail_is_not_in_form)
             false
         } else {
@@ -140,7 +150,11 @@ class RegisterViewModel : BaseViewModel() {
     private fun validatePasswordLength(): Boolean {
         return if (!(password1Content.value?.length!! >= passwordLength)) {
             _passwordErrorLength.value =
-                stringResource(R.string.password_must_have) + passwordLength + stringResource(R.string.number_of_characters)
+                stringResource(
+                    R.string.password_must_have
+                ) + passwordLength + stringResource(
+                    R.string.number_of_characters
+                )
             false
         } else {
             _passwordErrorLength.value = ""
@@ -155,7 +169,8 @@ class RegisterViewModel : BaseViewModel() {
      */
     private fun validateSamePassword(): Boolean {
         return if (password1Content.value != password2Content.value) {
-            _passwordErrorSimilarity.value = stringResource(R.string.password_not_same)
+            _passwordErrorSimilarity.value =
+                stringResource(R.string.password_not_same)
             false
         } else {
             _passwordErrorSimilarity.value = ""
@@ -170,12 +185,16 @@ class RegisterViewModel : BaseViewModel() {
      * @param password password of the user
      * @return returns task
      */
-    fun createUserInFirebaseAuth(email: String, password: String): Task<AuthResult> {
-        return FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+    fun createUserInFirebaseAuth(
+        email: String,
+        password: String
+    ): Task<AuthResult> {
+        return FirebaseAuth.getInstance()
+            .createUserWithEmailAndPassword(email, password)
     }
 
     /**
-     * Creates user in firestore
+     * Creates user in firestore database
      *
      * @param name users given name
      * @param email users email
@@ -189,6 +208,7 @@ class RegisterViewModel : BaseViewModel() {
         user["email"] = email
         user["photoURL"] = ""
 
-        return db.collection(Constants.USERS_STRING).document(FirebaseAuth.getInstance().currentUser!!.uid).set(user)
+        return db.collection(Constants.USERS_STRING)
+            .document(FirebaseAuth.getInstance().currentUser!!.uid).set(user)
     }
 }

@@ -112,18 +112,27 @@ class CreateEditItemFragmentViewModel : BaseViewModel() {
      *
      * @param itemName name of item you want to get
      * @param itemBarcode barcode of item you want to get
-     * @param listOfAllWarehouseItems list of all items in actual
-     * @return returns warehouse based on given parameters
+     * @param listOfAllWarehouseItems list of all items in actual warehouse
+     * @return returns warehouse item based on given parameters
      */
-    private fun returnWarehouseItemWithGivenParameters(itemName: String = "", itemBarcode: String = "", listOfAllWarehouseItems: MutableList<WarehouseItem>): WarehouseItem? {
+    private fun returnWarehouseItemWithGivenParameters(
+        itemName: String = "",
+        itemBarcode: String = "",
+        listOfAllWarehouseItems: MutableList<WarehouseItem>
+    ): WarehouseItem? {
+        //object of found warehouse item, default value is null
         var foundObject: WarehouseItem? = null
 
+        //loops through all warehouse item and checks if any of items
+        //matches given parameter
         listOfAllWarehouseItems.any {
             if (it.name == itemName || it.code == itemBarcode) {
                 foundObject = it
-                true //shoda našli jsme shodu podle jména nebo podle kódu
-            } else false //neshoda nic jsme nenanšli
+                true //match - item found by name or by code
+            } else false //not match no item found with given parameter
         }
+        // returns found object of warehouse item
+        // or null if there was no match
         return foundObject
     }
 

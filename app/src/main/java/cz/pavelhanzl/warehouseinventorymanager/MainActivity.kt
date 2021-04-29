@@ -20,8 +20,6 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import cz.pavelhanzl.warehouseinventorymanager.databinding.FragmentChangeNameBinding
 import cz.pavelhanzl.warehouseinventorymanager.repository.Constants
 import cz.pavelhanzl.warehouseinventorymanager.repository.hideKeyboard
 import cz.pavelhanzl.warehouseinventorymanager.signInUser.LoginActivity
@@ -43,12 +41,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-
     lateinit var mainActivityViewModel: MainActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Registruje viewmodel k danému view
-        mainActivityViewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+        mainActivityViewModel =
+            ViewModelProvider(this).get(MainActivityViewModel::class.java)
 
 
 
@@ -89,14 +87,16 @@ class MainActivity : AppCompatActivity() {
         })
 
         try {
-        mainActivityViewModel.profilePhotoUrl.observe(this, Observer { profilePhotoURL ->
-            Glide.with(applicationContext)
-                .load(profilePhotoURL)
-                .placeholder(R.drawable.avatar_profileavatar)
-                .error(R.drawable.avatar_profileavatar)
-                .into(profileImage)
-        })
-        } catch (e : Exception){
+            mainActivityViewModel.profilePhotoUrl.observe(
+                this,
+                Observer { profilePhotoURL ->
+                    Glide.with(applicationContext)
+                        .load(profilePhotoURL)
+                        .placeholder(R.drawable.avatar_profileavatar)
+                        .error(R.drawable.avatar_profileavatar)
+                        .into(profileImage)
+                })
+        } catch (e: Exception) {
             Log.d("Drawer menu header", "Image not ready yet.")
         }
 
@@ -127,27 +127,36 @@ class MainActivity : AppCompatActivity() {
     private fun setIndividualMenuItems() {
 
         //Logout menu item
-        val menuItemLogout = drawerNavigationView.menu.findItem(R.id.menuItem_logout)
+        val menuItemLogout =
+            drawerNavigationView.menu.findItem(R.id.menuItem_logout)
         menuItemLogout.setOnMenuItemClickListener {
             logOut()
             true
         }
 
-
-
         //About app menu item
-        val menuItemAboutApp = drawerNavigationView.menu.findItem(R.id.menuItem_aboutApp)
+        val menuItemAboutApp =
+            drawerNavigationView.menu.findItem(R.id.menuItem_aboutApp)
+
+        //Sets on click listener for About app menu item
         menuItemAboutApp.setOnMenuItemClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.PROJECTS_WEBSITE_URL))
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(Constants.PROJECTS_WEBSITE_URL)
+            )
             startActivity(intent)
             true
         }
 
-
         //Contact developer app menu item
-        val menuItemContact = drawerNavigationView.menu.findItem(R.id.menuItem_contact)
+        val menuItemContact =
+            drawerNavigationView.menu.findItem(R.id.menuItem_contact)
+
         menuItemContact.setOnMenuItemClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(Constants.PROJECTS_WEBSITE_URL_CONTACT))
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(Constants.PROJECTS_WEBSITE_URL_CONTACT)
+            )
             startActivity(intent)
             true
         }
@@ -159,11 +168,33 @@ class MainActivity : AppCompatActivity() {
      * Performs Log out
      */
     private fun logOut() {
-        Toast.makeText(applicationContext, getString(R.string.LoggingOut), Toast.LENGTH_SHORT)
-            .show()
+        //shows short pop up message informing about logging out
+        Toast.makeText(
+            applicationContext,
+            getString(R.string.LoggingOut),
+            Toast.LENGTH_SHORT
+        ).show()
+
+        //sign out from Firebase Authentication
         FirebaseAuth.getInstance().signOut()
-        startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+        //starts new activity - LoginActivity in this case
+        startActivity(
+            Intent(
+                this@MainActivity,
+                LoginActivity::class.java
+            )
+        )
+
+        //displays a nicer transition animation
+        //than is the default transition animation
+        overridePendingTransition(
+            android.R.anim.fade_in,
+            android.R.anim.fade_out
+        )
+
+        //finishes this activity, so user can not use back button of device
+        //to go back to this location - MainActivity in this case
         finish()
     }
 
@@ -179,8 +210,11 @@ class MainActivity : AppCompatActivity() {
      *
      */
     fun showLoadingOverlay() {
-       window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-       loadingOverlay.visibility = View.VISIBLE
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+        loadingOverlay.visibility = View.VISIBLE
     }
 
     /**

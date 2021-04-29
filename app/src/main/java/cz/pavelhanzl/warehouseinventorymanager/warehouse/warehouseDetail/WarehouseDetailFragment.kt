@@ -31,20 +31,38 @@ import kotlinx.android.synthetic.main.fragment_warehouse_detail.*
  */
 class WarehouseDetailFragment : BaseFragment() {
 
-
     private val args: WarehouseDetailFragmentArgs by navArgs()
     private lateinit var binding: FragmentWarehouseDetailBinding
     private val viewModel: WarehousesDetailFragmentViewModel by activityViewModels()
 
-    private val fabAddItemAnimFromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom) }
-    private val fabAddItemAnimToBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_to_bottom) }
+    private val fabAddItemAnimFromBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.fab_from_bottom
+        )
+    }
+    private val fabAddItemAnimToBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.fab_to_bottom
+        )
+    }
 
-    private val fabRemoveItemAnimFromBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_from_bottom) }
-    private val fabRemoveItemAnimToBottom: Animation by lazy { AnimationUtils.loadAnimation(requireContext(), R.anim.fab_to_bottom) }
+    private val fabRemoveItemAnimFromBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.fab_from_bottom
+        )
+    }
+    private val fabRemoveItemAnimToBottom: Animation by lazy {
+        AnimationUtils.loadAnimation(
+            requireContext(),
+            R.anim.fab_to_bottom
+        )
+    }
 
     private var addItemClicked = false
     private var removeItemClicked = false
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,16 +83,22 @@ class WarehouseDetailFragment : BaseFragment() {
         addItemClicked = false
         removeItemClicked = false
 
-
         //binduje a přiřazuje viewmodel
-        binding = FragmentWarehouseDetailBinding.inflate(inflater, container, false)
+        binding = FragmentWarehouseDetailBinding.inflate(
+            inflater,
+            container,
+            false
+        )
         binding.viewmodel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
         //observer na warehouse object, který když se změní, tak se upraví title pro tento fragment
-        viewModel.warehouseObject.observe(viewLifecycleOwner, Observer { profilePhoto ->
-            (activity as MainActivity).supportActionBar!!.title = viewModel.warehouseObject.value!!.name
-        })
+        viewModel.warehouseObject.observe(
+            viewLifecycleOwner,
+            Observer { profilePhoto ->
+                (activity as MainActivity).supportActionBar!!.title =
+                    viewModel.warehouseObject.value!!.name
+            })
 
 
 
@@ -95,35 +119,51 @@ class WarehouseDetailFragment : BaseFragment() {
      */
     private fun setOnClickListenersOnAddRemoveButtons() {
         binding.fabOwnWhDetailAddItem.setOnClickListener {
-            onAddOrRemoveItemButtonClicked(addItemClicked, Constants.ADD_STRING)
+            onAddOrRemoveItemButtonClicked(
+                addItemClicked,
+                Constants.ADD_STRING
+            )
         }
 
         binding.fabOwnWhDetailAddItemByHand.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
-            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToAddRemoveItem()
+            val action =
+                WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToAddRemoveItem()
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailAddItemByScan.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.ADDING_STRING
-            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment(Constants.ADDING_STRING, viewModel.warehouseObject.value)
+            val action =
+                WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment(
+                    Constants.ADDING_STRING,
+                    viewModel.warehouseObject.value
+                )
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailRemoveItem.setOnClickListener {
 
-            onAddOrRemoveItemButtonClicked(removeItemClicked, Constants.REMOVE_STRING)
+            onAddOrRemoveItemButtonClicked(
+                removeItemClicked,
+                Constants.REMOVE_STRING
+            )
         }
 
         binding.fabOwnWhDetailRemoveItemByHand.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
-            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToAddRemoveItem()
+            val action =
+                WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToAddRemoveItem()
             findNavController().navigate(action)
         }
 
         binding.fabOwnWhDetailRemoveItemByScan.setOnClickListener {
             viewModel.addRemoveFragmentMode = Constants.REMOVING_STRING
-            val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment(Constants.REMOVING_STRING,  viewModel.warehouseObject.value)
+            val action =
+                WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToScannerFragment(
+                    Constants.REMOVING_STRING,
+                    viewModel.warehouseObject.value
+                )
             findNavController().navigate(action)
         }
     }
@@ -134,7 +174,10 @@ class WarehouseDetailFragment : BaseFragment() {
      * @param clicked
      * @param operation
      */
-    private fun onAddOrRemoveItemButtonClicked(clicked: Boolean, operation: String) {
+    private fun onAddOrRemoveItemButtonClicked(
+        clicked: Boolean,
+        operation: String
+    ) {
 
         when (operation) {
             Constants.ADD_STRING -> addItemClicked = !addItemClicked
@@ -155,20 +198,36 @@ class WarehouseDetailFragment : BaseFragment() {
         when (operation) {
             Constants.ADD_STRING -> {
                 if (!clicked) {
-                    binding.fabOwnWhDetailAddItemByScan.startAnimation(fabAddItemAnimFromBottom)
-                    binding.fabOwnWhDetailAddItemByHand.startAnimation(fabAddItemAnimFromBottom)
+                    binding.fabOwnWhDetailAddItemByScan.startAnimation(
+                        fabAddItemAnimFromBottom
+                    )
+                    binding.fabOwnWhDetailAddItemByHand.startAnimation(
+                        fabAddItemAnimFromBottom
+                    )
                 } else {
-                    binding.fabOwnWhDetailAddItemByScan.startAnimation(fabAddItemAnimToBottom)
-                    binding.fabOwnWhDetailAddItemByHand.startAnimation(fabAddItemAnimToBottom)
+                    binding.fabOwnWhDetailAddItemByScan.startAnimation(
+                        fabAddItemAnimToBottom
+                    )
+                    binding.fabOwnWhDetailAddItemByHand.startAnimation(
+                        fabAddItemAnimToBottom
+                    )
                 }
             }
             Constants.REMOVE_STRING -> {
                 if (!clicked) {
-                    binding.fabOwnWhDetailRemoveItemByScan.startAnimation(fabRemoveItemAnimFromBottom)
-                    binding.fabOwnWhDetailRemoveItemByHand.startAnimation(fabRemoveItemAnimFromBottom)
+                    binding.fabOwnWhDetailRemoveItemByScan.startAnimation(
+                        fabRemoveItemAnimFromBottom
+                    )
+                    binding.fabOwnWhDetailRemoveItemByHand.startAnimation(
+                        fabRemoveItemAnimFromBottom
+                    )
                 } else {
-                    binding.fabOwnWhDetailRemoveItemByScan.startAnimation(fabRemoveItemAnimToBottom)
-                    binding.fabOwnWhDetailRemoveItemByHand.startAnimation(fabRemoveItemAnimToBottom)
+                    binding.fabOwnWhDetailRemoveItemByScan.startAnimation(
+                        fabRemoveItemAnimToBottom
+                    )
+                    binding.fabOwnWhDetailRemoveItemByHand.startAnimation(
+                        fabRemoveItemAnimToBottom
+                    )
                 }
             }
         }
@@ -221,7 +280,10 @@ class WarehouseDetailFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item!!.itemId) {
             R.id.miOwnWarehouseEdit -> {
-                val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToCreateWarehouseFragment(viewModel.warehouseObject.value)
+                val action =
+                    WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToCreateWarehouseFragment(
+                        viewModel.warehouseObject.value
+                    )
                 findNavController().navigate(action)
             }
 
@@ -230,16 +292,22 @@ class WarehouseDetailFragment : BaseFragment() {
             R.id.miOwnWarehouseLeave -> leaveSharedWarehouse()
 
             R.id.miOwnWarehouseLog -> {
-                val action =  WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToWarehouseLogFragment(viewModel.warehouseObject.value!!)
+                val action =
+                    WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToWarehouseLogFragment(
+                        viewModel.warehouseObject.value!!
+                    )
                 findNavController().navigate(action)
 
             }
 
             R.id.miOwnWarehousePeople -> {
-                val action = WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToPeopleInWarehouseFragment(viewModel.warehouseObject.value!!, args.ownWarehouse)
+                val action =
+                    WarehouseDetailFragmentDirections.actionWarehouseDetailFragmentToPeopleInWarehouseFragment(
+                        viewModel.warehouseObject.value!!,
+                        args.ownWarehouse
+                    )
                 findNavController().navigate(action)
             }
-
 
         }
         return super.onOptionsItemSelected(item)
@@ -261,7 +329,11 @@ class WarehouseDetailFragment : BaseFragment() {
                 viewModel.leaveWarehouse()
 
                 //zobrazí snackar s možností  vrácení akce opuštění skladu
-                Snackbar.make(this.requireView(), getString(R.string.you_left_the_warehouse), Snackbar.LENGTH_LONG)
+                Snackbar.make(
+                    this.requireView(),
+                    getString(R.string.you_left_the_warehouse),
+                    Snackbar.LENGTH_LONG
+                )
                     .setAction(R.string.back) {
                         viewModel.undoChangesOfWarehouseDocument()
                     }.show()
@@ -273,27 +345,32 @@ class WarehouseDetailFragment : BaseFragment() {
     }
 
     /**
-     * Shows dialog with option to delete of own warehouse
+     * Shows dialog with option to delete own warehouse
      */
     private fun deleteOfOwnWarehouse() {
-        //zobrazí dialog s výzvou k potvrzení ke smazání skladu
+        //Shows dialog with option to delete of own warehouse
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.delete_warehouse_title)
             .setMessage(R.string.delete_warehouse_description)
             .setNegativeButton(R.string.no) { dialog, which ->
-                /* zrušení dialogu*/
+                /* cancel dialog*/
             }
             .setPositiveButton(R.string.yes) { dialog, which ->
-                //volá smazání skladu
+                //calls deletion of warehouse in viewmodel class
                 viewModel.deleteWarehouse()
 
-                //zobrazí snackar s možností  vrácení akce smazání skladu
-                Snackbar.make(this.requireView(), getString(R.string.warehouse_was_deleted), Snackbar.LENGTH_LONG)
+                //shows snackbar with option to restore warehouse
+                Snackbar.make(
+                    this.requireView(),
+                    getString(R.string.warehouse_was_deleted),
+                    Snackbar.LENGTH_LONG
+                )
                     .setAction(getString(R.string.restore)) {
+                        //calls restoration of warehouse in viewmodel class
                         viewModel.undoChangesOfWarehouseDocument()
                     }.show()
 
-                //naviguje na předchozí lokaci
+                //navigates to previous location
                 findNavController().navigateUp()
             }
             .show()
@@ -304,19 +381,23 @@ class WarehouseDetailFragment : BaseFragment() {
      */
     private fun setUpRecycleView() {
         //nastaví recycleview
-        val query = db.collection(Constants.WAREHOUSES_STRING).document(args.warehouseID).collection(Constants.ITEMS_STRING).orderBy("name_lowercase")
-        val options = FirestoreRecyclerOptions.Builder<WarehouseItem>().setQuery(query, WarehouseItem::class.java).setLifecycleOwner(this).build()
+        val query = db.collection(Constants.WAREHOUSES_STRING)
+            .document(args.warehouseID).collection(Constants.ITEMS_STRING)
+            .orderBy("name_lowercase")
+        val options = FirestoreRecyclerOptions.Builder<WarehouseItem>()
+            .setQuery(query, WarehouseItem::class.java)
+            .setLifecycleOwner(this).build()
 
         query.get().addOnCompleteListener {
-            if(it.result!!.documents.isEmpty()){
+            if (it.result!!.documents.isEmpty()) {
                 binding.noitemAnim.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.noitemAnim.visibility = View.GONE
             }
         }
 
-
-        val ownWarehouseDetailAdapter = WarehouseDetailAdapter(options,args.ownWarehouse)
+        val ownWarehouseDetailAdapter =
+            WarehouseDetailAdapter(options, args.ownWarehouse)
 
         rv_ownWarehouseDetailList.apply {
             layoutManager = LinearLayoutManager(activity)
